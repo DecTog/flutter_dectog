@@ -1,0 +1,14 @@
+{
+  "$source": "POST /api/v1/app-installs: no signal, no candidate",
+  "matched": false,
+  "type": "organic",
+  "match_source": null,
+  "referrer_source": null,
+  "match_confidence": null,
+  "fraud_flags": [],
+  "is_reinstall": false,
+  "install_state": null,
+  "routing": null,
+  "apple_search_ads": null,
+  "install_id": "00000002-0000-4000-8000-000000000000"
+}

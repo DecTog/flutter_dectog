@@ -1,0 +1,5 @@
+{
+  "DECTOG_API_KEY": "dtg_paste_your_production_key_here",
+  "DECTOG_BASE_URL": "https://app.dectog.com",
+  "DECTOG_LINK_ROOT_DOMAIN": "dectog.com"
+}

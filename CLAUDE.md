@@ -1,0 +1,55 @@
+# Working on flutter_dectog
+
+The Flutter SDK for DecTog: Dart in `lib/`, a Kotlin plugin in `android/`, a
+Swift plugin in `ios/`, an example app in `example/`. The server and its wire
+contract are in `DecTog/dectog` (`docs/API_CONTRACT.md`).
+
+## Commands
+
+```bash
+dart format --output=none --set-exit-if-changed lib test tool example/lib
+flutter analyze
+flutter test
+flutter pub publish --dry-run
+(cd packages/flutter_dectog_adid && flutter test) && tool/publish_adid.sh --dry-run
+cd example && flutter build apk --debug && flutter build ios --simulator --debug
+(cd example/android && ./gradlew :flutter_dectog:testDebugUnitTest)   # Kotlin tests
+swift test --package-path ios/native_tests                             # Swift tests
+tool/device_restart_test.sh   # with an emulator or device attached
+```
+
+`flutter test` mocks the platform channel; the example builds are what compile
+the Kotlin and Swift.
+
+## Rules
+
+- Pre-release: the public API may change without deprecations until the first
+  pub.dev release. Never publish to pub.dev without being asked.
+- The wire format follows the server's `docs/API_CONTRACT.md`; change both
+  together. Errors arrive as `{"error": {"code", "message", "request_id"}}` and
+  surface as `DectogError.code` / `requestId`.
+- Everything the SDK collects respects `setEnabled(false)` and
+  `DectogConfig.collect` (`DectogCollection`), and is declared in
+  `ios/flutter_dectog/Sources/flutter_dectog/PrivacyInfo.xcprivacy` and the
+  disclosure table in `doc/api-reference.md`. The advertising id lives only
+  in `packages/flutter_dectog_adid`; the core links no ad framework.
+- The native reads live in framework-free files shared as source with the
+  React Native SDK (`DecTog/react-native-dectog`, whose `tool/sync_shared.sh
+  --check` compares them byte for byte): `android/src/main/kotlin/app/dectog/core/`
+  and, in `ios/flutter_dectog/Sources/flutter_dectog/`, `DectogDevice.swift`,
+  `DectogKeychain.swift`, `DectogInstallDates.swift` and
+  `DectogPasteTargetView.swift`. Keep Flutter out of them, change them here
+  first, then sync. The plugin classes only map the channel onto them.
+- Custom-scheme links are recognised by their `dtg_l=<username>/<slug>` tag,
+  never by the URL's shape (only `dectog://` is accepted untagged).
+- Version bumps touch `pubspec.yaml`, `lib/src/version.dart`, the podspec and
+  `CHANGELOG.md` together (`RELEASING.md`).
+- `test/fixtures/wire/` mirrors the server's golden responses (`tool/sync_wire_fixtures.sh`);
+  `test/fixtures/url-cases.json` is the shared URL table; `test/public_api_test.dart` pins the
+  public surface; `test/sdk_harness_test.dart` is the end-to-end harness.
+- `doc/api-reference.md` is the API reference (the docs site syncs it). A public API change
+  updates it, then `dart run tool/gen_llms.dart` regenerates `llms.txt`; `test/llms_test.dart`
+  fails until both are done.
+- A defect fix starts with a failing test.
+- Comments, doc comments and test names say what and why in words: no plan item
+  ids (`P2.12`), decision or review ids.

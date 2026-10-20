@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # One pinned toolchain so the formatter and the analyzer agree with local runs.
+  FLUTTER_VERSION: 3.47.6
+
+# Actions are pinned by commit SHA; the comment names the release. The Ubuntu
+# image is pinned too: ubuntu-latest moves to 26.04 from 2026-10-19
+# (actions/runner-images#14748).
+jobs:
+  dart:
+    name: Format, analyze, test, publish dry run
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      # The companion package resolves on its own (flutter analyze
+      # below covers it too).
+      - run: flutter pub get
+        working-directory: packages/flutter_dectog_adid
+      - run: dart format --output=none --set-exit-if-changed lib test tool example/lib packages/flutter_dectog_adid/lib packages/flutter_dectog_adid/test
+      - run: flutter analyze
+      # Includes test/version_test.dart: pubspec, version.dart, podspec,
+      # CHANGELOG and the README snippet must agree.
+      - run: flutter test
+      - run: flutter test
+        working-directory: packages/flutter_dectog_adid
+      - run: flutter pub publish --dry-run
+      - run: tool/publish_adid.sh --dry-run
+      # What has newer versions, in the log of every run (Dependabot
+      # opens the pull requests).
+      - run: flutter pub outdated
+
+  android:
+    name: Android build (plugin Kotlin via the example app)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - name: Build the example APK
+        working-directory: example
+        run: flutter build apk --debug
+      # The Kotlin referrer reader and orchestrator against a fake
+      # InstallReferrerClient (JUnit + Robolectric, no device).
+      - name: Native unit tests (Kotlin)
+        working-directory: example/android
+        run: ./gradlew :flutter_dectog:testDebugUnitTest --console=plain
+
+  ios:
+    name: iOS build (plugin Swift via the example app)
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - name: Build the example for the simulator
+        working-directory: example
+        run: flutter build ios --simulator --debug
+      # DectogInstallDates against a temporary container and a fake
+      # Keychain (XCTest on the macOS host, no simulator).
+      - name: Native unit tests (Swift)
+        run: swift test --package-path ios/native_tests

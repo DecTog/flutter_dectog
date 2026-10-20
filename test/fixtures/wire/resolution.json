@@ -1,0 +1,17 @@
+{
+  "$source": "GET /api/v1/resolve/:username/:slug (public)",
+  "id": "00000003-0000-4000-8000-000000000000",
+  "slug": "spring",
+  "target": "https://example.com/s",
+  "url": "https://acme.dectog.com/spring",
+  "type": "permanent",
+  "created_at": "2026-10-12T09:00:00.000Z",
+  "click_count": 0,
+  "expires_at": null,
+  "ttl_seconds": null,
+  "metadata": {
+    "screen": "sale"
+  },
+  "ios_deep_link_path": null,
+  "android_deep_link_path": null
+}

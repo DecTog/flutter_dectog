@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The core plugin requests no runtime permissions and reads no
+         advertising ID: no AD_ID permission, no Play services ads dependency.
+
+         GET_COMMON_DATA is the custom permission Huawei AppGallery
+         requires for its install-referrer ContentProvider (the same read
+         Adjust's HuaweiReferrerClient performs); it is a no-op on devices
+         without AppGallery and prompts nothing (normal protection level). -->
+    <uses-permission android:name="com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA" />
+
+    <!-- Package VISIBILITY (not permissions): Android 11+ hides other
+         packages unless declared.
+           - Meta apps: the Meta install-referrer read, only used
+             when DectogConfig.fbAppId is set.
+           - Play Store: lets the referrer reader skip the three retries on
+             devices without Play instead of waiting on a bind that can
+             never succeed.
+           - Huawei / Vivo providers: the OEM install-referrer reads.
+         Samsung and Xiaomi readers go through their vendor libraries, whose
+         own manifests declare what they need. -->
+    <queries>
+        <package android:name="com.facebook.katana" />
+        <package android:name="com.facebook.lite" />
+        <package android:name="com.instagram.android" />
+        <package android:name="com.android.vending" />
+        <provider android:authorities="com.huawei.appmarket.commondata" />
+        <provider android:authorities="com.vivo.appstore.provider.referrer" />
+    </queries>
+</manifest>

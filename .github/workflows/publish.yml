@@ -1,0 +1,37 @@
+name: Publish
+
+# Runs on a version tag. pub.dev's automated publishing must be enabled for
+# this repository (package admin page → Automated publishing, tag pattern
+# `v{{version}}`, environment `pub.dev`), which pub.dev only allows after the
+# first manual publish. See RELEASING.md.
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+*']
+
+permissions:
+  contents: read
+
+# The Ubuntu image is pinned, as in ci.yml. The publish job runs where
+# dart-lang's reusable workflow puts it (ubuntu-latest).
+jobs:
+  check:
+    name: Tag matches the package version
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Compare tag, pubspec.yaml, version.dart and CHANGELOG.md
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pubspec=$(sed -n 's/^version:[[:space:]]*//p' pubspec.yaml)
+          dart=$(sed -n "s/^const String packageVersion = '\(.*\)';/\1/p" lib/src/version.dart)
+          changelog=$(sed -n 's/^## \[\([^]]*\)\].*/\1/p' CHANGELOG.md | head -n1)
+          echo "tag=$tag pubspec=$pubspec version.dart=$dart changelog=$changelog"
+          test "$tag" = "$pubspec" && test "$tag" = "$dart" && test "$tag" = "$changelog"
+
+  publish:
+    needs: check
+    permissions:
+      id-token: write # OIDC token for pub.dev; no long-lived secret
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+    with:
+      environment: pub.dev

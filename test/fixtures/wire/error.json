@@ -1,0 +1,8 @@
+{
+  "$source": "Every error, every route",
+  "error": {
+    "code": "not_found",
+    "message": "Link not found",
+    "request_id": "00000006-0000-4000-8000-000000000000"
+  }
+}

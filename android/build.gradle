@@ -1,0 +1,112 @@
+group 'app.dectog.flutter_dectog'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.11.1'
+        // Only loaded when this module has to apply the Kotlin Gradle plugin
+        // itself (see below); a host that already ships KGP on its root
+        // classpath wins, parent-first.
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+// Kotlin toolchain, three worlds:
+//  - AGP 9+ "built-in Kotlin" (Flutter 3.47+ default): AGP compiles Kotlin
+//    itself; applying the Kotlin Gradle plugin (KGP) on top is an error.
+//  - AGP 8 on Flutter 3.47+: Flutter's tooling applies KGP to plugin modules
+//    that do not apply it (android.builtInKotlin=false hosts).
+//  - AGP 8 on Flutter < 3.47: nobody applies KGP for us, so this module
+//    must — or its Kotlin sources never compile. Applied through the plugin
+//    manager (not `apply plugin:`) so Flutter's build-file scan does not
+//    count this module among those forcing KGP on built-in-Kotlin hosts.
+def builtInKotlin = {
+    int agpMajor = 0
+    try {
+        agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+    } catch (Throwable ignored) {
+    }
+    def prop = project.findProperty('android.builtInKotlin')
+    boolean enabled = prop == null ? agpMajor >= 9 : prop.toString().toBoolean()
+    return enabled && agpMajor >= 9
+}()
+if (!builtInKotlin
+        && !project.plugins.hasPlugin('org.jetbrains.kotlin.android')
+        && !project.plugins.hasPlugin('kotlin-android')) {
+    project.pluginManager.apply('org.jetbrains.kotlin.android')
+}
+
+android {
+    namespace 'app.dectog.flutter_dectog'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 24
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Kotlin JVM target aligned with the Java compile options above (no
+    // toolchain download): the built-in Kotlin DSL on AGP 9, KGP's on AGP 8.
+    if (builtInKotlin) {
+        kotlin {
+            compilerOptions {
+                jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+            }
+        }
+    } else {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
+    }
+
+    lint {
+        checkReleaseBuilds false
+    }
+
+    // JVM tests of the native code (src/test, Robolectric). Run from
+    // example/android: ./gradlew :flutter_dectog:testDebugUnitTest
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    // No Play services here by design: the package reads no GAID, so it
+    // never merges the AD_ID permission into a host app (N1 item 3).
+
+    // Google Play Install Referrer: the SDK reads the referrer itself
+    // (Adjust's retry policy, server-side timestamps, install version). This
+    // is Google's own AIDL client library — no Play services dependency, no
+    // permissions.
+    implementation 'com.android.installreferrer:installreferrer:2.2'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.17'
+
+    // Samsung Galaxy Store (store.galaxy.samsung.installreferrer:
+    // samsung_galaxystore_install_referrer:4.0.0) and Xiaomi GetApps
+    // (com.miui.referrer:homereferrer:1.0.0.7) are deliberately NOT
+    // declared: the readers reach them by reflection, so a host app that
+    // ships through those stores adds the library itself and everyone else
+    // builds without it (Branch's compileOnly posture without the compile
+    // dependency).
+}

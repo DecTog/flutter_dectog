@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Replace with your deployed backend domain (e.g. applinks:links.yourdomain.com)
+         before testing Universal Links — Apple fetches the AASA from that host over HTTPS.
+         The placeholder keeps dev builds (custom scheme / localhost) working. -->
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:YOUR_SUBDOMAIN.dectog.com</string>
+        <!-- Production: replace {username} with your
+             tenant; Apple fetches the AASA from that host over HTTPS. -->
+        <!-- <string>applinks:{username}.dectog.com</string> -->
+    </array>
+</dict>
+</plist> 

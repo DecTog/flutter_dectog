@@ -1,0 +1,16 @@
+{
+  "$source": "GET /api/v1/sdk-config?package=com.example.testapp: an app with a Facebook App ID and schemes, an account with a custom domain",
+  "app_id": "6f0f6a2e-8c1d-4f8e-9b2a-3c4d5e6f7a8b",
+  "fb_app_id": "1234567890",
+  "oem_store_referrers": true,
+  "read_clipboard_on_install": true,
+  "ios_tap_to_store": false,
+  "ios_app_scheme": "acme",
+  "android_app_scheme": "acme",
+  "ios_bundle_id": "com.example.testapp",
+  "android_package": "com.example.testapp",
+  "link_hosts": ["go.acme.app", "acme.dectog.com"],
+  "username": "acme",
+  "environment": "live",
+  "cache_seconds": 3600
+}

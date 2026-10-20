@@ -1,0 +1,35 @@
+{
+  "$source": "GET /api/v1/attribution?device_id=: the verdict plus last_open",
+  "matched": true,
+  "type": "non-organic",
+  "match_source": "referrer",
+  "referrer_source": "google_play",
+  "match_confidence": "guaranteed",
+  "fraud_flags": [],
+  "is_reinstall": false,
+  "install_state": null,
+  "routing": {
+    "username": "acme",
+    "slug": "promo",
+    "deep_link": null,
+    "click_params": null,
+    "confidence": "guaranteed",
+    "clicked_at": "2026-10-12T09:00:00.000Z"
+  },
+  "apple_search_ads": null,
+  "last_open": null,
+  "username": "acme",
+  "slug": "promo",
+  "link": {
+    "slug": "promo",
+    "target": "https://example.com/dest",
+    "url": "https://acme.dectog.com/promo",
+    "created_at": "2026-10-12T09:00:00.000Z",
+    "metadata": null
+  },
+  "custom_params": null,
+  "click_params": null,
+  "deep_link": null,
+  "clicked_at": "2026-10-12T09:00:00.000Z",
+  "install_id": "00000001-0000-4000-8000-000000000000"
+}
