@@ -124,6 +124,7 @@ The verdict on `onAppInstalled`, `currentAppInstall`, `getAttributionData()` and
 | `target` | `String?` |
 | `createdAt` | `DateTime` |
 | `metadata` | `Map<String, dynamic>?` |
+| `referrerCustomerId` | `String?`: the customer whose referral link brought the install, else null. Set by the server from the link, never from the tapped URL |
 
 ### DectogAppOpen
 
@@ -407,7 +408,7 @@ if (initialLink != null) {
 | Member | Signature | Endpoint |
 |---|---|---|
 | `createLink` | `Future<DectogLink> createLink({required String slug, String? target, Map<String, dynamic>? metadata, String? appId, String? iosDeepLinkPath, String? androidDeepLinkPath, String? redirectUrl, String? fallbackUrl, String? ogTitle, String? ogDescription, String? ogImageUrl, String? label, String? campaign, String? adgroup, String? creative})` | `POST /api/v1/links`, expects 201 |
-| `createReferralLink` | `Future<DectogLink> createReferralLink({required String customerId, String? campaign})` | `POST /api/v1/referral-links`; 201 the first time, 200 with the same link afterwards. Works with a plain SDK key. A new user who installs through it and signs up is recorded as the customer's referral. See [Referral programs](https://docs.dectog.com/guides/referral-programs/). |
+| `createReferralLink` | `Future<DectogLink> createReferralLink({required String customerId, String? campaign})` | `POST /api/v1/referral-links`; 201 the first time, 200 with the same link afterwards. Works with a plain SDK key. A new user who installs through it and signs up is recorded as the customer's referral. On that user's device, `install.link?.referrerCustomerId` (in `onAppInstalled` and `getAttributionData()`) names the customer; a reinstall (`install.isReinstall`) never records a referral. See [Referral programs](https://docs.dectog.com/guides/referral-programs/). |
 | `updateLink` | `Future<DectogLink> updateLink(String slug, {String? target, Map<String, dynamic>? metadata, String? iosDeepLinkPath, String? androidDeepLinkPath, String? redirectUrl, String? fallbackUrl, String? ogTitle, String? ogDescription, String? ogImageUrl, String? label, String? campaign, String? adgroup, String? creative})` | `PUT /api/v1/links/{slug}`. `null` keeps, `''` clears. |
 | `getLinks` | `Future<DectogLinkPage> getLinks({int? limit, String? cursor})` | `GET /api/v1/links`; one page, newest first. `DectogLinkPage` has `links`, `nextCursor` (pass it back as `cursor`) and `hasMore`. |
 | `getLink` | `Future<DectogLink> getLink(String slug)` | `GET /api/v1/links/{slug}` |
