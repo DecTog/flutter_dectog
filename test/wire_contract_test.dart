@@ -49,9 +49,19 @@ void main() {
     expect(r.installId, isNotEmpty);
     expect(r.clickedAt, isNotNull);
     expect(r.link?.slug, 'promo');
+    expect(r.link?.referrerCustomerId, isNull);
     expect(r.routing?.slug, 'promo');
     expect(r.routing?.confidence, 'guaranteed');
     expect(r.isReinstall, isFalse);
+  });
+
+  test('an install through a referral link names the referrer', () {
+    final json = fixture('install-verdict-matched');
+    final link = Map<String, dynamic>.from(json['link'] as Map)
+      ..['referrer_customer_id'] = 'alice';
+    final r = DectogAppInstallResponse.fromJson({...json, 'link': link});
+    expect(r.link?.referrerCustomerId, 'alice');
+    expect(r.toJson()['link']['referrer_customer_id'], 'alice');
   });
 
   test('an organic install verdict', () {

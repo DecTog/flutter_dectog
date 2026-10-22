@@ -413,12 +413,20 @@ class DectogAppInstallLink {
   /// Link metadata
   final Map<String, dynamic>? metadata;
 
+  /// The customer whose referral link brought this install (the id passed to
+  /// `createReferralLink`), or null for any other link. The server reads it
+  /// from the link, so nothing in the tapped URL can change it. Use it for
+  /// screens such as "Invited by …"; grant rewards from the
+  /// `referral.converted` webhook.
+  final String? referrerCustomerId;
+
   const DectogAppInstallLink({
     required this.slug,
     required this.target,
     required this.url,
     required this.createdAt,
     this.metadata,
+    this.referrerCustomerId,
   });
 
   /// Create from JSON
@@ -429,6 +437,7 @@ class DectogAppInstallLink {
       url: json['url'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       metadata: json['metadata'] as Map<String, dynamic>?,
+      referrerCustomerId: json['referrer_customer_id'] as String?,
     );
   }
 
@@ -440,11 +449,12 @@ class DectogAppInstallLink {
       'url': url,
       'created_at': createdAt.toIso8601String(),
       if (metadata != null) 'metadata': metadata,
+      'referrer_customer_id': referrerCustomerId,
     };
   }
 
   @override
   String toString() {
-    return 'DectogAppInstallLink{slug: $slug, target: $target, url: $url, createdAt: $createdAt, metadata: $metadata }';
+    return 'DectogAppInstallLink{slug: $slug, target: $target, url: $url, createdAt: $createdAt, metadata: $metadata, referrerCustomerId: $referrerCustomerId }';
   }
 }
