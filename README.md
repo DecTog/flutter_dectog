@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 ![Flutter >= 3.29](https://img.shields.io/badge/Flutter->=3.29-02569B?style=flat-square&logo=flutter&logoColor=white)
 ![iOS 15+](https://img.shields.io/badge/iOS-15%2B-000000?style=flat-square&logo=apple&logoColor=white)
-![Android 7+](https://img.shields.io/badge/Android-7%2B%20(API%2024)-3DDC84?style=flat-square&logo=android&logoColor=white)
+![Android 7+](https://img.shields.io/badge/Android-7%2B%20%28API%2024%29-3DDC84?style=flat-square&logo=android&logoColor=white)
 [![Documentation](https://img.shields.io/badge/Docs-docs.dectog.com-141414?style=flat-square)](https://docs.dectog.com/sdk/installation/)
 
 [Installation](#installation) • [Setup](#setup) • [Handle links](#handle-links) • [Install attribution](#install-attribution) • [Events](#events) • [Links](#create-links-from-the-app) • [Privacy](#what-the-sdk-collects) • [Testing](#testing-install-attribution)
