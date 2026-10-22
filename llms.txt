@@ -155,14 +155,12 @@ The verdict on `onAppInstalled`, `currentAppInstall`, `getAttributionData()` and
 
 ## Routing an install
 
-**Routing vs credit.** `matched` is attribution *credit*, granted only
-at `matchConfidence` `guaranteed` (install referrer, Meta, pasteboard) or
-`high`. A probabilistic candidate the server is less sure about still comes
-back as `routing` (`DectogDeferredRoute`: `slug`, `deepLink`, `clickParams`,
-`confidence`) at `medium` confidence with `matched: false` — use it to route a
-new user to the content they tapped (routing is cheap to get wrong, credit is
-not; AppsFlyer separates the two the same way). A tie between candidates is
-`low` and yields neither.
+**Routing vs credit.** `matched` is attribution *credit*, granted only at `matchConfidence`
+`guaranteed` (install referrer, Meta, pasteboard) or `high`. A probabilistic candidate the
+server is less sure about still comes back as `routing` (`DectogDeferredRoute`: `slug`,
+`deepLink`, `clickParams`, `confidence`) at `medium` confidence with `matched: false`: use it to
+route a new user to the content they tapped, because routing is cheap to get wrong and credit
+is not. A tie between candidates is `low` and yields neither.
 
 ```dart
 dectog.onAppInstalled.listen((install) {
@@ -369,18 +367,14 @@ await dectog.initialize(DectogConfig(
 Incoming links:
 
 ```dart
-// Listen for incoming links
 dectog.onLinkClick.listen((linkClick) {
-  print('Link: ${linkClick.originalUrl}');
-  print('Slug: ${linkClick.slug}');
-  
+  // Route on dec_deeplink when the URL carries one, else on the link's own path.
+  final route = linkClick.clickParams?.deepLink ?? linkClick.linkResolution?.deepLinkPath;
+  if (route != null) _openRoute(route);
 });
 
-// Handle app launch from link
+// The link that launched the app, for code that runs after the stream delivered it.
 final initialLink = await dectog.getInitialLink();
-if (initialLink != null) {
-  // Handle same as above
-}
 ```
 
 ## FlutterDectog
