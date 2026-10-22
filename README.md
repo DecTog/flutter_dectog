@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://dectog.com"><img src=".github/dectog-readme.png" alt="DecTog: Flutter SDK" width="800"></a>
+</p>
+
 # Flutter DecTog
 
 A Flutter package for creating and handling dynamic links using your own DecTog backend.
