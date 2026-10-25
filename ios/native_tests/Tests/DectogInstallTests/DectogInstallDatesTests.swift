@@ -80,6 +80,30 @@ final class DectogInstallDatesTests: XCTestCase {
     XCTAssertEqual(store.values[DectogInstallDates.latestInstallAccount], String(t0))
   }
 
+  func testABuildMadeBeforeTheInstallDoesNotDateTheFirstInstall() throws {
+    // The executable keeps the date the build was made, which can be days
+    // before the install (an older build, or one copied in with its file
+    // dates). Taken as the install date, it made a fresh install look like a
+    // reinstall more than a day old.
+    let store = FakeStore()
+    let out = DectogInstallDates.collect(
+      container: try container(executable: t0 - 3 * day, library: t0, documents: t0 + 1_000), store: store)
+    XCTAssertEqual(out["executableCtime"] as? Int64, t0 - 3 * day)
+    XCTAssertEqual(out["keychainFirstInstall"] as? Int64, t0)
+    XCTAssertEqual(out["keychainLatestInstall"] as? Int64, t0)
+    XCTAssertEqual(store.values[DectogInstallDates.firstInstallAccount], String(t0))
+  }
+
+  func testAReinstalledOlderBuildMovesTheLatestDateToTheNewContainer() throws {
+    let store = FakeStore()
+    store.values = [DectogInstallDates.firstInstallAccount: String(t0), DectogInstallDates.latestInstallAccount: String(t0)]
+    let reinstalled = t0 + 5 * day
+    let out = DectogInstallDates.collect(
+      container: try container(executable: t0 + day, library: reinstalled, documents: reinstalled), store: store)
+    XCTAssertEqual(out["keychainFirstInstall"] as? Int64, t0)
+    XCTAssertEqual(out["keychainLatestInstall"] as? Int64, reinstalled)
+  }
+
   func testAnUpdateKeepsBothDates() throws {
     // An App Store update replaces the bundle (newer executable) but keeps
     // the container.
