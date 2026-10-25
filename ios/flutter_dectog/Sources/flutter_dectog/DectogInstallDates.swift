@@ -81,11 +81,11 @@ enum DectogInstallDates {
 
     var first = ms(firstRead)
     var latest = ms(latestRead)
-    let containerDates = [library, documents, executable].compactMap { $0 }
-    // Container creation: the earliest of the three. Library/Documents are
-    // created together at install; the executable's date trails after an
-    // update, so the minimum is the install itself.
-    let container = containerDates.min()
+    // Container creation: Library and Documents are created together at
+    // install. Never the executable: it keeps the date its build was made,
+    // which can be days before the install and would date a fresh install
+    // as a reinstall (Branch dates the install by its Library directory too).
+    let container = [library, documents].compactMap { $0 }.min()
 
     if first == nil {
       // First sight on this device: seed both dates from the container.
