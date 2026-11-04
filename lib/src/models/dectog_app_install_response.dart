@@ -413,11 +413,11 @@ class DectogAppInstallLink {
   /// Link metadata
   final Map<String, dynamic>? metadata;
 
-  /// The customer whose referral link brought this install (the id passed to
-  /// `createReferralLink`), or null for any other link. The server reads it
-  /// from the link, so nothing in the tapped URL can change it. Use it for
-  /// screens such as "Invited by …"; grant rewards from the
-  /// `referral.converted` webhook.
+  /// The customer who referred this install: the id passed to
+  /// `createReferralLink` for a referral link (read from the link, so nothing
+  /// in the tapped URL can change it), else the tap's `dec_referrer` URL
+  /// parameter, else null. Use it for screens such as "Invited by …"; grant
+  /// rewards from the `referral.converted` webhook.
   final String? referrerCustomerId;
 
   const DectogAppInstallLink({
