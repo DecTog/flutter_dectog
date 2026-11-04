@@ -100,7 +100,7 @@ const DectogConfig({
 | `fbAppId` | `String?` | Enables Meta's on-device referrer on Android; `null` takes the Facebook App ID saved in the dashboard. |
 | `persistDeviceId` | `bool` | Keep the first IDFV in the iOS Keychain. |
 | `enabled` | `bool` | Whether collection is on until the app first calls `setEnabled` (default `true`). `false` waits for consent; see `setEnabled`. The app's stored choice wins on every later launch. |
-| `environment` | `DectogEnvironment?` | The environment this build's key should belong to, for example `test` in debug builds with the test environment's key. `diagnostics()` warns when it belongs to the other one. `null`: no check, except that a release build with a test key warns. See [Environments](#environments). |
+| `environment` | `DectogEnvironment?` | A check, not a switch: the key alone decides the account, and this changes nothing at runtime. The environment this build's key should belong to, for example `test` in debug builds with the test environment's key; when the app calls `diagnostics()`, it warns if the key belongs to the other one. `null`: no check, except that a release build with a test key warns. See [Environments](#environments). |
 | `defaultBaseUrl` | `static const String` | `'https://app.dectog.com'` |
 | `defaultLinkRootDomain` | `static const String` | `'dectog.com'` |
 | `effectiveBaseUrl` | `String get` | `baseUrl` with trailing slashes removed, or the default. |

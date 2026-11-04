@@ -271,9 +271,13 @@ builds and add `t-<username>.dectog.com` to their associated domains:
 ```dart
 await dectog.initialize(DectogConfig(
   apiKey: kReleaseMode ? liveSdkKey : testSdkKey,
-  environment: kReleaseMode ? DectogEnvironment.live : DectogEnvironment.test,
 ));
 ```
+
+The key alone decides which account gets the data. `DectogConfig(environment:)` is an optional
+check, not a switch, and changes nothing at runtime: when the app calls `diagnostics()`, it warns
+if the key belongs to the other environment. Without it, `diagnostics()` still warns about a test
+key in a release build.
 
 To simulate a first install, delete the app (iOS) or run `adb shell pm clear <package>`
 (Android), tap a DecTog link, install and open the app: `onAppInstalled` fires with
