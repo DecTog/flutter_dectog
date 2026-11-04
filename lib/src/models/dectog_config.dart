@@ -91,10 +91,14 @@ class DectogConfig {
   /// choice is stored and wins over this value on every later launch.
   final bool enabled;
 
-  /// The environment this build's [apiKey] should belong to, for
-  /// example `test` in debug builds that use the test environment's key.
-  /// `diagnostics()` warns when the key belongs to the other one. Null (the
-  /// default): no check, except that a release build with a test key warns.
+  /// A check, not a switch: [apiKey] alone decides which account (live or
+  /// test) gets the data, and this field changes nothing at runtime.
+  ///
+  /// The environment this build's [apiKey] should belong to, for example
+  /// `test` in debug builds that use the test environment's key. When the app
+  /// calls `diagnostics()`, it warns if the key belongs to the other one.
+  /// Null (the default): no check, except that a release build with a test
+  /// key warns.
   final DectogEnvironment? environment;
 
   const DectogConfig({
