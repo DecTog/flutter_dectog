@@ -746,6 +746,30 @@ void main() {
   );
 
   test(
+    'the first launch waits for a settings answer as slow as a cold connection',
+    () async {
+      final fixture =
+          File('test/fixtures/wire/sdk-config.json').readAsStringSync();
+      h.answer = (r) async {
+        if (r.url.path != '/api/v1/sdk-config') return null;
+        // One request on a cold connection measured about 2 s.
+        await Future<void>.delayed(const Duration(seconds: 2));
+        return http.Response(
+          fixture,
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      };
+      await FlutterDectog().initialize(config);
+      expect(
+        SdkConfigStore().config?.fbAppId,
+        '1234567890',
+        reason: 'the install registration ran with the settings',
+      );
+    },
+  );
+
+  test(
     'diagnostics warns when the key belongs to the other environment',
     () async {
       h.responses['/api/v1/sdk-config'] =
