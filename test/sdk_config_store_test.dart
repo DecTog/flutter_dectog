@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dectog/flutter_dectog.dart';
-import 'package:flutter_dectog/src/services/sdk_config_store.dart';
+import 'package:flutter_adto/flutter_adto.dart';
+import 'package:flutter_adto/src/services/sdk_config_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The server's SDK settings are cached on disk for cache_seconds.
@@ -11,7 +11,7 @@ void main() {
   final store = SdkConfigStore();
 
   setUp(() async {
-    dir = await Directory.systemTemp.createTemp('dectog_sdk_config');
+    dir = await Directory.systemTemp.createTemp('adto_sdk_config');
     store.resetForTest(directoryProvider: () async => dir);
   });
   tearDown(() async {
@@ -24,16 +24,19 @@ void main() {
           as Map<String, dynamic>;
 
   test('parses the wire shape', () {
-    final c = DectogSdkConfig.fromJson(fixture);
+    final c = AdtoSdkConfig.fromJson(fixture);
     expect(c.fbAppId, '1234567890');
     expect(c.readClipboardOnInstall, isTrue);
-    expect(c.linkHosts, ['go.acme.app', 'acme.dectog.com']);
+    expect(c.linkHosts, [
+      'go.acme.app',
+      'acme.dectog.com',
+    ]); // as in the server's fixture
     expect(c.username, 'acme');
-    expect(c.environment, DectogEnvironment.live);
+    expect(c.environment, AdtoEnvironment.live);
     expect(c.cacheSeconds, 3600);
     expect(
-      DectogSdkConfig.fromJson({...fixture, 'environment': 'test'}).environment,
-      DectogEnvironment.test,
+      AdtoSdkConfig.fromJson({...fixture, 'environment': 'test'}).environment,
+      AdtoEnvironment.test,
     );
     expect(c.toJson()['environment'], 'live');
   });
@@ -42,7 +45,7 @@ void main() {
     'a saved config survives a restart and is fresh for cache_seconds',
     () async {
       final t0 = DateTime(2026, 10, 14, 12);
-      await store.save(DectogSdkConfig.fromJson(fixture), now: t0);
+      await store.save(AdtoSdkConfig.fromJson(fixture), now: t0);
       store.resetForTest(directoryProvider: () async => dir);
       final loaded = await store.load();
       expect(loaded?.fbAppId, '1234567890');

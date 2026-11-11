@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dectog/src/services/event_queue_service.dart';
+import 'package:flutter_adto/src/services/event_queue_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
   late EventQueueService queue;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('dectog_queue_test');
+    tempDir = await Directory.systemTemp.createTemp('adto_queue_test');
     queue = EventQueueService();
     await queue.resetForTest(
       directoryProvider: () async => tempDir,

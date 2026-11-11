@@ -1,8 +1,8 @@
-# Working on flutter_dectog
+# Working on flutter_adto
 
-The Flutter SDK for DecTog: Dart in `lib/`, a Kotlin plugin in `android/`, a
+The Flutter SDK for AdTo: Dart in `lib/`, a Kotlin plugin in `android/`, a
 Swift plugin in `ios/`, an example app in `example/`. The server and its wire
-contract are in `DecTog/dectog` (`docs/API_CONTRACT.md`).
+contract are in `ad-to/adto` (`docs/API_CONTRACT.md`).
 
 ## Commands
 
@@ -11,9 +11,9 @@ dart format --output=none --set-exit-if-changed lib test tool example/lib
 flutter analyze
 flutter test
 flutter pub publish --dry-run
-(cd packages/flutter_dectog_adid && flutter test) && tool/publish_adid.sh --dry-run
+(cd packages/flutter_adto_adid && flutter test) && tool/publish_adid.sh --dry-run
 cd example && flutter build apk --debug && flutter build ios --simulator --debug
-(cd example/android && ./gradlew :flutter_dectog:testDebugUnitTest)   # Kotlin tests
+(cd example/android && ./gradlew :flutter_adto:testDebugUnitTest)   # Kotlin tests
 swift test --package-path ios/native_tests                             # Swift tests
 tool/device_restart_test.sh   # with an emulator or device attached
 ```
@@ -23,23 +23,27 @@ the Kotlin and Swift.
 
 ## Rules
 
-- Released: 1.0.0 is on pub.dev and in production apps, so the public API
-  follows semantic versioning; a removed, renamed or retyped member needs a
-  major version. Never publish to pub.dev without being asked.
+- flutter_adto continues flutter_dectog (1.0.0 on pub.dev, in production
+  apps; maintained on the `flutter_dectog-1.x` branch). The public API follows
+  semantic versioning; a removed, renamed or retyped member needs a major
+  version. Never publish to pub.dev without being asked.
+- The on-device names stay DecTog's (the `dectog` folder, `.dectog_*.json`,
+  the Keychain service `app.dectog.sdk`), as do the wire names (`x-dectog-*`,
+  `DectogSDK/`, `dtg_*`, `dectog://`): `test/on_device_names_test.dart` pins them.
 - The wire format follows the server's `docs/API_CONTRACT.md`; change both
   together. Errors arrive as `{"error": {"code", "message", "request_id"}}` and
-  surface as `DectogError.code` / `requestId`.
+  surface as `AdtoError.code` / `requestId`.
 - Everything the SDK collects respects `setEnabled(false)` and
-  `DectogConfig.collect` (`DectogCollection`), and is declared in
-  `ios/flutter_dectog/Sources/flutter_dectog/PrivacyInfo.xcprivacy` and the
+  `AdtoConfig.collect` (`AdtoCollection`), and is declared in
+  `ios/flutter_adto/Sources/flutter_adto/PrivacyInfo.xcprivacy` and the
   disclosure table in `doc/api-reference.md`. The advertising id lives only
-  in `packages/flutter_dectog_adid`; the core links no ad framework.
+  in `packages/flutter_adto_adid`; the core links no ad framework.
 - The native reads live in framework-free files shared as source with the
-  React Native SDK (`DecTog/react-native-dectog`, whose `tool/sync_shared.sh
-  --check` compares them byte for byte): `android/src/main/kotlin/app/dectog/core/`
-  and, in `ios/flutter_dectog/Sources/flutter_dectog/`, `DectogDevice.swift`,
-  `DectogKeychain.swift`, `DectogInstallDates.swift` and
-  `DectogPasteTargetView.swift`. Keep Flutter out of them, change them here
+  React Native SDK (`ad-to/react-native-adto`, whose `tool/sync_shared.sh
+  --check` compares them byte for byte): `android/src/main/kotlin/app/adto/core/`
+  and, in `ios/flutter_adto/Sources/flutter_adto/`, `AdtoDevice.swift`,
+  `AdtoKeychain.swift`, `AdtoInstallDates.swift` and
+  `AdtoPasteTargetView.swift`. Keep Flutter out of them, change them here
   first, then sync. The plugin classes only map the channel onto them.
 - Custom-scheme links are recognised by their `dtg_l=<username>/<slug>` tag,
   never by the URL's shape (only `dectog://` is accepted untagged).

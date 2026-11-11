@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  tearDown(() => DectogPasteButton.debugIsSupportedOverride = null);
+  tearDown(() => AdtoPasteButton.debugIsSupportedOverride = null);
 
   testWidgets('renders nothing where UIPasteControl does not exist', (
     tester,
   ) async {
-    DectogPasteButton.debugIsSupportedOverride = () => false;
+    AdtoPasteButton.debugIsSupportedOverride = () => false;
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
-        child: DectogPasteButton(),
+        child: AdtoPasteButton(),
       ),
     );
     expect(find.byType(SizedBox), findsOneWidget);
@@ -24,20 +24,20 @@ void main() {
   testWidgets('on iOS 16+ it hosts the native view with the creation params', (
     tester,
   ) async {
-    DectogPasteButton.debugIsSupportedOverride = () => true;
+    AdtoPasteButton.debugIsSupportedOverride = () => true;
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
-        child: DectogPasteButton(
+        child: AdtoPasteButton(
           size: Size(220, 48),
-          displayMode: DectogPasteDisplayMode.labelOnly,
-          cornerStyle: DectogPasteCornerStyle.medium,
+          displayMode: AdtoPasteDisplayMode.labelOnly,
+          cornerStyle: AdtoPasteCornerStyle.medium,
           backgroundColor: Color(0xFF112233),
         ),
       ),
     );
     final view = tester.widget<UiKitView>(find.byType(UiKitView));
-    expect(view.viewType, DectogPasteButton.viewType);
+    expect(view.viewType, AdtoPasteButton.viewType);
     expect(view.creationParams, {
       'displayMode': 'labelOnly',
       'cornerStyle': 'medium',
@@ -54,6 +54,6 @@ void main() {
   });
 
   test('off-device the support check is false (test host is not iOS)', () {
-    expect(DectogPasteButton.isSupported, isFalse);
+    expect(AdtoPasteButton.isSupported, isFalse);
   });
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 
 import 'app.dart';
 import 'trails.dart';
@@ -51,10 +51,10 @@ class WelcomeScreen extends StatelessWidget {
           const SizedBox(height: 32),
           // iOS 16+: paste a copied invite link without the system alert;
           // renders nothing elsewhere.
-          if (DectogPasteButton.isSupported) ...[
+          if (AdtoPasteButton.isSupported) ...[
             const Text('Copied an invite link? Paste it here:'),
             const SizedBox(height: 8),
-            const DectogPasteButton(),
+            const AdtoPasteButton(),
           ],
           const SizedBox(height: 32),
           _Status(app: app),
@@ -147,12 +147,12 @@ class TrailScreen extends StatelessWidget {
         queryParameters: {'dec_deeplink': trail.route},
       );
       await Clipboard.setData(ClipboardData(text: url.toString()));
-      await app.dectog.trackEvent(
+      await app.adto.trackEvent(
         'trail_shared',
         data: {'trail_id': trail.id},
       );
       messenger.showSnackBar(SnackBar(content: Text('Copied $url')));
-    } on DectogError catch (e) {
+    } on AdtoError catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
     }
   }
@@ -167,7 +167,7 @@ class InviteScreen extends StatefulWidget {
 }
 
 class _InviteScreenState extends State<InviteScreen> {
-  DectogLink? _link;
+  AdtoLink? _link;
   String? _error;
 
   @override
@@ -268,7 +268,7 @@ class DebugScreen extends StatelessWidget {
               children: [
                 OutlinedButton(
                   onPressed: () async {
-                    final report = await app.dectog.diagnostics();
+                    final report = await app.adto.diagnostics();
                     app.note(
                       report.ok
                           ? 'Setup matches the dashboard'
@@ -279,21 +279,21 @@ class DebugScreen extends StatelessWidget {
                 ),
                 OutlinedButton(
                   onPressed: () async {
-                    final v = await app.dectog.getAttributionData();
+                    final v = await app.adto.getAttributionData();
                     app.note('Attribution: ${v ?? 'none'}');
                   },
                   child: const Text('Attribution'),
                 ),
                 OutlinedButton(
                   onPressed: () async {
-                    final on = await app.dectog.isEnabled();
-                    await app.dectog.setEnabled(!on);
+                    final on = await app.adto.isEnabled();
+                    await app.adto.setEnabled(!on);
                     app.note('Collection ${on ? 'off' : 'on'}');
                   },
                   child: const Text('Toggle consent'),
                 ),
                 OutlinedButton(
-                  onPressed: () => app.dectog.flush(),
+                  onPressed: () => app.adto.flush(),
                   child: const Text('Flush events'),
                 ),
               ],
@@ -322,11 +322,11 @@ class _Status extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = switch (app.status) {
       'no-key' =>
-        'No DECTOG_API_KEY: run with --dart-define-from-file=env/dev.json.',
-      'starting' => 'Starting DecTog…',
-      'failed' => 'DecTog failed to start: ${app.error}',
+        'No ADTO_API_KEY: run with --dart-define-from-file=env/dev.json.',
+      'starting' => 'Starting AdTo…',
+      'failed' => 'AdTo failed to start: ${app.error}',
       _ =>
-        'DecTog ready · ${app.verdict == null ? 'no verdict yet' : app.verdict!.matched ? 'install credited to /${app.verdict!.slug}' : 'organic install'}',
+        'AdTo ready · ${app.verdict == null ? 'no verdict yet' : app.verdict!.matched ? 'install credited to /${app.verdict!.slug}' : 'organic install'}',
     };
     return Text(text, style: Theme.of(context).textTheme.bodySmall);
   }

@@ -198,7 +198,7 @@ public/
 android/fastlane/metadata/
 results.json
 
-# Swift Package Manager (ios/flutter_dectog package)
+# Swift Package Manager (ios/flutter_adto package)
 .build/
 .swiftpm/
 

@@ -28,7 +28,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>app.dectog.example</string>
+			<string>app.adto.example</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>dectog</string>
@@ -40,7 +40,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>The DecTog example reads the advertising identifier to show how install attribution uses it.</string>
+	<string>The AdTo example reads the advertising identifier to show how install attribution uses it.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The server's golden wire fixtures (copied by tool/sync_wire_fixtures.sh
-/// from DecTog/dectog apps/worker/test/fixtures/wire, where every live v1
+/// from ad-to/adto apps/worker/test/fixtures/wire, where every live v1
 /// response is held to their shape). Each must parse into the model the SDK
 /// uses for it, with no field lost.
 Map<String, dynamic> fixture(String name) =>
@@ -36,7 +36,7 @@ void main() {
   });
 
   test('a matched install verdict', () {
-    final r = DectogAppInstallResponse.fromJson(
+    final r = AdtoAppInstallResponse.fromJson(
       fixture('install-verdict-matched'),
     );
     expect(r.matched, isTrue);
@@ -59,13 +59,13 @@ void main() {
     final json = fixture('install-verdict-matched');
     final link = Map<String, dynamic>.from(json['link'] as Map)
       ..['referrer_customer_id'] = 'alice';
-    final r = DectogAppInstallResponse.fromJson({...json, 'link': link});
+    final r = AdtoAppInstallResponse.fromJson({...json, 'link': link});
     expect(r.link?.referrerCustomerId, 'alice');
     expect(r.toJson()['link']['referrer_customer_id'], 'alice');
   });
 
   test('an organic install verdict', () {
-    final r = DectogAppInstallResponse.fromJson(
+    final r = AdtoAppInstallResponse.fromJson(
       fixture('install-verdict-organic'),
     );
     expect(r.matched, isFalse);
@@ -79,13 +79,13 @@ void main() {
   test('the attribution pull carries last_open', () {
     final json = fixture('attribution');
     expect(json.containsKey('last_open'), isTrue);
-    final r = DectogAppInstallResponse.fromJson(json);
+    final r = AdtoAppInstallResponse.fromJson(json);
     expect(r.matched, isTrue);
     expect(r.lastOpen, isNull);
   });
 
   test('a permanent link', () {
-    final l = DectogLink.fromJson(fixture('link'));
+    final l = AdtoLink.fromJson(fixture('link'));
     expect(l.slug, 'spring');
     expect(l.target, 'https://example.com/s');
     expect(l.campaign, 'c1');
@@ -105,14 +105,14 @@ void main() {
   });
 
   test('a page of links', () {
-    final p = DectogLinkPage.fromJson(fixture('link-page'));
+    final p = AdtoLinkPage.fromJson(fixture('link-page'));
     expect(p.links.single.slug, 'spring');
     expect(p.nextCursor, isNotEmpty);
     expect(p.hasMore, isTrue);
   });
 
   test('a temporary link', () {
-    final t = DectogTempLink.fromJson(fixture('temp-link'));
+    final t = AdtoTempLink.fromJson(fixture('temp-link'));
     expect(t.slug, startsWith('t_'));
     expect(t.ttlSeconds, 600);
     expect(t.expiredUrl, isNull);
@@ -120,14 +120,14 @@ void main() {
   });
 
   test('a public resolution', () {
-    final r = DectogLinkResolution.fromJson(fixture('resolution'));
+    final r = AdtoLinkResolution.fromJson(fixture('resolution'));
     expect(r.slug, 'spring');
     expect(r.type, 'permanent');
     expect(r.expiresAt, isNull);
   });
 
   test('the error envelope', () {
-    final e = DectogError.fromResponse(
+    final e = AdtoError.fromResponse(
       statusCode: 404,
       body: jsonEncode(fixture('error')),
       fallbackMessage: 'Request failed (HTTP 404)',
@@ -138,7 +138,7 @@ void main() {
   });
 
   test('the app settings', () {
-    final c = DectogSdkConfig.fromJson(fixture('sdk-config'));
+    final c = AdtoSdkConfig.fromJson(fixture('sdk-config'));
     final json = fixture('sdk-config')..remove(r'$source');
     expect(c.toJson(), json, reason: 'no field lost');
   });

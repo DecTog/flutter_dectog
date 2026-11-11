@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// DectogNavigatorObserver reports page routes as screen views,
+/// AdtoNavigatorObserver reports page routes as screen views,
 /// debounced, deduplicated, name only unless params are allowed.
 void main() {
   late List<(String, Map<String, Object?>?)> seen;
   late GlobalKey<NavigatorState> nav;
 
-  DectogNavigatorObserver observer({
+  AdtoNavigatorObserver observer({
     Set<String> captureParams = const {},
     String? Function(Route<dynamic>)? nameOf,
-  }) => DectogNavigatorObserver(
+  }) => AdtoNavigatorObserver(
     captureParams: captureParams,
     nameOf: nameOf,
     track: (name, {params}) async => seen.add((name, params)),
@@ -22,7 +22,7 @@ void main() {
     builder: (_) => Text(name ?? 'unnamed'),
   );
 
-  Future<void> pumpApp(WidgetTester tester, DectogNavigatorObserver o) =>
+  Future<void> pumpApp(WidgetTester tester, AdtoNavigatorObserver o) =>
       tester.pumpWidget(
         MaterialApp(
           navigatorKey: nav,

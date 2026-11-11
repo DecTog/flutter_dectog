@@ -1,4 +1,4 @@
-import 'package:flutter_dectog/src/services/install_classifier.dart';
+import 'package:flutter_adto/src/services/install_classifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

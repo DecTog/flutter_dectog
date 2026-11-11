@@ -1,11 +1,11 @@
-# Contributing to flutter_dectog
+# Contributing to flutter_adto
 
-Thank you for helping. This repository is the Flutter SDK for DecTog: a Dart
+Thank you for helping. This repository is the Flutter SDK for AdTo: a Dart
 package with a Kotlin plugin (`android/`) and a Swift plugin (`ios/`). The
-server is [DecTog/dectog](https://github.com/DecTog/dectog); the docs site is
-[DecTog/docs](https://github.com/DecTog/docs).
+server is [ad-to/adto](https://github.com/ad-to/adto); the docs site is
+[ad-to/docs](https://github.com/ad-to/docs).
 
-flutter_dectog is on pub.dev and in apps in production, so the public API
+flutter_adto is on pub.dev and in apps in production, so the public API
 follows semantic versioning: a removed, renamed or retyped member is a breaking
 change and needs a major version. `test/public_api_test.dart` fails on any
 change to the surface.
@@ -14,7 +14,7 @@ change to the surface.
 
 - **Bugs:** open an issue with the Flutter version, the platform and OS
   version, the SDK log with `enableDebugLogging: true`, and the `requestId` of
-  any `DectogError` you got.
+  any `AdtoError` you got.
 - **Features:** open an issue before a large change.
 - **Security issues:** never in public; see [SECURITY.md](SECURITY.md).
 
@@ -28,15 +28,15 @@ flutter analyze
 flutter test
 flutter pub publish --dry-run
 cd example && flutter build apk --debug && flutter build ios --simulator --debug
-(cd example/android && ./gradlew :flutter_dectog:testDebugUnitTest)   # Kotlin, JUnit + Robolectric
+(cd example/android && ./gradlew :flutter_adto:testDebugUnitTest)   # Kotlin, JUnit + Robolectric
 swift test --package-path ios/native_tests                             # Swift, XCTest on macOS
 ```
 
 The two example builds compile the plugin's Kotlin and Swift; `flutter test`
 alone does not, because it mocks the platform channel. The native reads sit in
-framework-free files (`android/src/main/kotlin/app/dectog/core/`, and
-`DectogDevice.swift`, `DectogKeychain.swift`, `DectogInstallDates.swift` and
-`DectogPasteTargetView.swift` on iOS) that the React Native SDK copies byte for
+framework-free files (`android/src/main/kotlin/app/adto/core/`, and
+`AdtoDevice.swift`, `AdtoKeychain.swift`, `AdtoInstallDates.swift` and
+`AdtoPasteTargetView.swift` on iOS) that the React Native SDK copies byte for
 byte; keep Flutter imports out of them. The native tests cover
 the referrer reader and orchestrator (`android/src/test`) and the install dates
 (`ios/native_tests`, which compiles the production Swift files through
@@ -60,14 +60,14 @@ workflow).
   faked plugins and a recording HTTP client; use it for anything that spans
   services (what is sent, and what must not be).
 - **Versions move together.** `pubspec.yaml`, `lib/src/version.dart`,
-  `ios/flutter_dectog.podspec` and the newest `CHANGELOG.md` entry carry the
+  `ios/flutter_adto.podspec` and the newest `CHANGELOG.md` entry carry the
   same version; `test/version_test.dart` fails otherwise. See
   [RELEASING.md](RELEASING.md).
 - **Collection is consent-gated.** Anything new the SDK sends must respect
   `setEnabled(false)` and `collectDeviceData`, and must be listed in the
   privacy manifest and the docs site's device-data page.
 - **Never block the host app.** Native reads run with timeouts and fail soft;
-  no SDK call may throw into app code except the documented `DectogError`s.
+  no SDK call may throw into app code except the documented `AdtoError`s.
 - **Tests first for defects.** A bug fix starts with a test that fails without it.
 - **No tracking ids in code.** Comments, doc comments and test names say what and
   why in words, without plan item ids (`P2.12`), decision or review ids: dartdoc

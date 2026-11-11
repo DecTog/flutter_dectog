@@ -1,18 +1,18 @@
-/// Data models for Flutter DecTog plugin
+/// Data models for Flutter AdTo plugin
 library models;
 
-export 'dectog_app_install_request.dart';
-export 'dectog_app_install_response.dart';
-export 'dectog_click_params.dart';
-export 'dectog_collection.dart';
-export 'dectog_config.dart';
-export 'dectog_environment.dart';
-export 'dectog_error.dart';
-export 'dectog_link.dart';
-export 'dectog_link_page.dart';
-export 'dectog_link_click.dart';
-export 'dectog_link_resolution.dart';
-export 'dectog_revenue.dart';
-export 'dectog_routing_rule.dart';
-export 'dectog_sdk_config.dart';
-export 'dectog_temp_link.dart';
+export 'adto_app_install_request.dart';
+export 'adto_app_install_response.dart';
+export 'adto_click_params.dart';
+export 'adto_collection.dart';
+export 'adto_config.dart';
+export 'adto_environment.dart';
+export 'adto_error.dart';
+export 'adto_link.dart';
+export 'adto_link_page.dart';
+export 'adto_link_click.dart';
+export 'adto_link_resolution.dart';
+export 'adto_revenue.dart';
+export 'adto_routing_rule.dart';
+export 'adto_sdk_config.dart';
+export 'adto_temp_link.dart';

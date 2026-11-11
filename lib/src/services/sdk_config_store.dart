@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-import '../models/dectog_sdk_config.dart';
+import '../models/adto_sdk_config.dart';
 import 'sdk_storage.dart';
 
 /// The server's SDK settings, cached on disk with the time they were
@@ -15,12 +15,12 @@ class SdkConfigStore {
 
   static const String fileName = '.dectog_sdk_config.json';
 
-  DectogSdkConfig? _config;
+  AdtoSdkConfig? _config;
   DateTime? _fetchedAt;
   Future<Directory> Function()? _directoryProvider;
   bool _loaded = false;
 
-  DectogSdkConfig? get config => _config;
+  AdtoSdkConfig? get config => _config;
 
   @visibleForTesting
   void resetForTest({Future<Directory> Function()? directoryProvider}) {
@@ -36,7 +36,7 @@ class SdkConfigStore {
   }
 
   /// The cached settings, read once per process.
-  Future<DectogSdkConfig?> load() async {
+  Future<AdtoSdkConfig?> load() async {
     if (_loaded) return _config;
     _loaded = true;
     try {
@@ -46,7 +46,7 @@ class SdkConfigStore {
         if (decoded is Map<String, dynamic>) {
           final c = decoded['config'];
           _config =
-              c is Map<String, dynamic> ? DectogSdkConfig.fromJson(c) : null;
+              c is Map<String, dynamic> ? AdtoSdkConfig.fromJson(c) : null;
           _fetchedAt = DateTime.tryParse(
             decoded['fetched_at'] as String? ?? '',
           );
@@ -65,7 +65,7 @@ class SdkConfigStore {
         Duration(seconds: c.cacheSeconds);
   }
 
-  Future<void> save(DectogSdkConfig config, {DateTime? now}) async {
+  Future<void> save(AdtoSdkConfig config, {DateTime? now}) async {
     _config = config;
     _fetchedAt = now ?? DateTime.now();
     _loaded = true;

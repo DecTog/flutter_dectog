@@ -1,12 +1,11 @@
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Future<DectogAdvertisingId?> _adId() async =>
-    const DectogAdvertisingId(id: 'ad');
+Future<AdtoAdvertisingId?> _adId() async => const AdtoAdvertisingId(id: 'ad');
 
 void main() {
   test('config defaults', () {
-    const c = DectogConfig(apiKey: 'dtg_test');
+    const c = AdtoConfig(apiKey: 'dtg_test');
     expect(c.installReferrerTimeout, const Duration(seconds: 5));
     expect(c.collect, isNull);
     // null collects the device tier, no ASA token, no ad id, and
@@ -20,13 +19,13 @@ void main() {
   });
 
   test('a collect set is exact: what it leaves out is off', () {
-    const none = DectogConfig(apiKey: 'dtg_test', collect: {});
+    const none = AdtoConfig(apiKey: 'dtg_test', collect: {});
     expect(none.collectsDeviceTier, isFalse);
     expect(none.collectsAppleSearchAdsToken, isFalse);
     expect(none.pasteboardSetting, isFalse);
     expect(none.oemReferrersSetting, isFalse);
     expect(
-      const DectogConfig(
+      const AdtoConfig(
         apiKey: 'dtg_test',
         collect: {},
         advertisingIdProvider: _adId,
@@ -34,9 +33,9 @@ void main() {
       isFalse,
     );
 
-    const all = DectogConfig(
+    const all = AdtoConfig(
       apiKey: 'dtg_test',
-      collect: {...DectogCollection.values},
+      collect: {...AdtoCollection.values},
     );
     expect(all.collectsDeviceTier, isTrue);
     expect(all.collectsAppleSearchAdsToken, isTrue);
@@ -47,38 +46,35 @@ void main() {
   });
 
   test('the ad id is on by default once a provider is given', () {
-    const c = DectogConfig(apiKey: 'dtg_test', advertisingIdProvider: _adId);
+    const c = AdtoConfig(apiKey: 'dtg_test', advertisingIdProvider: _adId);
     expect(c.collectsAdId, isTrue);
   });
 
   test(
     'pasteboard read: platform default is iOS on / Android off, explicit values win',
     () {
-      expect(DectogConfig.resolveReadClipboard(null, isIOS: true), isTrue);
-      expect(DectogConfig.resolveReadClipboard(null, isIOS: false), isFalse);
-      expect(DectogConfig.resolveReadClipboard(false, isIOS: true), isFalse);
-      expect(DectogConfig.resolveReadClipboard(true, isIOS: false), isTrue);
+      expect(AdtoConfig.resolveReadClipboard(null, isIOS: true), isTrue);
+      expect(AdtoConfig.resolveReadClipboard(null, isIOS: false), isFalse);
+      expect(AdtoConfig.resolveReadClipboard(false, isIOS: true), isFalse);
+      expect(AdtoConfig.resolveReadClipboard(true, isIOS: false), isTrue);
 
-      const optOut = DectogConfig(
+      const optOut = AdtoConfig(
         apiKey: 'dtg_test',
-        collect: {DectogCollection.deviceTier},
+        collect: {AdtoCollection.deviceTier},
       );
       expect(optOut.readClipboardFor(isIOS: true), isFalse);
-      const forced = DectogConfig(
+      const forced = AdtoConfig(
         apiKey: 'dtg_test',
-        collect: {DectogCollection.pasteboard},
+        collect: {AdtoCollection.pasteboard},
       );
       expect(forced.readClipboardFor(isIOS: false), isTrue);
     },
   );
 
   test('toString never leaks the key and names the collection', () {
-    const c = DectogConfig(
+    const c = AdtoConfig(
       apiKey: 'dtg_0123456789abcdef',
-      collect: {
-        DectogCollection.deviceTier,
-        DectogCollection.appleSearchAdsToken,
-      },
+      collect: {AdtoCollection.deviceTier, AdtoCollection.appleSearchAdsToken},
     );
     final s = c.toString();
     expect(s, isNot(contains('0123456789abcdef')));
@@ -86,9 +82,9 @@ void main() {
     expect(s, contains('collect: deviceTier,appleSearchAdsToken'));
     expect(s, contains('adId: false'));
     expect(
-      const DectogConfig(apiKey: 'dtg_test').toString(),
+      const AdtoConfig(apiKey: 'dtg_test').toString(),
       contains('collect: defaults'),
     );
-    expect(const DectogConfig(apiKey: 'short').toString(), contains('***'));
+    expect(const AdtoConfig(apiKey: 'short').toString(), contains('***'));
   });
 }

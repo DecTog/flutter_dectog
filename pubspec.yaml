@@ -1,13 +1,13 @@
-name: flutter_dectog
-description: A Flutter plugin for DecTog dynamic links - similar to Firebase
-  Dynamic Links but using your own backend.
+name: flutter_adto
+description: AdTo for Flutter apps. Deep links that open the app, deferred deep links that
+  survive the install, and install attribution.
 
 version: 1.0.0
 
-homepage: https://dectog.com
-repository: https://github.com/DecTog/flutter_dectog
-issue_tracker: https://github.com/DecTog/flutter_dectog/issues
-documentation: https://docs.dectog.com
+homepage: https://adto.app
+repository: https://github.com/ad-to/flutter_adto
+issue_tracker: https://github.com/ad-to/flutter_adto/issues
+documentation: https://docs.adto.app
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
@@ -45,7 +45,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: app.dectog.flutter_dectog
-        pluginClass: DectogIdentifiersPlugin
+        package: app.adto.flutter_adto
+        pluginClass: AdtoIdentifiersPlugin
       ios:
-        pluginClass: DectogIdentifiersPlugin
+        pluginClass: AdtoIdentifiersPlugin

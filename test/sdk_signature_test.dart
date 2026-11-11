@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter_dectog/src/services/sdk_signature.dart';
+import 'package:flutter_adto/src/services/sdk_signature.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

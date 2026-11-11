@@ -1,6 +1,6 @@
 import 'dart:ui' show Brightness;
 
-import 'package:flutter_dectog/src/services/device_settings_service.dart';
+import 'package:flutter_adto/src/services/device_settings_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

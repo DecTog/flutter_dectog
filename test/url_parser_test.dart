@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dectog/src/dectog_impl.dart';
+import 'package:flutter_adto/src/adto_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The golden link-URL cases in test/fixtures/url-cases.json, shared by every
@@ -15,7 +15,7 @@ void main() {
   group('url-cases.json', () {
     for (final c in cases.cast<Map<String, dynamic>>()) {
       test(c['name'] as String, () {
-        final result = parseDectogUrl(
+        final result = parseAdtoUrl(
           Uri.parse(c['url'] as String),
           c['baseUrl'] as String,
           linkRootDomain: c['linkRootDomain'] as String?,
@@ -30,7 +30,7 @@ void main() {
   });
 
   test('the full URI, path included, survives for the host app router', () {
-    // DectogLinkClick.originalUrl is uri.toString(): the deep-link path is
+    // AdtoLinkClick.originalUrl is uri.toString(): the deep-link path is
     // the HOST APP's route, delivered verbatim, with dtg_click readable.
     const raw =
         'istoria://products/42?color=black&dtg_click=abc123&dtg_l=demo/welcome';

@@ -15,7 +15,7 @@ import 'sdk_storage.dart';
 /// SDK's backup-excluded storage directory ([SdkStorage] — a
 /// restored backup must not resurrect another install's customer id),
 /// best-effort, never throws into app code.
-/// The DecTog link that last opened the app, stamped on every later
+/// The AdTo link that last opened the app, stamped on every later
 /// event so the server can credit a re-engagement.
 class LastOpen {
   const LastOpen({required this.slug, this.clickId, required this.openedAt});
@@ -70,10 +70,10 @@ class SdkStateStore {
   String? get customerId => _customerId;
 
   /// Collection consent: the app's last `setEnabled` choice, which survives
-  /// restarts; until it made one, [defaultEnabled] (`DectogConfig.enabled`).
+  /// restarts; until it made one, [defaultEnabled] (`AdtoConfig.enabled`).
   bool get enabled => _enabled ?? defaultEnabled;
 
-  /// `DectogConfig.enabled`, set by initialize.
+  /// `AdtoConfig.enabled`, set by initialize.
   bool defaultEnabled = true;
 
   /// The install verdict's id, persisted after the first-launch install

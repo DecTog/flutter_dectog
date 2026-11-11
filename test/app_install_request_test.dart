@@ -1,9 +1,9 @@
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('legacy fields serialize exactly as before (backcompat)', () {
-    const request = DectogAppInstallRequest(
+    const request = AdtoAppInstallRequest(
       appPlatform: 'flutter',
       appVersion: '1.0.0',
       appBuildNumber: '42',
@@ -37,7 +37,7 @@ void main() {
   });
 
   test('device-tier fields are emitted and omit-if-null', () {
-    const withAll = DectogAppInstallRequest(
+    const withAll = AdtoAppInstallRequest(
       os: 'android',
       deviceId: '8af8770a27cfd182',
       deviceModel: 'Pixel 9',
@@ -57,7 +57,7 @@ void main() {
     expect(json['carrier_mcc'], '310');
     expect(json['screen_width'], '1080');
 
-    const minimal = DectogAppInstallRequest(os: 'ios');
+    const minimal = AdtoAppInstallRequest(os: 'ios');
     final minimalJson = minimal.toJson();
     expect(minimalJson.containsKey('device_id'), isFalse);
     expect(minimalJson.containsKey('ad_id'), isFalse);
@@ -65,7 +65,7 @@ void main() {
   });
 
   test('fromJson roundtrips the device tier', () {
-    const request = DectogAppInstallRequest(
+    const request = AdtoAppInstallRequest(
       os: 'ios',
       deviceId: '7946DA4E-8429-423C-B405-B3FC77914E3E',
       deviceModel: 'iPhone 15 Pro Max',
@@ -76,7 +76,7 @@ void main() {
       screenDensity: '3.000',
       connectivityType: 'cellular',
     );
-    final roundtripped = DectogAppInstallRequest.fromJson(request.toJson());
+    final roundtripped = AdtoAppInstallRequest.fromJson(request.toJson());
     expect(roundtripped.deviceId, request.deviceId);
     expect(roundtripped.deviceModel, request.deviceModel);
     expect(roundtripped.screenWidth, '1170');
@@ -90,7 +90,7 @@ void main() {
   test(
     'the UTC offset and the settings serialize, omit-if-null and round-trip',
     () {
-      const withAll = DectogAppInstallRequest(
+      const withAll = AdtoAppInstallRequest(
         os: 'ios',
         timezone: '3:00:00.000000',
         utcOffsetMin: 180,
@@ -106,7 +106,7 @@ void main() {
       expect(json['high_contrast'], isFalse);
       expect(json['reduce_motion'], isTrue);
 
-      final minimal = const DectogAppInstallRequest(os: 'android').toJson();
+      final minimal = const AdtoAppInstallRequest(os: 'android').toJson();
       for (final key in [
         'utc_offset_min',
         'text_size',
@@ -117,7 +117,7 @@ void main() {
         expect(minimal.containsKey(key), isFalse, reason: key);
       }
 
-      final roundtripped = DectogAppInstallRequest.fromJson(json);
+      final roundtripped = AdtoAppInstallRequest.fromJson(json);
       expect(roundtripped.utcOffsetMin, 180);
       expect(roundtripped.textSize, 19);
       expect(roundtripped.darkMode, isTrue);
@@ -126,19 +126,19 @@ void main() {
 
       // West of UTC is negative.
       expect(
-        DectogAppInstallRequest.fromJson({'utc_offset_min': -420}).utcOffsetMin,
+        AdtoAppInstallRequest.fromJson({'utc_offset_min': -420}).utcOffsetMin,
         -420,
       );
     },
   );
 
   test('withdrawn probe signals are absent from the wire format', () {
-    const request = DectogAppInstallRequest(os: 'android');
+    const request = AdtoAppInstallRequest(os: 'android');
     expect(request.toJson().keys.where((k) => k.startsWith('fp_')), isEmpty);
   });
 
   test('provenance tier serializes and roundtrips', () {
-    const withAll = DectogAppInstallRequest(
+    const withAll = AdtoAppInstallRequest(
       os: 'android',
       packageName: 'com.example.demoapp',
       isPhysicalDevice: true,
@@ -151,7 +151,7 @@ void main() {
       metaReferrer: 'utm_source=facebook&dtg_click=abc',
       metaReferrerTs: 1759999999000,
       metaReferrerIsCt: true,
-      clipboardUrl: 'https://demo.dectog.com/welcome?dtg_click=abc',
+      clipboardUrl: 'https://demo.adto.app/welcome?dtg_click=abc',
     );
     final json = withAll.toJson();
     expect(json['package_name'], 'com.example.demoapp');
@@ -166,7 +166,7 @@ void main() {
     expect(json['meta_referrer_is_ct'], isTrue);
     expect(json['clipboard_url'], contains('dtg_click'));
 
-    final minimal = DectogAppInstallRequest(os: 'ios');
+    final minimal = AdtoAppInstallRequest(os: 'ios');
     final minimalJson = minimal.toJson();
     for (final key in [
       'package_name',
@@ -185,7 +185,7 @@ void main() {
       expect(minimalJson.containsKey(key), isFalse, reason: key);
     }
 
-    final roundtripped = DectogAppInstallRequest.fromJson(withAll.toJson());
+    final roundtripped = AdtoAppInstallRequest.fromJson(withAll.toJson());
     expect(roundtripped.packageName, withAll.packageName);
     expect(roundtripped.isPhysicalDevice, isTrue);
     expect(roundtripped.installTime, 1760000020000);
@@ -195,7 +195,7 @@ void main() {
   });
 
   test('contract v2 fields serialize, omit-if-null and round-trip', () {
-    const withAll = DectogAppInstallRequest(
+    const withAll = AdtoAppInstallRequest(
       os: 'android',
       installReferrer: 'dtg_click=abc&dtg_l=demo/welcome',
       installAttemptId: '8b1e2b0a-7c1d-4f3e-9a2b-1c2d3e4f5a6b',
@@ -231,7 +231,7 @@ void main() {
     expect(json['first_install_ts'], 1760000020000);
     expect(json['asa_token'], 'AAAA==');
 
-    final minimal = const DectogAppInstallRequest(os: 'ios').toJson();
+    final minimal = const AdtoAppInstallRequest(os: 'ios').toJson();
     for (final key in [
       'install_attempt_id',
       'attempt',
@@ -252,7 +252,7 @@ void main() {
       expect(minimal.containsKey(key), isFalse, reason: key);
     }
 
-    final roundtripped = DectogAppInstallRequest.fromJson(withAll.toJson());
+    final roundtripped = AdtoAppInstallRequest.fromJson(withAll.toJson());
     expect(roundtripped.installAttemptId, withAll.installAttemptId);
     expect(roundtripped.attempt, 2);
     expect(roundtripped.referrerClickServerTs, 1760000001000);

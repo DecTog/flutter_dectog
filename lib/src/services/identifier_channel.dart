@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 ///  - getDeviceId({persist}) → String | null
 ///      Android: Settings.Secure.ANDROID_ID (persist ignored). iOS: the
 ///      IDFV (identifierForVendor). With persist: true (the default via
-///      DectogConfig.persistDeviceId) it is kept in the Keychain and
+///      AdtoConfig.persistDeviceId) it is kept in the Keychain and
 ///      survives reinstall; otherwise the plain IDFV changes on reinstall.
 ///  - getCarrierInfo → { mcc: String, mnc: String } | null (Android only)
 ///  - getWebViewUserAgent → String | null (Android only)
@@ -46,7 +46,7 @@ class IdentifierChannel {
   factory IdentifierChannel() => _instance;
 
   static const MethodChannel _channel = MethodChannel(
-    'dectog_device_identifiers',
+    'adto_device_identifiers',
   );
 
   final StreamController<String> _pasteControl =
@@ -259,7 +259,7 @@ class IdentifierChannel {
   Future<String?> readPasteboardUrl() async =>
       _str(await _invoke<String>('readPasteboardUrl'));
 
-  /// Clear the pasteboard (after a DecTog link was credited, like Branch's
+  /// Clear the pasteboard (after an AdTo link was credited, like Branch's
   /// NativeLink). False on failure.
   Future<bool> clearPasteboard() async =>
       await _invoke<bool>('clearPasteboard') ?? false;
@@ -395,7 +395,7 @@ class InstallDates {
 class MetaReferrer {
   const MetaReferrer({required this.referrer, this.ts, this.isCt});
 
-  /// The raw referrer string Meta recorded (utm params; a DecTog link
+  /// The raw referrer string Meta recorded (utm params; an AdTo link
   /// click carries dtg_click inside it).
   final String referrer;
 

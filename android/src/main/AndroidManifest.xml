@@ -11,7 +11,7 @@
     <!-- Package VISIBILITY (not permissions): Android 11+ hides other
          packages unless declared.
            - Meta apps: the Meta install-referrer read, only used
-             when DectogConfig.fbAppId is set.
+             when AdtoConfig.fbAppId is set.
            - Play Store: lets the referrer reader skip the three retries on
              devices without Play instead of waiting on a bind that can
              never succeed.

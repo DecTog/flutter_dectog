@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_dectog/src/services/device_identity_service.dart';
+import 'package:flutter_adto/src/services/device_identity_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const channel = MethodChannel('dectog_device_identifiers');
+  const channel = MethodChannel('adto_device_identifiers');
 
   void mockDeviceId(Object? Function() reply) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

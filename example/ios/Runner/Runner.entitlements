@@ -7,10 +7,10 @@
          The placeholder keeps dev builds (custom scheme / localhost) working. -->
     <key>com.apple.developer.associated-domains</key>
     <array>
-        <string>applinks:YOUR_SUBDOMAIN.dectog.com</string>
+        <string>applinks:YOUR_SUBDOMAIN.adto.app</string>
         <!-- Production: replace {username} with your
              tenant; Apple fetches the AASA from that host over HTTPS. -->
-        <!-- <string>applinks:{username}.dectog.com</string> -->
+        <!-- <string>applinks:{username}.adto.app</string> -->
     </array>
 </dict>
 </plist> 

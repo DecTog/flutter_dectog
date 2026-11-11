@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
-import 'package:flutter_dectog/src/dectog_impl.dart';
-import 'package:flutter_dectog/src/services/device_identity_service.dart';
-import 'package:flutter_dectog/src/services/device_settings_service.dart';
-import 'package:flutter_dectog/src/services/event_queue_service.dart';
-import 'package:flutter_dectog/src/services/install_state_store.dart';
-import 'package:flutter_dectog/src/services/sdk_config_store.dart';
-import 'package:flutter_dectog/src/services/sdk_state_store.dart';
-import 'package:flutter_dectog/src/services/sdk_storage.dart';
-import 'package:flutter_dectog/src/version.dart';
+import 'package:flutter_adto/flutter_adto.dart';
+import 'package:flutter_adto/src/adto_impl.dart';
+import 'package:flutter_adto/src/services/device_identity_service.dart';
+import 'package:flutter_adto/src/services/device_settings_service.dart';
+import 'package:flutter_adto/src/services/event_queue_service.dart';
+import 'package:flutter_adto/src/services/install_state_store.dart';
+import 'package:flutter_adto/src/services/sdk_config_store.dart';
+import 'package:flutter_adto/src/services/sdk_state_store.dart';
+import 'package:flutter_adto/src/services/sdk_storage.dart';
+import 'package:flutter_adto/src/version.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -57,7 +57,7 @@ class Harness {
   Future<void> setUp() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     DeviceSettingsService().overrideForTest(platformDispatcher);
-    dir = await Directory.systemTemp.createTemp('dectog_harness');
+    dir = await Directory.systemTemp.createTemp('adto_harness');
     Future<Directory> provider() async => dir;
     SdkStorage().overrideForTest(provider);
     await SdkStateStore().resetForTest(directoryProvider: provider);
@@ -67,7 +67,7 @@ class Harness {
     DeviceIdentityService().resetForTest();
     PackageInfo.setMockInitialValues(
       appName: 'Harness',
-      packageName: 'app.dectog.harness',
+      packageName: 'app.adto.harness',
       version: '1.0.0',
       buildNumber: '1',
       buildSignature: '',
@@ -110,7 +110,7 @@ class Harness {
         File(
           'test/fixtures/wire/install-verdict-organic.json',
         ).readAsStringSync();
-    FlutterDectogImpl.resetForTest(
+    FlutterAdtoImpl.resetForTest(
       httpClient: MockClient((request) async {
         requests.add(request);
         final answered = await answer?.call(request);
@@ -161,12 +161,12 @@ class Harness {
   }
 }
 
-const _identifiers = MethodChannel('dectog_device_identifiers');
+const _identifiers = MethodChannel('adto_device_identifiers');
 
-const config = DectogConfig(
+const config = AdtoConfig(
   apiKey: 'dtg_0123456789abcdef0123456789abcdef',
-  baseUrl: 'https://app.dectog.com',
-  linkRootDomain: 'dectog.com',
+  baseUrl: 'https://app.adto.app',
+  linkRootDomain: 'adto.app',
 );
 
 /// The UTC day the SDK remembers a ping by.
@@ -183,22 +183,22 @@ void main() {
   test(
     'enabled (default): the first launch registers the install, signed and identified',
     () async {
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
       final installs = h.requests.where(
         (r) => r.url.path == '/api/v1/app-installs',
       );
       expect(installs, hasLength(1));
       final r = installs.single;
-      expect(r.headers['x-dectog-sdk'], 'flutter_dectog/$packageVersion');
+      expect(r.headers['x-dectog-sdk'], 'flutter_adto/$packageVersion');
       expect(r.headers['x-dectog-signature'], startsWith('v1='));
-      expect(FlutterDectog().currentAppInstall?.matched, isFalse);
+      expect(FlutterAdto().currentAppInstall?.matched, isFalse);
     },
   );
 
   test('a tapped link is logged as a click and an app open', () async {
-    h.initialLink = 'https://demo.dectog.com/spring';
-    await FlutterDectog().initialize(config);
+    h.initialLink = 'https://demo.adto.app/spring';
+    await FlutterAdto().initialize(config);
     await h.settle();
     expect(h.paths, contains('POST /api/v1/clicks'));
     expect(h.paths, contains('POST /api/v1/app-opens'));
@@ -208,8 +208,8 @@ void main() {
     'the click report carries the dec_* and utm_* values, never the rest of the URL',
     () async {
       h.initialLink =
-          'https://demo.dectog.com/spring?dec_campaign=chat&utm_source=mail&email=ana%40example.com#top';
-      await FlutterDectog().initialize(config);
+          'https://demo.adto.app/spring?dec_campaign=chat&utm_source=mail&email=ana%40example.com#top';
+      await FlutterAdto().initialize(config);
       await h.settle();
       final click = h.requests.singleWhere(
         (r) => r.url.path == '/api/v1/clicks',
@@ -229,11 +229,11 @@ void main() {
       h.responses['/api/v1/sdk-config'] =
           File('test/fixtures/wire/sdk-config.json').readAsStringSync();
       h.initialLink = 'https://go.acme.app/spring';
-      await FlutterDectog().initialize(
-        const DectogConfig(
+      await FlutterAdto().initialize(
+        const AdtoConfig(
           apiKey: 'dtg_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.dectog.com',
-          linkRootDomain: 'dectog.com',
+          baseUrl: 'https://app.adto.app',
+          linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
         ),
       );
@@ -249,11 +249,11 @@ void main() {
     () async {
       // No sdk-config answer: the account stays unknown.
       h.initialLink = 'https://go.acme.app/spring';
-      await FlutterDectog().initialize(
-        const DectogConfig(
+      await FlutterAdto().initialize(
+        const AdtoConfig(
           apiKey: 'dtg_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.dectog.com',
-          linkRootDomain: 'dectog.com',
+          baseUrl: 'https://app.adto.app',
+          linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
         ),
       );
@@ -267,15 +267,15 @@ void main() {
   test(
     'handleUrl routes an in-app link once, as an open and not a click',
     () async {
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
-      final emitted = <DectogLinkClick>[];
-      final sub = FlutterDectog().onLinkClick.listen(emitted.add);
-      final click = await FlutterDectog().handleUrl(
-        'https://demo.dectog.com/spring?utm_source=chat',
+      final emitted = <AdtoLinkClick>[];
+      final sub = FlutterAdto().onLinkClick.listen(emitted.add);
+      final click = await FlutterAdto().handleUrl(
+        'https://demo.adto.app/spring?utm_source=chat',
       );
-      final again = await FlutterDectog().handleUrl(
-        'https://demo.dectog.com/spring?utm_source=chat',
+      final again = await FlutterAdto().handleUrl(
+        'https://demo.adto.app/spring?utm_source=chat',
       );
       await h.settle();
       await sub.cancel();
@@ -286,12 +286,12 @@ void main() {
       expect(h.paths, contains('POST /api/v1/app-opens'));
       expect(h.paths, isNot(contains('POST /api/v1/clicks')));
 
-      // Not a DecTog link, or a sign-in callback: the app opens it itself.
+      // Not an AdTo link, or a sign-in callback: the app opens it itself.
       expect(
-        await FlutterDectog().handleUrl('https://example.com/article'),
+        await FlutterAdto().handleUrl('https://example.com/article'),
         isNull,
       );
-      expect(await FlutterDectog().handleUrl('not a url'), isNull);
+      expect(await FlutterAdto().handleUrl('not a url'), isNull);
     },
   );
 
@@ -300,50 +300,50 @@ void main() {
     () async {
       // A previous launch turned collection off.
       await SdkStateStore().setEnabled(false);
-      h.initialLink = 'https://demo.dectog.com/spring';
+      h.initialLink = 'https://demo.adto.app/spring';
 
-      await FlutterDectog().initialize(config);
-      await FlutterDectog().trackEvent('opened_cart');
-      await FlutterDectog().identify(customerId: 'cust-1', email: 'a@b.c');
+      await FlutterAdto().initialize(config);
+      await FlutterAdto().trackEvent('opened_cart');
+      await FlutterAdto().identify(customerId: 'cust-1', email: 'a@b.c');
       await h.settle();
 
       expect(h.paths, isEmpty, reason: 'collection off: no request');
-      expect(await FlutterDectog().isEnabled(), isFalse);
+      expect(await FlutterAdto().isEnabled(), isFalse);
 
-      await FlutterDectog().setEnabled(true);
+      await FlutterAdto().setEnabled(true);
       await h.settle();
       expect(h.paths, contains('POST /api/v1/app-installs'));
-      expect(await FlutterDectog().isEnabled(), isTrue);
+      expect(await FlutterAdto().isEnabled(), isTrue);
     },
   );
 
   group('consent mode', () {
-    const waiting = DectogConfig(
+    const waiting = AdtoConfig(
       apiKey: 'dtg_0123456789abcdef0123456789abcdef',
-      baseUrl: 'https://app.dectog.com',
-      linkRootDomain: 'dectog.com',
+      baseUrl: 'https://app.adto.app',
+      linkRootDomain: 'adto.app',
       enabled: false,
     );
 
     test(
       'enabled: false sends nothing: launch link, events, identify, attribution pull, in-app link',
       () async {
-        h.initialLink = 'https://demo.dectog.com/spring?dec_screen=sale';
-        final emitted = <DectogLinkClick>[];
-        final sub = FlutterDectog().onLinkClick.listen(emitted.add);
-        await FlutterDectog().initialize(waiting);
-        await FlutterDectog().trackEvent('opened_cart');
-        await FlutterDectog().identify(customerId: 'cust-1');
-        expect(await FlutterDectog().getAttributionData(), isNull);
-        final inApp = await FlutterDectog().handleUrl(
-          'https://demo.dectog.com/summer',
+        h.initialLink = 'https://demo.adto.app/spring?dec_screen=sale';
+        final emitted = <AdtoLinkClick>[];
+        final sub = FlutterAdto().onLinkClick.listen(emitted.add);
+        await FlutterAdto().initialize(waiting);
+        await FlutterAdto().trackEvent('opened_cart');
+        await FlutterAdto().identify(customerId: 'cust-1');
+        expect(await FlutterAdto().getAttributionData(), isNull);
+        final inApp = await FlutterAdto().handleUrl(
+          'https://demo.adto.app/summer',
         );
-        await FlutterDectog().flush();
+        await FlutterAdto().flush();
         await h.settle();
         await sub.cancel();
 
         expect(h.paths, isEmpty);
-        expect(await FlutterDectog().isEnabled(), isFalse);
+        expect(await FlutterAdto().isEnabled(), isFalse);
         // The app still routes: the links arrive as parsed, without the server's details.
         expect(emitted.map((c) => c.slug), contains('spring'));
         expect(
@@ -358,13 +358,13 @@ void main() {
     test(
       'consent given: the install registers, the held events go, the launch link is reported',
       () async {
-        h.initialLink = 'https://demo.dectog.com/spring';
-        await FlutterDectog().initialize(waiting);
-        await FlutterDectog().trackEvent('opened_cart');
+        h.initialLink = 'https://demo.adto.app/spring';
+        await FlutterAdto().initialize(waiting);
+        await FlutterAdto().trackEvent('opened_cart');
         await h.settle();
         expect(h.paths, isEmpty);
 
-        await FlutterDectog().setEnabled(true);
+        await FlutterAdto().setEnabled(true);
         await h.settle();
         expect(h.paths, contains('POST /api/v1/app-installs'));
         expect(h.paths, contains('POST /api/v1/clicks'));
@@ -387,11 +387,11 @@ void main() {
     test(
       'a revoke drops the held link report; held events stay for the next consent',
       () async {
-        h.initialLink = 'https://demo.dectog.com/spring';
-        await FlutterDectog().initialize(waiting);
-        await FlutterDectog().trackEvent('before_revoke');
-        await FlutterDectog().setEnabled(false);
-        await FlutterDectog().setEnabled(true);
+        h.initialLink = 'https://demo.adto.app/spring';
+        await FlutterAdto().initialize(waiting);
+        await FlutterAdto().trackEvent('before_revoke');
+        await FlutterAdto().setEnabled(false);
+        await FlutterAdto().setEnabled(true);
         await h.settle();
         expect(h.paths, isNot(contains('POST /api/v1/clicks')));
         expect(h.paths, isNot(contains('POST /api/v1/app-opens')));
@@ -401,9 +401,9 @@ void main() {
 
     test('the stored choice wins over the config on later launches', () async {
       await SdkStateStore().setEnabled(true);
-      await FlutterDectog().initialize(waiting);
+      await FlutterAdto().initialize(waiting);
       await h.settle();
-      expect(await FlutterDectog().isEnabled(), isTrue);
+      expect(await FlutterAdto().isEnabled(), isTrue);
       expect(h.paths, contains('POST /api/v1/app-installs'));
     });
   });
@@ -411,18 +411,18 @@ void main() {
   test(
     'a refund rides as a conversion with its transaction, top level',
     () async {
-      await FlutterDectog().initialize(config);
-      await FlutterDectog().trackConversion(
+      await FlutterAdto().initialize(config);
+      await FlutterAdto().trackConversion(
         revenue: 4.99,
         currency: 'EUR',
         productId: 'pro_monthly',
         transactionId: '2000000123',
         originalTransactionId: '2000000100',
-        store: DectogStore.appStore,
-        purchaseType: DectogPurchaseType.subscription,
-        transactionType: DectogTransactionType.refund,
+        store: AdtoStore.appStore,
+        purchaseType: AdtoPurchaseType.subscription,
+        transactionType: AdtoTransactionType.refund,
       );
-      await FlutterDectog().flush();
+      await FlutterAdto().flush();
       await h.settle();
       final batch = h.requests.lastWhere((r) => r.url.path == '/api/v1/events');
       final event =
@@ -446,10 +446,10 @@ void main() {
   );
 
   test('screen views ride the event queue with the previous screen', () async {
-    await FlutterDectog().initialize(config);
-    await FlutterDectog().trackScreenView('home');
-    await FlutterDectog().trackScreenView('  ');
-    await FlutterDectog().trackScreenView(
+    await FlutterAdto().initialize(config);
+    await FlutterAdto().trackScreenView('home');
+    await FlutterAdto().trackScreenView('  ');
+    await FlutterAdto().trackScreenView(
       'product',
       params: {
         'id': 42,
@@ -460,7 +460,7 @@ void main() {
         'ratio': double.nan,
       },
     );
-    await FlutterDectog().flush();
+    await FlutterAdto().flush();
     await h.settle();
     final events = [
       for (final r in h.requests.where((r) => r.url.path == '/api/v1/events'))
@@ -478,13 +478,13 @@ void main() {
   });
 
   test('a StoreKit 2 transaction rides as app_store_jws', () async {
-    await FlutterDectog().initialize(config);
-    await FlutterDectog().trackConversion(
+    await FlutterAdto().initialize(config);
+    await FlutterAdto().trackConversion(
       revenue: 9.99,
-      store: DectogStore.appStore,
+      store: AdtoStore.appStore,
       appStoreJws: 'header.payload.signature',
     );
-    await FlutterDectog().flush();
+    await FlutterAdto().flush();
     await h.settle();
     final batch = h.requests.lastWhere((r) => r.url.path == '/api/v1/events');
     final event =
@@ -496,12 +496,12 @@ void main() {
   test(
     'an install the server lost is registered again with recovered_from',
     () async {
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
       final first = h.requests.firstWhere(
         (r) => r.url.path == '/api/v1/app-installs',
       );
-      final lostId = FlutterDectog().currentAppInstall!.installId;
+      final lostId = FlutterAdto().currentAppInstall!.installId;
 
       h.responses['/api/v1/events'] = jsonEncode({
         'accepted': 1,
@@ -510,8 +510,8 @@ void main() {
         'code': 'install_not_found',
         'action': 'reregister',
       });
-      await FlutterDectog().trackEvent('after_restore');
-      await FlutterDectog().flush();
+      await FlutterAdto().trackEvent('after_restore');
+      await FlutterAdto().flush();
       await h.settle();
 
       final installs =
@@ -532,10 +532,10 @@ void main() {
   test(
     'a recovery registration never reads the pasteboard; the first launch does',
     () async {
-      FlutterDectogImpl.debugIsIOS = true;
-      addTearDown(() => FlutterDectogImpl.debugIsIOS = null);
-      h.pasteboardUrl = 'https://demo.dectog.com/spring?dtg_click=abcdefgh1234';
-      await FlutterDectog().initialize(config);
+      FlutterAdtoImpl.debugIsIOS = true;
+      addTearDown(() => FlutterAdtoImpl.debugIsIOS = null);
+      h.pasteboardUrl = 'https://demo.adto.app/spring?dtg_click=abcdefgh1234';
+      await FlutterAdto().initialize(config);
       await h.settle();
       expect(h.pasteboardReads, 1);
       final first = h.requests.firstWhere(
@@ -550,8 +550,8 @@ void main() {
         'code': 'install_not_found',
         'action': 'reregister',
       });
-      await FlutterDectog().trackEvent('after_restore');
-      await FlutterDectog().flush();
+      await FlutterAdto().trackEvent('after_restore');
+      await FlutterAdto().flush();
       await h.settle();
       final installs =
           h.requests
@@ -568,12 +568,12 @@ void main() {
   test(
     'events after a link opened the app name that link and the session',
     () async {
-      h.initialLink = 'https://demo.dectog.com/spring';
-      await FlutterDectog().initialize(config);
+      h.initialLink = 'https://demo.adto.app/spring';
+      await FlutterAdto().initialize(config);
       await h.settle();
-      await FlutterDectog().trackEvent('cart_viewed');
-      await FlutterDectog().trackEvent('checkout');
-      await FlutterDectog().flush();
+      await FlutterAdto().trackEvent('cart_viewed');
+      await FlutterAdto().trackEvent('checkout');
+      await FlutterAdto().flush();
       await h.settle();
       final events =
           (jsonDecode(
@@ -596,11 +596,11 @@ void main() {
   test(
     'a link with a malformed dtg_click opens the app without it, and later events still go',
     () async {
-      h.initialLink = 'https://demo.dectog.com/spring?dtg_click=bad';
-      await FlutterDectog().initialize(config);
+      h.initialLink = 'https://demo.adto.app/spring?dtg_click=bad';
+      await FlutterAdto().initialize(config);
       await h.settle();
-      await FlutterDectog().trackEvent('checkout');
-      await FlutterDectog().flush();
+      await FlutterAdto().trackEvent('checkout');
+      await FlutterAdto().flush();
       await h.settle();
       final open = h.requests.lastWhere(
         (r) => r.url.path == '/api/v1/app-opens',
@@ -632,7 +632,7 @@ void main() {
   test(
     'an open the server refused leaves the earlier open on later events',
     () async {
-      h.initialLink = 'https://demo.dectog.com/spring';
+      h.initialLink = 'https://demo.adto.app/spring';
       h.answer = (r) async {
         if (r.url.path != '/api/v1/app-opens') return null;
         if ((jsonDecode(r.body) as Map)['slug'] != 'paused') return null;
@@ -648,13 +648,13 @@ void main() {
           headers: {'content-type': 'application/json'},
         );
       };
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
-      await FlutterDectog().handleUrl('https://demo.dectog.com/paused');
+      await FlutterAdto().handleUrl('https://demo.adto.app/paused');
       await h.settle();
       expect(SdkStateStore().lastOpen?.slug, 'spring');
-      await FlutterDectog().trackEvent('checkout');
-      await FlutterDectog().flush();
+      await FlutterAdto().trackEvent('checkout');
+      await FlutterAdto().flush();
       await h.settle();
       final events =
           (jsonDecode(
@@ -671,8 +671,8 @@ void main() {
   test('createReferralLink accepts the existing link (200)', () async {
     h.responses['/api/v1/referral-links'] =
         File('test/fixtures/wire/link.json').readAsStringSync();
-    await FlutterDectog().initialize(config);
-    final link = await FlutterDectog().createReferralLink(customerId: 'alice');
+    await FlutterAdto().initialize(config);
+    final link = await FlutterAdto().createReferralLink(customerId: 'alice');
     final sent = h.requests.lastWhere(
       (r) => r.url.path == '/api/v1/referral-links',
     );
@@ -685,7 +685,7 @@ void main() {
     () async {
       h.responses['/api/v1/sdk-config'] =
           File('test/fixtures/wire/sdk-config.json').readAsStringSync();
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
       final paths = h.paths.toList();
       final cfg = paths.indexOf('GET /api/v1/sdk-config');
@@ -693,11 +693,11 @@ void main() {
       expect(cfg, lessThan(paths.indexOf('POST /api/v1/app-installs')));
       expect(
         h.requests[cfg].url.queryParameters['package'],
-        'app.dectog.harness',
+        'app.adto.harness',
       );
       expect(SdkConfigStore().config?.fbAppId, '1234567890');
 
-      final report = await FlutterDectog().diagnostics();
+      final report = await FlutterAdto().diagnostics();
       expect(report.serverConfig?.linkHosts, [
         'go.acme.app',
         'acme.dectog.com',
@@ -727,7 +727,7 @@ void main() {
         );
       };
       final started = DateTime.now();
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       expect(
         DateTime.now().difference(started),
         lessThan(const Duration(seconds: 5)),
@@ -760,7 +760,7 @@ void main() {
           headers: {'content-type': 'application/json'},
         );
       };
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       expect(
         SdkConfigStore().config?.fbAppId,
         '1234567890',
@@ -774,16 +774,16 @@ void main() {
     () async {
       h.responses['/api/v1/sdk-config'] =
           File('test/fixtures/wire/sdk-config.json').readAsStringSync();
-      await FlutterDectog().initialize(
-        const DectogConfig(
+      await FlutterAdto().initialize(
+        const AdtoConfig(
           apiKey: 'dtg_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.dectog.com',
-          linkRootDomain: 'dectog.com',
-          environment: DectogEnvironment.test,
+          baseUrl: 'https://app.adto.app',
+          linkRootDomain: 'adto.app',
+          environment: AdtoEnvironment.test,
         ),
       );
-      final report = await FlutterDectog().diagnostics();
-      expect(report.serverConfig?.environment, DectogEnvironment.live);
+      final report = await FlutterAdto().diagnostics();
+      expect(report.serverConfig?.environment, AdtoEnvironment.live);
       expect(
         report.warnings,
         contains(
@@ -802,13 +802,13 @@ void main() {
           as Map<String, dynamic>;
 
   test('the advertising id from the provider goes on the install', () async {
-    await FlutterDectog().initialize(
-      DectogConfig(
+    await FlutterAdto().initialize(
+      AdtoConfig(
         apiKey: config.apiKey,
         baseUrl: config.baseUrl,
         linkRootDomain: config.linkRootDomain,
         advertisingIdProvider:
-            () async => const DectogAdvertisingId(id: 'IDFA-1'),
+            () async => const AdtoAdvertisingId(id: 'IDFA-1'),
       ),
     );
     await h.settle();
@@ -818,13 +818,13 @@ void main() {
   });
 
   test('a limited id sends the flag and no id', () async {
-    await FlutterDectog().initialize(
-      DectogConfig(
+    await FlutterAdto().initialize(
+      AdtoConfig(
         apiKey: config.apiKey,
         baseUrl: config.baseUrl,
         linkRootDomain: config.linkRootDomain,
         advertisingIdProvider:
-            () async => const DectogAdvertisingId(id: 'IDFA-1', limited: true),
+            () async => const AdtoAdvertisingId(id: 'IDFA-1', limited: true),
       ),
     );
     await h.settle();
@@ -838,15 +838,15 @@ void main() {
     () async {
       h.deviceId = 'device-1';
       var asked = 0;
-      await FlutterDectog().initialize(
-        DectogConfig(
+      await FlutterAdto().initialize(
+        AdtoConfig(
           apiKey: config.apiKey,
           baseUrl: config.baseUrl,
           linkRootDomain: config.linkRootDomain,
           collect: const {},
           advertisingIdProvider: () async {
             asked++;
-            return const DectogAdvertisingId(id: 'IDFA-1');
+            return const AdtoAdvertisingId(id: 'IDFA-1');
           },
         ),
       );
@@ -861,7 +861,7 @@ void main() {
 
   test('the defaults send the device tier and ping', () async {
     h.deviceId = 'device-1';
-    await FlutterDectog().initialize(config);
+    await FlutterAdto().initialize(config);
     await h.settle();
     expect(installBody()['device_id'], 'device-1');
     expect(h.paths, contains('POST /api/v1/device-ping'));
@@ -871,7 +871,7 @@ void main() {
   test('a device already pinged today is not pinged again', () async {
     h.deviceId = 'device-1';
     await SdkStateStore().setPingDay(utcDay(DateTime.now()));
-    await FlutterDectog().initialize(config);
+    await FlutterAdto().initialize(config);
     await h.settle();
     expect(h.paths, isNot(contains('POST /api/v1/device-ping')));
   });
@@ -881,7 +881,7 @@ void main() {
     await SdkStateStore().setPingDay(
       utcDay(DateTime.now().subtract(const Duration(days: 1))),
     );
-    await FlutterDectog().initialize(config);
+    await FlutterAdto().initialize(config);
     await h.settle();
     expect(h.paths, contains('POST /api/v1/device-ping'));
     expect(SdkStateStore().pingDay, utcDay(DateTime.now()));
@@ -899,9 +899,9 @@ void main() {
     });
 
     test('the device tier sends them with the UTC offset', () async {
-      FlutterDectogImpl.debugIsIOS = true;
-      addTearDown(() => FlutterDectogImpl.debugIsIOS = null);
-      await FlutterDectog().initialize(config);
+      FlutterAdtoImpl.debugIsIOS = true;
+      addTearDown(() => FlutterAdtoImpl.debugIsIOS = null);
+      await FlutterAdto().initialize(config);
       await h.settle();
       final body = installBody();
       expect(body['text_size'], 19);
@@ -914,10 +914,10 @@ void main() {
     test(
       'without the device tier none are sent, but the UTC offset is',
       () async {
-        FlutterDectogImpl.debugIsIOS = true;
-        addTearDown(() => FlutterDectogImpl.debugIsIOS = null);
-        await FlutterDectog().initialize(
-          DectogConfig(
+        FlutterAdtoImpl.debugIsIOS = true;
+        addTearDown(() => FlutterAdtoImpl.debugIsIOS = null);
+        await FlutterAdto().initialize(
+          AdtoConfig(
             apiKey: config.apiKey,
             baseUrl: config.baseUrl,
             linkRootDomain: config.linkRootDomain,
@@ -940,9 +940,9 @@ void main() {
     );
 
     test('the text size and high contrast are sent on iOS only', () async {
-      FlutterDectogImpl.debugIsIOS = false;
-      addTearDown(() => FlutterDectogImpl.debugIsIOS = null);
-      await FlutterDectog().initialize(config);
+      FlutterAdtoImpl.debugIsIOS = false;
+      addTearDown(() => FlutterAdtoImpl.debugIsIOS = null);
+      await FlutterAdto().initialize(config);
       await h.settle();
       final body = installBody();
       expect(body.containsKey('text_size'), isFalse);
@@ -953,7 +953,7 @@ void main() {
   });
 
   group('each pasteboard read keeps its own mark', () {
-    const link = 'https://demo.dectog.com/invite?dtg_click=c1';
+    const link = 'https://demo.adto.app/invite?dtg_click=c1';
     final matched =
         jsonDecode(
               File(
@@ -970,13 +970,13 @@ void main() {
         Future<void>.delayed(Duration(milliseconds: ms));
 
     setUp(() => h.pasteboardChangeCount = 7);
-    tearDown(() => FlutterDectog().dispose());
+    tearDown(() => FlutterAdto().dispose());
 
     test('a credited paste-control link is cleared', () async {
       h.answer =
           (r) async =>
               r.url.path.endsWith('/claim') ? verdict('upgraded') : null;
-      await FlutterDectog().initialize(config);
+      await FlutterAdto().initialize(config);
       await h.settle();
       await h.paste(link);
       await h.settle();
@@ -995,7 +995,7 @@ void main() {
           }
           return verdict('unchanged');
         };
-        await FlutterDectog().initialize(config);
+        await FlutterAdto().initialize(config);
         await h.settle();
         await h.paste(link);
         await wait(20);
@@ -1015,12 +1015,12 @@ void main() {
           await wait(first ? 100 : 300);
           return verdict(first ? 'upgraded' : 'rejected');
         };
-        await FlutterDectog().initialize(config);
+        await FlutterAdto().initialize(config);
         await h.settle();
         await h.paste(link); // read at 7
         await wait(20);
         h.pasteboardChangeCount = 8; // the user copies another link
-        await h.paste('https://demo.dectog.com/other?dtg_click=c2');
+        await h.paste('https://demo.adto.app/other?dtg_click=c2');
         await wait(600);
         expect(h.pasteboardClears, 0);
       },
