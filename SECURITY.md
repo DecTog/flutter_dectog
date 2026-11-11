@@ -59,5 +59,5 @@ automated scanners.
 
 ## Supported versions
 
-DecTog is pre-release and the SDK is not yet on pub.dev. Fixes land on
-`main`. A supported-versions table arrives with the first published release.
+Fixes land on `main` and ship in the next release on
+[pub.dev](https://pub.dev/packages/flutter_dectog).

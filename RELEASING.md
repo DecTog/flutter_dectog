@@ -1,9 +1,9 @@
 # Releasing flutter_dectog
 
-DecTog is pre-release. Until the first release, nothing is published to
-pub.dev and the
-public API may change without a deprecation path. CI runs
-`flutter pub publish --dry-run` on every push so the package stays publishable.
+flutter_dectog is on pub.dev (1.0.0, published 2026-11-04). Versions follow
+semantic versioning: a breaking change to the public API needs a major
+version. CI runs `flutter pub publish --dry-run` on every push so the package
+stays publishable.
 
 ## Every release
 
@@ -37,7 +37,8 @@ public API may change without a deprecation path. CI runs
 ## First publish (release day only)
 
 pub.dev enables automated publishing only for a package that already exists, so
-the first version goes out by hand:
+the first version goes out by hand. flutter_dectog 1.0.0 is out;
+`flutter_dectog_adid` is not on pub.dev yet (step 4).
 
 1. `flutter pub publish` from a clean checkout of the tagged commit, signed in as
    the publisher account.

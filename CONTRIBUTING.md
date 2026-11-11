@@ -5,9 +5,10 @@ package with a Kotlin plugin (`android/`) and a Swift plugin (`ios/`). The
 server is [DecTog/dectog](https://github.com/DecTog/dectog); the docs site is
 [DecTog/docs](https://github.com/DecTog/docs).
 
-DecTog is pre-release and the SDK is not on pub.dev yet, so a change may break
-the public API when that makes the design better. That ends at the first
-published release.
+flutter_dectog is on pub.dev and in apps in production, so the public API
+follows semantic versioning: a removed, renamed or retyped member is a breaking
+change and needs a major version. `test/public_api_test.dart` fails on any
+change to the surface.
 
 ## Before you start
 
