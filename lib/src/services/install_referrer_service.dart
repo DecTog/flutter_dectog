@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import '../models/dectog_config.dart';
+import '../models/adto_config.dart';
 import 'identifier_channel.dart';
 
 /// Wire statuses of an install-referrer read, as the native reader

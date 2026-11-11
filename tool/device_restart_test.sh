@@ -13,7 +13,7 @@ PORT="${1:-8799}"
 PKG=com.example.example
 MOCK="http://127.0.0.1:$PORT"
 
-dart run tool/mock_install_server.dart "$PORT" > "${TMPDIR:-/tmp}/dectog-mock.log" 2>&1 &
+dart run tool/mock_install_server.dart "$PORT" > "${TMPDIR:-/tmp}/adto-mock.log" 2>&1 &
 MOCK_PID=$!
 trap 'kill $MOCK_PID 2>/dev/null || true' EXIT
 for _ in $(seq 1 60); do curl -sf "$MOCK/_mock/installs" > /dev/null && break; sleep 0.5; done
@@ -24,8 +24,8 @@ adb reverse "tcp:$PORT" "tcp:$PORT" > /dev/null
 (
   cd example
   flutter build apk --debug \
-    --dart-define=DECTOG_API_KEY=dtg_pub_00000000000000000000000000000000 \
-    --dart-define=DECTOG_BASE_URL="http://127.0.0.1:$PORT"
+    --dart-define=ADTO_API_KEY=dtg_pub_00000000000000000000000000000000 \
+    --dart-define=ADTO_BASE_URL="http://127.0.0.1:$PORT"
 )
 adb install -r example/build/app/outputs/flutter-apk/app-debug.apk > /dev/null
 adb shell pm clear "$PKG" > /dev/null   # a fresh install's state

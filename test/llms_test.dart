@@ -16,10 +16,10 @@ void main() {
     },
   );
 
-  test('the reference documents every FlutterDectog member', () {
-    final source = File('lib/flutter_dectog.dart').readAsStringSync();
+  test('the reference documents every FlutterAdto member', () {
+    final source = File('lib/flutter_adto.dart').readAsStringSync();
     final body = source.substring(
-      source.indexOf('abstract interface class FlutterDectog'),
+      source.indexOf('abstract interface class FlutterAdto'),
     );
     final members =
         RegExp(
@@ -60,11 +60,7 @@ void main() {
     }
     expect(
       types,
-      containsAll([
-        'DectogConfig',
-        'DectogAppInstallResponse',
-        'DectogLinkPage',
-      ]),
+      containsAll(['AdtoConfig', 'AdtoAppInstallResponse', 'AdtoLinkPage']),
     );
     final missing =
         types.where((t) => !RegExp('\\b$t\\b').hasMatch(reference)).toList();
@@ -79,8 +75,8 @@ void main() {
         expect(llms, contains('## $title\n'));
       }
       expect(
-        llms.indexOf('## DectogConfig'),
-        lessThan(llms.indexOf('## FlutterDectog')),
+        llms.indexOf('## AdtoConfig'),
+        lessThan(llms.indexOf('## FlutterAdto')),
       );
       expect(llms, contains('## Link URLs the SDK recognizes'));
     },

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dectog/src/services/install_state_store.dart';
+import 'package:flutter_adto/src/services/install_state_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
   final store = InstallStateStore();
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('dectog_install_state');
+    tempDir = await Directory.systemTemp.createTemp('adto_install_state');
     await store.resetForTest(directoryProvider: () async => tempDir);
   });
 

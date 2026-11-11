@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_dectog/src/services/identifier_channel.dart';
-import 'package:flutter_dectog/src/services/install_referrer_service.dart';
+import 'package:flutter_adto/src/services/identifier_channel.dart';
+import 'package:flutter_adto/src/services/install_referrer_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  const channel = MethodChannel('dectog_device_identifiers');
+  const channel = MethodChannel('adto_device_identifiers');
 
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter_dectog/src/services/retry_policy.dart';
+import 'package:flutter_adto/src/services/retry_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

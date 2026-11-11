@@ -1,5 +1,5 @@
 {
-  "DECTOG_API_KEY": "dtg_paste_your_key_here",
-  "DECTOG_BASE_URL": "http://localhost:8787",
-  "DECTOG_LINK_ROOT_DOMAIN": ""
+  "ADTO_API_KEY": "dtg_paste_your_key_here",
+  "ADTO_BASE_URL": "https://app.adto.app",
+  "ADTO_LINK_ROOT_DOMAIN": "adto.app"
 }

@@ -1,6 +1,6 @@
-import 'package:flutter_dectog/src/services/link_deduper.dart';
-import 'package:flutter_dectog/src/services/link_filter.dart';
-import 'package:flutter_dectog/src/services/platform_version.dart';
+import 'package:flutter_adto/src/services/link_deduper.dart';
+import 'package:flutter_adto/src/services/link_filter.dart';
+import 'package:flutter_adto/src/services/platform_version.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -14,19 +14,19 @@ void main() {
         'com.googleusercontent.apps.123-xyz:/oauth2redirect?code=4/abc',
         'myoauthscheme://done',
         'custom://x?access_token=AAA',
-        'https://demo.dectog.com/promo?id_token=eyJ',
-        'https://demo.dectog.com/promo#access_token=AAA&state=1',
+        'https://demo.adto.app/promo?id_token=eyJ',
+        'https://demo.adto.app/promo#access_token=AAA&state=1',
       ]) {
         expect(isSensitiveUrl(Uri.parse(u)), isTrue, reason: u);
       }
     });
 
-    test('DecTog links and ordinary deep links are not', () {
+    test('AdTo links and ordinary deep links are not', () {
       for (final u in [
-        'https://demo.dectog.com/welcome?dtg_click=abc&dec_deeplink=voucher%3Fcode%3DX',
+        'https://demo.adto.app/welcome?dtg_click=abc&dec_deeplink=voucher%3Fcode%3DX',
         'istoria://demo/welcome/products/42?color=black',
         'http://localhost:8787/r/demo/e2e',
-        'https://demo.dectog.com/promo?token_hint=1', // not an exact token key
+        'https://demo.adto.app/promo?token_hint=1', // not an exact token key
       ]) {
         expect(isSensitiveUrl(Uri.parse(u)), isFalse, reason: u);
       }
@@ -39,7 +39,7 @@ void main() {
       () {
         final d = LinkDeduper(window: const Duration(seconds: 10));
         final t0 = DateTime(2026, 10, 12, 12);
-        const url = 'https://demo.dectog.com/welcome';
+        const url = 'https://demo.adto.app/welcome';
         expect(d.shouldProcess(url, initial: true, now: t0), isTrue);
         // uriLinkStream delivers the same link right after getInitialLink
         expect(

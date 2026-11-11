@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_dectog/src/services/identifier_channel.dart';
+import 'package:flutter_adto/src/services/identifier_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const channel = MethodChannel('dectog_device_identifiers');
+  const channel = MethodChannel('adto_device_identifiers');
 
   void mockMetaReferrer(Object? reply) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -106,12 +106,12 @@ void main() {
               'keychainFirstInstall': 4,
             },
         'excludeFromBackup': (call) {
-          expect(call.arguments, {'path': '/tmp/dectog'});
+          expect(call.arguments, {'path': '/tmp/adto'});
           return true;
         },
         'getAttributionToken': (_) => 'token==',
         'pasteboardHasUrl': (_) => true,
-        'readPasteboardUrl': (_) => ' https://demo.dectog.com/x?dtg_click=1 ',
+        'readPasteboardUrl': (_) => ' https://demo.adto.app/x?dtg_click=1 ',
         'clearPasteboard': (_) => true,
       });
       final c = IdentifierChannel();
@@ -128,12 +128,12 @@ void main() {
       expect(dates?.executableCtime, 1);
       expect(dates?.keychainFirstInstall, 4);
       expect(dates?.keychainLatestInstall, isNull);
-      expect(await c.excludeFromBackup('/tmp/dectog'), isTrue);
+      expect(await c.excludeFromBackup('/tmp/adto'), isTrue);
       expect(await c.getAttributionToken(), 'token==');
       expect(await c.pasteboardHasUrl(), isTrue);
       expect(
         await c.readPasteboardUrl(),
-        'https://demo.dectog.com/x?dtg_click=1',
+        'https://demo.adto.app/x?dtg_click=1',
       );
       expect(await c.clearPasteboard(), isTrue);
     },
@@ -199,15 +199,15 @@ void main() {
         await completer.future;
       }
 
-      await push({'url': 'https://demo.dectog.com/invite?dtg_click=p1'});
+      await push({'url': 'https://demo.adto.app/invite?dtg_click=p1'});
       await push({'url': '   '}); // blank: ignored
       await push(
-        'https://demo.dectog.com/invite?dtg_click=p2',
+        'https://demo.adto.app/invite?dtg_click=p2',
       ); // bare string also accepted
       await Future<void>.delayed(Duration.zero);
       expect(received, [
-        'https://demo.dectog.com/invite?dtg_click=p1',
-        'https://demo.dectog.com/invite?dtg_click=p2',
+        'https://demo.adto.app/invite?dtg_click=p1',
+        'https://demo.adto.app/invite?dtg_click=p2',
       ]);
       await sub.cancel();
     },

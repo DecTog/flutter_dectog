@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 
 import 'identifier_channel.dart';
 
-/// First-party device identifier behind the `DectogCollection.deviceTier` consent
+/// First-party device identifier behind the `AdtoCollection.deviceTier` consent
 /// gate: `Settings.Secure.ANDROID_ID` on Android and the IDFV on iOS. The
 /// IDFV is kept in the Keychain so it survives uninstall/reinstall unless
-/// the host sets `DectogConfig.persistDeviceId: false`; see README privacy
+/// the host sets `AdtoConfig.persistDeviceId: false`; see README privacy
 /// notes. Cached per process; a
 /// failed read returns null and the install is simply sent WITHOUT a
 /// device_id (a random per-process fallback would register phantom devices
@@ -21,7 +21,7 @@ class DeviceIdentityService {
 
   /// Stable device identifier for this install, or null when the platform
   /// read fails (the field is then omitted entirely). [persist] is the
-  /// iOS Keychain switch (DectogConfig.persistDeviceId).
+  /// iOS Keychain switch (AdtoConfig.persistDeviceId).
   Future<String?> getDeviceId({bool persist = false}) async {
     if (_cachedDeviceId != null) return _cachedDeviceId;
     final native = await _channel.getDeviceId(persist: persist);

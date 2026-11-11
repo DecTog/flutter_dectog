@@ -24,15 +24,15 @@
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
-      <!-- Deep link intent filter for DecTog links -->
+      <!-- Deep link intent filter for AdTo links -->
       <!-- Production App Links: replace {username} with
            your tenant and keep autoVerify — Android then validates against
-           https://{username}.dectog.com/.well-known/assetlinks.json. -->
+           https://{username}.adto.app/.well-known/assetlinks.json. -->
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="{username}.dectog.com" />
+        <data android:scheme="https" android:host="{username}.adto.app" />
       </intent-filter>
       <!-- Development: local worker on the host machine -->
       <intent-filter>

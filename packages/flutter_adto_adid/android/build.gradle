@@ -1,0 +1,88 @@
+group 'app.adto.flutter_adto_adid'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.11.1'
+        // Only loaded when this module has to apply the Kotlin Gradle plugin
+        // itself (see below); a host that already ships KGP on its root
+        // classpath wins, parent-first.
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+// Kotlin toolchain, three worlds:
+//  - AGP 9+ "built-in Kotlin" (Flutter 3.47+ default): AGP compiles Kotlin
+//    itself; applying the Kotlin Gradle plugin (KGP) on top is an error.
+//  - AGP 8 on Flutter 3.47+: Flutter's tooling applies KGP to plugin modules
+//    that do not apply it (android.builtInKotlin=false hosts).
+//  - AGP 8 on Flutter < 3.47: nobody applies KGP for us, so this module
+//    must — or its Kotlin sources never compile. Applied through the plugin
+//    manager (not `apply plugin:`) so Flutter's build-file scan does not
+//    count this module among those forcing KGP on built-in-Kotlin hosts.
+def builtInKotlin = {
+    int agpMajor = 0
+    try {
+        agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+    } catch (Throwable ignored) {
+    }
+    def prop = project.findProperty('android.builtInKotlin')
+    boolean enabled = prop == null ? agpMajor >= 9 : prop.toString().toBoolean()
+    return enabled && agpMajor >= 9
+}()
+if (!builtInKotlin
+        && !project.plugins.hasPlugin('org.jetbrains.kotlin.android')
+        && !project.plugins.hasPlugin('kotlin-android')) {
+    project.pluginManager.apply('org.jetbrains.kotlin.android')
+}
+
+android {
+    namespace 'app.adto.flutter_adto_adid'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 24
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Kotlin JVM target aligned with the Java compile options above (no
+    // toolchain download): the built-in Kotlin DSL on AGP 9, KGP's on AGP 8.
+    if (builtInKotlin) {
+        kotlin {
+            compilerOptions {
+                jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+            }
+        }
+    } else {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
+    }
+
+    lint {
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    // The GAID reader. Its manifest merges the AD_ID permission, which
+    // is why it lives here and never in flutter_adto.
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.2.0'
+}

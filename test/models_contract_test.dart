@@ -1,13 +1,13 @@
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('links without a target parse, with the full field set', () {
-    final link = DectogLink.fromJson({
+    final link = AdtoLink.fromJson({
       'id': 'l1',
       'slug': 'spring',
       'target': null,
-      'url': 'https://acme.dectog.com/spring',
+      'url': 'https://acme.adto.app/spring',
       'click_count': 3,
       'created_at': '2026-10-12T10:00:00Z',
       'updated_at': null,
@@ -21,11 +21,11 @@ void main() {
     expect(link.campaign, 'spring_sale');
     expect(link.ogTitle, 'Spring');
 
-    final temp = DectogTempLink.fromJson({
+    final temp = AdtoTempLink.fromJson({
       'id': 't1',
       'slug': 't_abc',
       'target': null,
-      'url': 'https://acme.dectog.com/t_abc',
+      'url': 'https://acme.adto.app/t_abc',
       'expires_at': '2026-10-12T11:00:00Z',
       'created_at': '2026-10-12T10:00:00Z',
       'ttl_seconds': 3600,
@@ -35,11 +35,11 @@ void main() {
   });
 
   test('a paused, expiring, archived link parses its lifecycle', () {
-    final link = DectogLink.fromJson({
+    final link = AdtoLink.fromJson({
       'id': 'l2',
       'slug': 'sale',
       'target': null,
-      'url': 'https://acme.dectog.com/sale',
+      'url': 'https://acme.adto.app/sale',
       'click_count': 0,
       'created_at': '2026-10-12T10:00:00Z',
       'expires_at': '2026-12-31T23:59:00.000Z',
@@ -58,11 +58,11 @@ void main() {
   });
 
   test('a link parses its routing rules', () {
-    final link = DectogLink.fromJson({
+    final link = AdtoLink.fromJson({
       'id': 'l3',
       'slug': 'sale',
       'target': null,
-      'url': 'https://acme.dectog.com/sale',
+      'url': 'https://acme.adto.app/sale',
       'click_count': 0,
       'created_at': '2026-10-12T10:00:00Z',
       'routing_rules': [
@@ -85,11 +85,11 @@ void main() {
   });
 
   test('resolution parses a null target and exposes the deep-link paths', () {
-    final r = DectogLinkResolution.fromJson({
+    final r = AdtoLinkResolution.fromJson({
       'id': 'l1',
       'slug': 'open',
       'target': null,
-      'url': 'https://acme.dectog.com/open',
+      'url': 'https://acme.adto.app/open',
       'type': 'permanent',
       'created_at': '2026-10-12T10:00:00Z',
       'click_count': 1,
@@ -100,15 +100,15 @@ void main() {
     expect(r.iosDeepLinkPath, 'feed');
     // Tests run on the host, which takes the Android path.
     expect(r.deepLinkPath, 'products/1');
-    expect(r.toDectogLink()?.androidDeepLinkPath, 'products/1');
+    expect(r.toAdtoLink()?.androidDeepLinkPath, 'products/1');
   });
 
   test('deepLinkPath falls back to the iOS path off iOS', () {
-    final r = DectogLinkResolution.fromJson({
+    final r = AdtoLinkResolution.fromJson({
       'id': 'l1',
       'slug': 'open',
       'target': null,
-      'url': 'https://acme.dectog.com/open',
+      'url': 'https://acme.adto.app/open',
       'type': 'permanent',
       'created_at': '2026-10-12T10:00:00Z',
       'ios_deep_link_path': 'feed',
@@ -116,12 +116,12 @@ void main() {
     expect(r.deepLinkPath, 'feed');
   });
 
-  test('config defaults to hosted DecTog', () {
-    const hosted = DectogConfig(apiKey: 'dtg_test');
-    expect(hosted.effectiveBaseUrl, 'https://app.dectog.com');
-    expect(hosted.effectiveLinkRootDomain, 'dectog.com');
+  test('config defaults to hosted AdTo', () {
+    const hosted = AdtoConfig(apiKey: 'dtg_test');
+    expect(hosted.effectiveBaseUrl, 'https://app.adto.app');
+    expect(hosted.effectiveLinkRootDomain, 'adto.app');
 
-    const selfHosted = DectogConfig(
+    const selfHosted = AdtoConfig(
       apiKey: 'dtg_test',
       baseUrl: 'https://links.example.com/',
     );
@@ -131,7 +131,7 @@ void main() {
       isNull,
     ); // falls back to the API host
 
-    const split = DectogConfig(
+    const split = AdtoConfig(
       apiKey: 'dtg_test',
       baseUrl: 'https://app.example.com',
       linkRootDomain: 'example.com.',

@@ -1,4 +1,4 @@
-import 'package:flutter_dectog/src/services/pasteboard_gate.dart';
+import 'package:flutter_adto/src/services/pasteboard_gate.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The SDK sends only click-bearing pasteboard links, and clears the
@@ -9,13 +9,13 @@ void main() {
     test('a link with dtg_click or dtg_l is a signal', () {
       expect(
         PasteboardGate.carriesClickTag(
-          'https://demo.dectog.com/welcome?dtg_click=abc123',
+          'https://demo.adto.app/welcome?dtg_click=abc123',
         ),
         isTrue,
       );
       expect(
         PasteboardGate.carriesClickTag(
-          'https://demo.dectog.com/welcome?utm_source=x&dtg_click=abc123',
+          'https://demo.adto.app/welcome?utm_source=x&dtg_click=abc123',
         ),
         isTrue,
       );
@@ -27,7 +27,7 @@ void main() {
 
     test('a bare share link is not, and is never sent', () {
       expect(
-        PasteboardGate.carriesClickTag('https://demo.dectog.com/welcome'),
+        PasteboardGate.carriesClickTag('https://demo.adto.app/welcome'),
         isFalse,
       );
       expect(

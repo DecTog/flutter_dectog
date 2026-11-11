@@ -6,7 +6,7 @@
 /// `li<id>:`, `pdk<id>:`, `twitterkit-…` and Google Sign-In's
 /// `com.googleusercontent.apps.<id>-…` schemes plus anything carrying an
 /// OAuth token; Adjust filters the Facebook/VK callback shapes. These URLs
-/// are neither logged nor emitted on [FlutterDectog.onLinkClick].
+/// are neither logged nor emitted on [FlutterAdto.onLinkClick].
 library;
 
 final List<RegExp> _sensitiveSchemePatterns = [

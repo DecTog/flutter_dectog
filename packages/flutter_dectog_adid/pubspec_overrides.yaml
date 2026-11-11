@@ -1,4 +1,0 @@
-# Development only (not published): build against the SDK in this repo.
-dependency_overrides:
-  flutter_dectog:
-    path: ../..

@@ -11,11 +11,11 @@ void main() {
     await tester.pumpWidget(TrailsRoot(app: TrailsApp()));
     await tester.pumpAndSettle();
     // The navigator observer reports the screen after 350 ms (and, with no
-    // DecTog running, drops it).
+    // AdTo running, drops it).
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Welcome to Trails'), findsOneWidget);
-    expect(find.textContaining('DECTOG_API_KEY'), findsOneWidget);
-    // Sign up waits for DecTog.
+    expect(find.textContaining('ADTO_API_KEY'), findsOneWidget);
+    // Sign up waits for AdTo.
     final signUp = tester.widget<FilledButton>(find.byType(FilledButton));
     expect(signUp.onPressed, isNull);
   });

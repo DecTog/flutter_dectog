@@ -1,9 +1,9 @@
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('apple_search_ads parses the resolved record and round-trips', () {
-    final r = DectogAppInstallResponse.fromJson({
+    final r = AdtoAppInstallResponse.fromJson({
       'matched': false,
       'type': 'organic',
       'install_id': 'i1',
@@ -35,18 +35,18 @@ void main() {
     expect(asa.impressionDate, isNull);
     expect(asa.resolvedAt, DateTime.parse('2026-10-12T10:00:00.000Z'));
 
-    final again = DectogAppInstallResponse.fromJson(r.toJson());
+    final again = AdtoAppInstallResponse.fromJson(r.toJson());
     expect(again.appleSearchAds?.campaignId, 542370539);
     expect(again.appleSearchAds?.supplyPlacement, 'APPSTORE_SEARCH_RESULTS');
     expect(
       r.matched,
       isFalse,
-      reason: 'Apple Search Ads never changes DecTog link attribution',
+      reason: 'Apple Search Ads never changes AdTo link attribution',
     );
   });
 
   test('a pending exchange and a missing token both parse', () {
-    final pending = DectogAppInstallResponse.fromJson({
+    final pending = AdtoAppInstallResponse.fromJson({
       'matched': false,
       'type': 'organic',
       'install_id': 'i2',
@@ -60,7 +60,7 @@ void main() {
     expect(pending.appleSearchAds?.isAttributed, isFalse);
     expect(pending.appleSearchAds?.campaignId, isNull);
 
-    final none = DectogAppInstallResponse.fromJson({
+    final none = AdtoAppInstallResponse.fromJson({
       'matched': false,
       'type': 'organic',
       'install_id': 'i3',

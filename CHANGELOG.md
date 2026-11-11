@@ -1,11 +1,37 @@
 # Changelog
 
-All notable changes to the Flutter DecTog plugin will be documented in this file.
+All notable changes to flutter_adto are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-10-12
+## [1.0.0] - Unreleased
+
+flutter_adto is flutter_dectog 1.0.x under AdTo's name: the same behaviour, wire and on-device
+data, with the package, the types and the default hosts renamed. See "Moving from
+flutter_dectog" in the README.
+
+- **Package:** `flutter_adto` (`package:flutter_adto/flutter_adto.dart`), and
+  `flutter_adto_adid` for the advertising identifier. The iOS Swift package and pod, the Android
+  plugin (`app.adto.flutter_adto`) and the method channels are renamed too, so the old and the
+  new plugin never clash in one app.
+- **Types:** every `Dectog` prefix becomes `Adto`: `FlutterAdto`, `AdtoConfig`, `AdtoLink`,
+  `AdtoLinkClick`, `AdtoError`, `AdtoPasteButton`, `AdtoNavigatorObserver` and the rest. There
+  are no aliases for the old names.
+- **Default hosts:** `AdtoConfig.defaultBaseUrl` is `https://app.adto.app` and
+  `defaultLinkRootDomain` is `adto.app`. An account on the old DecTog service sets
+  `baseUrl: 'https://app.dectog.com'` and `linkRootDomain: 'dectog.com'`.
+- **SDK header:** calls send `x-dectog-sdk: flutter_adto/<version>`.
+- **Unchanged:** the request headers (`x-dectog-*`), the `DectogSDK/` user-agent token, the
+  `dtg_*` parameters, the `dectog://` development links, the files the SDK keeps on the device
+  (`.dectog_*.json` in its `dectog` folder) and the iOS Keychain items (service
+  `app.dectog.sdk`), so an app that moves from flutter_dectog keeps its install state.
+
+## flutter_dectog history
+
+flutter_adto continues flutter_dectog, whose releases follow.
+
+### flutter_dectog [1.0.0] - 2026-10-12
 
 First public release. flutter_dectog is the Flutter SDK for DecTog, a
 self-hosted deep-link and install-attribution backend (Cloudflare Worker +

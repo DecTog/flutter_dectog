@@ -182,17 +182,17 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_dectog:
+  flutter_adto:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
     version: "1.0.0"
-  flutter_dectog_adid:
+  flutter_adto_adid:
     dependency: "direct main"
     description:
-      path: "../packages/flutter_dectog_adid"
+      path: "../packages/flutter_adto_adid"
       relative: true
     source: path
     version: "1.0.0"

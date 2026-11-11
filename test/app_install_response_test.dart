@@ -1,11 +1,11 @@
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
     'parses the verdict fields (referrer_source, fraud_flags, last_open)',
     () {
-      final response = DectogAppInstallResponse.fromJson({
+      final response = AdtoAppInstallResponse.fromJson({
         'matched': true,
         'type': 'non-organic',
         'match_source': 'referrer',
@@ -36,7 +36,7 @@ void main() {
   );
 
   test('older payloads parse with empty fraud flags and no last_open', () {
-    final response = DectogAppInstallResponse.fromJson({
+    final response = AdtoAppInstallResponse.fromJson({
       'matched': false,
       'type': 'organic',
       'fraud_flags': [],
@@ -52,7 +52,7 @@ void main() {
   });
 
   test('clipboard match verdicts carry match_source clipboard', () {
-    final response = DectogAppInstallResponse.fromJson({
+    final response = AdtoAppInstallResponse.fromJson({
       'matched': true,
       'type': 'non-organic',
       'match_source': 'clipboard',
@@ -89,7 +89,7 @@ void main() {
         'install_state': 'reinstall',
         'install_id': 'inst-3',
       };
-      final r = DectogAppInstallResponse.fromJson(json);
+      final r = AdtoAppInstallResponse.fromJson(json);
       expect(
         r.matched,
         isFalse,
@@ -105,7 +105,7 @@ void main() {
       expect(r.isReinstall, isTrue);
       expect(r.installState, 'reinstall');
 
-      final again = DectogAppInstallResponse.fromJson(r.toJson());
+      final again = AdtoAppInstallResponse.fromJson(r.toJson());
       expect(again.routing?.deepLink, 'voucher?code=X');
       expect(again.routing?.clickParams?.label, 'l1');
       expect(again.matchConfidence, 'medium');
@@ -116,7 +116,7 @@ void main() {
   );
 
   test('claim responses carry claim / claim_reason', () {
-    final r = DectogAppInstallResponse.fromJson({
+    final r = AdtoAppInstallResponse.fromJson({
       'matched': true,
       'type': 'non-organic',
       'match_confidence': 'guaranteed',
@@ -125,7 +125,7 @@ void main() {
     });
     expect(r.claim, 'upgraded');
     expect(r.claimReason, isNull);
-    final rejected = DectogAppInstallResponse.fromJson({
+    final rejected = AdtoAppInstallResponse.fromJson({
       'matched': false,
       'type': 'organic',
       'claim': 'rejected',
@@ -137,12 +137,9 @@ void main() {
 
   test('a verdict without type derives it from matched', () {
     expect(
-      DectogAppInstallResponse.fromJson({'matched': true}).type,
+      AdtoAppInstallResponse.fromJson({'matched': true}).type,
       'non-organic',
     );
-    expect(
-      DectogAppInstallResponse.fromJson({'matched': false}).type,
-      'organic',
-    );
+    expect(AdtoAppInstallResponse.fromJson({'matched': false}).type, 'organic');
   });
 }

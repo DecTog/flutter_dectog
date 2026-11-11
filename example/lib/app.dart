@@ -3,23 +3,23 @@ import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
-import 'package:flutter_dectog_adid/flutter_dectog_adid.dart';
+import 'package:flutter_adto/flutter_adto.dart';
+import 'package:flutter_adto_adid/flutter_adto_adid.dart';
 
-/// The example's link to DecTog: initialization, the link that opened the
+/// The example's link to AdTo: initialization, the link that opened the
 /// app, the install verdict, the signed-up user and the pending route.
 ///
 /// Configure with `flutter run --dart-define-from-file=env/dev.json`
 /// (env/*.json is gitignored; see env/dev.json.example).
 class TrailsApp extends ChangeNotifier {
-  TrailsApp({FlutterDectog? dectog}) : dectog = dectog ?? FlutterDectog();
+  TrailsApp({FlutterAdto? adto}) : adto = adto ?? FlutterAdto();
 
-  final FlutterDectog dectog;
+  final FlutterAdto adto;
 
-  static const String envApiKey = String.fromEnvironment('DECTOG_API_KEY');
-  static const String envBaseUrl = String.fromEnvironment('DECTOG_BASE_URL');
+  static const String envApiKey = String.fromEnvironment('ADTO_API_KEY');
+  static const String envBaseUrl = String.fromEnvironment('ADTO_BASE_URL');
   static const String envLinkRoot = String.fromEnvironment(
-    'DECTOG_LINK_ROOT_DOMAIN',
+    'ADTO_LINK_ROOT_DOMAIN',
   );
 
   /// A local worker by default: the Android emulator reaches the host at 10.0.2.2.
@@ -31,8 +31,8 @@ class TrailsApp extends ChangeNotifier {
 
   String status = envApiKey.isEmpty ? 'no-key' : 'starting';
   String? error;
-  DectogAppInstallResponse? verdict;
-  DectogLinkClick? lastClick;
+  AdtoAppInstallResponse? verdict;
+  AdtoLinkClick? lastClick;
 
   /// The signed-in user's id: random, never a name or an email (no personal
   /// data rides an event).
@@ -54,32 +54,32 @@ class TrailsApp extends ChangeNotifier {
     if (envApiKey.isEmpty) return;
     // Subscribe before initialize: the link that opened the app is
     // reported while it runs.
-    _subscriptions.add(dectog.onLinkClick.listen(_onLink));
+    _subscriptions.add(adto.onLinkClick.listen(_onLink));
     // Fires again when a late signal (a store referrer that answered after
-    // the registration, a link pasted with DectogPasteButton) upgrades it.
-    _subscriptions.add(dectog.onAppInstalled.listen(_onVerdict));
+    // the registration, a link pasted with AdtoPasteButton) upgrades it.
+    _subscriptions.add(adto.onAppInstalled.listen(_onVerdict));
     try {
       // iOS: the ATT prompt runs before initialize so the install can carry
       // the IDFA; only when the user turned it on in Debug.
-      if (readAdId) await DectogAdId.requestTracking();
-      await dectog.initialize(
-        DectogConfig(
+      if (readAdId) await AdtoAdId.requestTracking();
+      await adto.initialize(
+        AdtoConfig(
           apiKey: envApiKey,
           baseUrl: baseUrl,
           linkRootDomain: envLinkRoot.isEmpty ? null : envLinkRoot,
           enableDebugLogging: kDebugMode,
-          advertisingIdProvider: readAdId ? DectogAdId.provider : null,
+          advertisingIdProvider: readAdId ? AdtoAdId.provider : null,
         ),
       );
       status = 'ready';
-    } on DectogError catch (e) {
+    } on AdtoError catch (e) {
       status = 'failed';
       error = e.message;
     }
     notifyListeners();
   }
 
-  void _onLink(DectogLinkClick click) {
+  void _onLink(AdtoLinkClick click) {
     lastClick = click;
     // dec_deeplink on the shared URL first, then the link's own route.
     final route = click.clickParams?.deepLink ??
@@ -91,7 +91,7 @@ class TrailsApp extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onVerdict(DectogAppInstallResponse v) {
+  void _onVerdict(AdtoAppInstallResponse v) {
     verdict = v;
     if (v.matched) {
       note(
@@ -121,26 +121,25 @@ class TrailsApp extends ChangeNotifier {
     final r = Random.secure();
     userId =
         'u_${List.generate(10, (_) => r.nextInt(36).toRadixString(36)).join()}';
-    await dectog.identify(customerId: userId!);
+    await adto.identify(customerId: userId!);
     note('Signed up as $userId');
   }
 
   /// The user's referral link, created on first use.
-  Future<DectogLink> referralLink() =>
-      dectog.createReferralLink(customerId: userId!);
+  Future<AdtoLink> referralLink() =>
+      adto.createReferralLink(customerId: userId!);
 
   /// A purchase, counted once even if reported twice (transaction id + store).
   Future<void> buyPro() async {
     final id = 'pro-${DateTime.now().millisecondsSinceEpoch}';
-    await dectog.trackConversion(
+    await adto.trackConversion(
       revenue: 4.99,
       currency: 'EUR',
       eventName: 'pro_monthly',
       productId: 'pro_monthly',
       transactionId: id,
-      store:
-          (!kIsWeb && Platform.isIOS) ? DectogStore.appStore : DectogStore.play,
-      purchaseType: DectogPurchaseType.subscription,
+      store: (!kIsWeb && Platform.isIOS) ? AdtoStore.appStore : AdtoStore.play,
+      purchaseType: AdtoPurchaseType.subscription,
       metadata: {'plan': 'pro_monthly'},
     );
     note('Pro purchase sent ($id)');

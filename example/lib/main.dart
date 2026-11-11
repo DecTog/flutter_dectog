@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 
 import 'app.dart';
 import 'screens.dart';
 import 'trails.dart';
 
-/// Trails: a small app built on flutter_dectog. Install from a shared trail
+/// Trails: a small app built on flutter_adto. Install from a shared trail
 /// or an invite, sign up, share a trail, go Pro; see README.md for the
 /// flows and how to try each one.
 void main() {
@@ -26,7 +26,7 @@ class _TrailsRootState extends State<TrailsRoot> {
   final _navigator = GlobalKey<NavigatorState>();
   // Each screen is reported as a screen view; route arguments only
   // when named here, and never personal data.
-  final _screens = DectogNavigatorObserver(captureParams: {'trail_id'});
+  final _screens = AdtoNavigatorObserver(captureParams: {'trail_id'});
 
   @override
   void initState() {

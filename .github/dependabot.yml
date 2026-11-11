@@ -7,7 +7,7 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: pub
-    directory: /packages/flutter_dectog_adid
+    directory: /packages/flutter_adto_adid
     schedule:
       interval: weekly
   - package-ecosystem: pub

@@ -1,4 +1,4 @@
-// A stand-in DecTog API for tool/device_restart_test.sh. It records
+// A stand-in AdTo API for tool/device_restart_test.sh. It records
 // every install registration and answers 503 until told otherwise, then the
 // organic verdict of test/fixtures/wire/. Every other /api/v1 call gets a
 // 200. Request signatures are not checked.
@@ -23,7 +23,7 @@ Future<void> main(List<String> args) async {
   var accept = false;
 
   final server = await HttpServer.bind(InternetAddress.anyIPv4, port);
-  stdout.writeln('mock DecTog API on :$port');
+  stdout.writeln('mock AdTo API on :$port');
   await for (final req in server) {
     final body = await utf8.decoder.bind(req).join();
     final path = req.uri.path;

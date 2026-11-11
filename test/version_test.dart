@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_dectog/src/version.dart';
+import 'package:flutter_adto/src/version.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -22,7 +22,7 @@ void main() {
   });
 
   test('iOS podspec version matches the package version', () {
-    final podspec = File('ios/flutter_dectog.podspec').readAsStringSync();
+    final podspec = File('ios/flutter_adto.podspec').readAsStringSync();
     final match = RegExp(
       r"^  s\.version\s*=\s*'([^']+)'",
       multiLine: true,
@@ -30,13 +30,13 @@ void main() {
     expect(
       match,
       isNotNull,
-      reason: 'ios/flutter_dectog.podspec must declare s.version',
+      reason: 'ios/flutter_adto.podspec must declare s.version',
     );
     expect(
       packageVersion,
       match!.group(1),
       reason:
-          'ios/flutter_dectog.podspec must be updated together with '
+          'ios/flutter_adto.podspec must be updated together with '
           'the version in pubspec.yaml',
     );
   });
@@ -62,7 +62,7 @@ void main() {
   test('the README install snippet accepts the package version', () {
     final readme = File('README.md').readAsStringSync();
     final match = RegExp(
-      r'^\s*flutter_dectog:\s*\^(\d+)\.(\d+)\.(\d+)',
+      r'^\s*flutter_adto:\s*\^(\d+)\.(\d+)\.(\d+)',
       multiLine: true,
     ).firstMatch(readme);
     expect(match, isNotNull, reason: 'README.md must show the pubspec line');
@@ -75,6 +75,6 @@ void main() {
   });
 
   test('the x-dectog-sdk identity carries the package version', () {
-    expect(sdkIdentity, 'flutter_dectog/$packageVersion');
+    expect(sdkIdentity, 'flutter_adto/$packageVersion');
   });
 }

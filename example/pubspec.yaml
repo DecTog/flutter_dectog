@@ -1,5 +1,5 @@
 name: example
-description: "Trails, the flutter_dectog example app."
+description: "Trails, the flutter_adto example app."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -34,11 +34,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  flutter_dectog:
+  flutter_adto:
     path: ../
   # The opt-in advertising id (IDFA after ATT, GAID).
-  flutter_dectog_adid:
-    path: ../packages/flutter_dectog_adid
+  flutter_adto_adid:
+    path: ../packages/flutter_adto_adid
 
 dev_dependencies:
   flutter_test:
@@ -92,8 +92,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-# flutter_dectog_adid depends on the hosted flutter_dectog; build both
+# flutter_adto_adid depends on the hosted flutter_adto; build both
 # against this repo.
 dependency_overrides:
-  flutter_dectog:
+  flutter_adto:
     path: ../

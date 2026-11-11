@@ -36,14 +36,14 @@ jobs:
       # The companion package resolves on its own (flutter analyze
       # below covers it too).
       - run: flutter pub get
-        working-directory: packages/flutter_dectog_adid
-      - run: dart format --output=none --set-exit-if-changed lib test tool example/lib packages/flutter_dectog_adid/lib packages/flutter_dectog_adid/test
+        working-directory: packages/flutter_adto_adid
+      - run: dart format --output=none --set-exit-if-changed lib test tool example/lib packages/flutter_adto_adid/lib packages/flutter_adto_adid/test
       - run: flutter analyze
       # Includes test/version_test.dart: pubspec, version.dart, podspec,
       # CHANGELOG and the README snippet must agree.
       - run: flutter test
       - run: flutter test
-        working-directory: packages/flutter_dectog_adid
+        working-directory: packages/flutter_adto_adid
       - run: flutter pub publish --dry-run
       - run: tool/publish_adid.sh --dry-run
       # What has newer versions, in the log of every run (Dependabot
@@ -72,7 +72,7 @@ jobs:
       # InstallReferrerClient (JUnit + Robolectric, no device).
       - name: Native unit tests (Kotlin)
         working-directory: example/android
-        run: ./gradlew :flutter_dectog:testDebugUnitTest --console=plain
+        run: ./gradlew :flutter_adto:testDebugUnitTest --console=plain
 
   ios:
     name: iOS build (plugin Swift via the example app)
@@ -88,7 +88,7 @@ jobs:
       - name: Build the example for the simulator
         working-directory: example
         run: flutter build ios --simulator --debug
-      # DectogInstallDates against a temporary container and a fake
+      # AdtoInstallDates against a temporary container and a fake
       # Keychain (XCTest on the macOS host, no simulator).
       - name: Native unit tests (Swift)
         run: swift test --package-path ios/native_tests

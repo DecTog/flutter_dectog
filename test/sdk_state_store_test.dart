@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_dectog/src/services/sdk_state_store.dart';
+import 'package:flutter_adto/src/services/sdk_state_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -8,7 +8,7 @@ void main() {
   final store = SdkStateStore();
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('dectog_state_test');
+    tempDir = await Directory.systemTemp.createTemp('adto_state_test');
     await store.resetForTest(directoryProvider: () async => tempDir);
   });
 

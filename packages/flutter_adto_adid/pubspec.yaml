@@ -1,0 +1,36 @@
+name: flutter_adto_adid
+description: The advertising identifier (IDFA after App Tracking Transparency,
+  GAID) for flutter_adto, kept out of the core SDK.
+
+version: 1.0.0
+
+homepage: https://adto.app
+repository: https://github.com/ad-to/flutter_adto/tree/main/packages/flutter_adto_adid
+issue_tracker: https://github.com/ad-to/flutter_adto/issues
+documentation: https://docs.adto.app/sdk/device-data-and-privacy/
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_adto: ^1.0.0
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+# The only package that links AdSupport and AppTrackingTransparency
+# (iOS) and Play services ads-identifier with the AD_ID permission (Android).
+# An app that does not depend on it ships none of them.
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: app.adto.flutter_adto_adid
+        pluginClass: AdtoAdIdPlugin
+      ios:
+        pluginClass: AdtoAdIdPlugin

@@ -1,24 +1,24 @@
-// The public-API tripwire. It compiles only while FlutterDectog's
+// The public-API tripwire. It compiles only while FlutterAdto's
 // surface is exactly what is written here:
 //  - _Probe implements every member with the published signature, so a new
 //    member or a new parameter on an existing one is a compile error;
 //  - surface() takes each member at its exact function type, so a removed or
 //    renamed parameter, or a changed type, is a compile error.
-// flutter_dectog is on pub.dev, so a change here changes the published API:
+// flutter_adto is on pub.dev, so a change here changes the published API:
 // a removed, renamed or retyped member is a breaking change and needs a major
 // version.
 // ignore_for_file: unused_local_variable
 
-import 'package:flutter_dectog/flutter_dectog.dart';
+import 'package:flutter_adto/flutter_adto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _Probe implements FlutterDectog {
+class _Probe implements FlutterAdto {
   Never get _no => throw UnimplementedError();
 
   @override
-  Future<void> initialize(DectogConfig config) => _no;
+  Future<void> initialize(AdtoConfig config) => _no;
   @override
-  Future<DectogLink> createLink({
+  Future<AdtoLink> createLink({
     required String slug,
     String? target,
     Map<String, dynamic>? metadata,
@@ -36,14 +36,14 @@ class _Probe implements FlutterDectog {
     String? creative,
   }) => _no;
   @override
-  Future<DectogDiagnostics> diagnostics() => _no;
+  Future<AdtoDiagnostics> diagnostics() => _no;
   @override
-  Future<DectogLink> createReferralLink({
+  Future<AdtoLink> createReferralLink({
     required String customerId,
     String? campaign,
   }) => _no;
   @override
-  Future<DectogLink> updateLink(
+  Future<AdtoLink> updateLink(
     String slug, {
     String? target,
     Map<String, dynamic>? metadata,
@@ -60,13 +60,13 @@ class _Probe implements FlutterDectog {
     String? creative,
   }) => _no;
   @override
-  Future<DectogLinkPage> getLinks({int? limit, String? cursor}) => _no;
+  Future<AdtoLinkPage> getLinks({int? limit, String? cursor}) => _no;
   @override
-  Future<DectogLink> getLink(String slug) => _no;
+  Future<AdtoLink> getLink(String slug) => _no;
   @override
   Future<void> deleteLink(String slug, {bool permanently = false}) => _no;
   @override
-  Future<DectogTempLink> createTempLink({
+  Future<AdtoTempLink> createTempLink({
     String? target,
     String? slug,
     int ttlSeconds = 900,
@@ -75,7 +75,7 @@ class _Probe implements FlutterDectog {
     String? ogImageUrl,
   }) => _no;
   @override
-  Future<DectogTempLink> updateTempLink(
+  Future<AdtoTempLink> updateTempLink(
     String slug, {
     String? target,
     String? ogTitle,
@@ -83,21 +83,21 @@ class _Probe implements FlutterDectog {
     String? ogImageUrl,
   }) => _no;
   @override
-  Future<DectogTempLink> getTempLink(String slug) => _no;
+  Future<AdtoTempLink> getTempLink(String slug) => _no;
   @override
   Future<void> deleteTempLink(String slug, {bool permanently = false}) => _no;
   @override
-  Future<DectogLinkResolution> resolveLink(String username, String slug) => _no;
+  Future<AdtoLinkResolution> resolveLink(String username, String slug) => _no;
   @override
-  Stream<DectogLinkClick> get onLinkClick => _no;
+  Stream<AdtoLinkClick> get onLinkClick => _no;
   @override
-  Stream<DectogAppInstallResponse> get onAppInstalled => _no;
+  Stream<AdtoAppInstallResponse> get onAppInstalled => _no;
   @override
-  DectogAppInstallResponse? get currentAppInstall => _no;
+  AdtoAppInstallResponse? get currentAppInstall => _no;
   @override
-  Future<DectogLinkClick?> getInitialLink() => _no;
+  Future<AdtoLinkClick?> getInitialLink() => _no;
   @override
-  Future<DectogLinkClick?> handleUrl(String url) => _no;
+  Future<AdtoLinkClick?> handleUrl(String url) => _no;
   @override
   Future<void> identify({
     required String customerId,
@@ -113,11 +113,11 @@ class _Probe implements FlutterDectog {
     String? productId,
     String? transactionId,
     String? originalTransactionId,
-    DectogStore? store,
-    DectogPurchaseType? purchaseType,
+    AdtoStore? store,
+    AdtoPurchaseType? purchaseType,
     int? quantity,
     String? appStoreJws,
-    DectogTransactionType transactionType = DectogTransactionType.purchase,
+    AdtoTransactionType transactionType = AdtoTransactionType.purchase,
     Map<String, dynamic>? metadata,
   }) => _no;
   @override
@@ -135,16 +135,15 @@ class _Probe implements FlutterDectog {
   @override
   Future<bool> isEnabled() => _no;
   @override
-  Future<DectogAppInstallResponse?> getAttributionData() => _no;
+  Future<AdtoAppInstallResponse?> getAttributionData() => _no;
   @override
-  Future<bool> willShowPasteboardPrompt({Set<DectogCollection>? collect}) =>
-      _no;
+  Future<bool> willShowPasteboardPrompt({Set<AdtoCollection>? collect}) => _no;
   @override
   Future<void> dispose() => _no;
 }
 
-/// Every DectogConfig parameter by name: a removed or renamed one fails to compile.
-const DectogConfig everyConfigParameter = DectogConfig(
+/// Every AdtoConfig parameter by name: a removed or renamed one fails to compile.
+const AdtoConfig everyConfigParameter = AdtoConfig(
   apiKey: 'dtg_pub_0123456789abcdef0123456789abcdef',
   baseUrl: null,
   linkRootDomain: null,
@@ -157,12 +156,12 @@ const DectogConfig everyConfigParameter = DectogConfig(
   fbAppId: null,
   persistDeviceId: true,
   enabled: true,
-  environment: DectogEnvironment.test,
+  environment: AdtoEnvironment.test,
 );
 
-void surface(FlutterDectog d) {
-  final Future<void> Function(DectogConfig) initialize = d.initialize;
-  final Future<DectogLink> Function({
+void surface(FlutterAdto d) {
+  final Future<void> Function(AdtoConfig) initialize = d.initialize;
+  final Future<AdtoLink> Function({
     required String slug,
     String? target,
     Map<String, dynamic>? metadata,
@@ -180,7 +179,7 @@ void surface(FlutterDectog d) {
     String? creative,
   })
   createLink = d.createLink;
-  final Future<DectogLink> Function(
+  final Future<AdtoLink> Function(
     String, {
     String? target,
     Map<String, dynamic>? metadata,
@@ -197,12 +196,12 @@ void surface(FlutterDectog d) {
     String? creative,
   })
   updateLink = d.updateLink;
-  final Future<DectogLinkPage> Function({int? limit, String? cursor}) getLinks =
+  final Future<AdtoLinkPage> Function({int? limit, String? cursor}) getLinks =
       d.getLinks;
-  final Future<DectogLink> Function(String) getLink = d.getLink;
+  final Future<AdtoLink> Function(String) getLink = d.getLink;
   final Future<void> Function(String, {bool permanently}) deleteLink =
       d.deleteLink;
-  final Future<DectogTempLink> Function({
+  final Future<AdtoTempLink> Function({
     String? target,
     String? slug,
     int ttlSeconds,
@@ -211,7 +210,7 @@ void surface(FlutterDectog d) {
     String? ogImageUrl,
   })
   createTempLink = d.createTempLink;
-  final Future<DectogTempLink> Function(
+  final Future<AdtoTempLink> Function(
     String, {
     String? target,
     String? ogTitle,
@@ -219,16 +218,16 @@ void surface(FlutterDectog d) {
     String? ogImageUrl,
   })
   updateTempLink = d.updateTempLink;
-  final Future<DectogTempLink> Function(String) getTempLink = d.getTempLink;
+  final Future<AdtoTempLink> Function(String) getTempLink = d.getTempLink;
   final Future<void> Function(String, {bool permanently}) deleteTempLink =
       d.deleteTempLink;
-  final Future<DectogLinkResolution> Function(String, String) resolveLink =
+  final Future<AdtoLinkResolution> Function(String, String) resolveLink =
       d.resolveLink;
-  final Stream<DectogLinkClick> onLinkClick = d.onLinkClick;
-  final Stream<DectogAppInstallResponse> onAppInstalled = d.onAppInstalled;
-  final DectogAppInstallResponse? currentAppInstall = d.currentAppInstall;
-  final Future<DectogLinkClick?> Function() getInitialLink = d.getInitialLink;
-  final Future<DectogLinkClick?> Function(String) handleUrl = d.handleUrl;
+  final Stream<AdtoLinkClick> onLinkClick = d.onLinkClick;
+  final Stream<AdtoAppInstallResponse> onAppInstalled = d.onAppInstalled;
+  final AdtoAppInstallResponse? currentAppInstall = d.currentAppInstall;
+  final Future<AdtoLinkClick?> Function() getInitialLink = d.getInitialLink;
+  final Future<AdtoLinkClick?> Function(String) handleUrl = d.handleUrl;
   final Future<void> Function({
     required String customerId,
     String? name,
@@ -243,16 +242,16 @@ void surface(FlutterDectog d) {
     String? productId,
     String? transactionId,
     String? originalTransactionId,
-    DectogStore? store,
-    DectogPurchaseType? purchaseType,
+    AdtoStore? store,
+    AdtoPurchaseType? purchaseType,
     int? quantity,
     String? appStoreJws,
-    DectogTransactionType transactionType,
+    AdtoTransactionType transactionType,
     Map<String, dynamic>? metadata,
   })
   trackConversion = d.trackConversion;
-  final Future<DectogDiagnostics> Function() diagnostics = d.diagnostics;
-  final Future<DectogLink> Function({
+  final Future<AdtoDiagnostics> Function() diagnostics = d.diagnostics;
+  final Future<AdtoLink> Function({
     required String customerId,
     String? campaign,
   })
@@ -265,17 +264,17 @@ void surface(FlutterDectog d) {
   final Future<void> Function() logout = d.logout;
   final Future<void> Function(bool) setEnabled = d.setEnabled;
   final Future<bool> Function() isEnabled = d.isEnabled;
-  final Future<DectogAppInstallResponse?> Function() getAttributionData =
+  final Future<AdtoAppInstallResponse?> Function() getAttributionData =
       d.getAttributionData;
-  final Future<bool> Function({Set<DectogCollection>? collect})
+  final Future<bool> Function({Set<AdtoCollection>? collect})
   willShowPasteboardPrompt = d.willShowPasteboardPrompt;
   final Future<void> Function() dispose = d.dispose;
 }
 
 void main() {
-  test('the public FlutterDectog surface is the published one', () {
+  test('the public FlutterAdto surface is the published one', () {
     // Compiling this file is the test; the probe only proves it ran.
-    expect(_Probe(), isA<FlutterDectog>());
+    expect(_Probe(), isA<FlutterAdto>());
     expect(surface, isA<Function>());
   });
 }
