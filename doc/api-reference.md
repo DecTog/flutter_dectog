@@ -353,7 +353,7 @@ Arguments of `trackConversion`, sent as their `wire` value.
 
 ## App settings
 
-At `initialize` the SDK reads the app's settings from the server (`GET /api/v1/sdk-config`) and caches them for an hour: a launch with a fresh cache makes no request, a first launch waits at most 1.5 seconds, a stale cache is refreshed in the background. An explicit `DectogConfig` value always wins over the server's.
+At `initialize` the SDK reads the app's settings from the server (`GET /api/v1/sdk-config`) and caches them for an hour: a launch with a fresh cache makes no request, a first launch waits at most 2.5 seconds (an answer that comes later is still cached for the next launch), a stale cache is refreshed in the background. An explicit `DectogConfig` value always wins over the server's.
 
 ### DectogSdkConfig
 

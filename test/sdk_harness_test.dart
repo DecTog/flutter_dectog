@@ -712,6 +712,64 @@ void main() {
   );
 
   test(
+    'a slow first-launch settings read does not hold start-up; its answer is still cached',
+    () async {
+      final gate = Completer<void>();
+      final fixture =
+          File('test/fixtures/wire/sdk-config.json').readAsStringSync();
+      h.answer = (r) async {
+        if (r.url.path != '/api/v1/sdk-config') return null;
+        await gate.future;
+        return http.Response(
+          fixture,
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      };
+      final started = DateTime.now();
+      await FlutterDectog().initialize(config);
+      expect(
+        DateTime.now().difference(started),
+        lessThan(const Duration(seconds: 5)),
+      );
+      expect(SdkConfigStore().config, isNull);
+
+      gate.complete();
+      await h.settle();
+      expect(SdkConfigStore().config?.fbAppId, '1234567890');
+      expect(
+        h.paths.where((p) => p == 'GET /api/v1/sdk-config').length,
+        1,
+        reason: 'one request: the late answer is kept, not fetched again',
+      );
+    },
+  );
+
+  test(
+    'the first launch waits for a settings answer as slow as a cold connection',
+    () async {
+      final fixture =
+          File('test/fixtures/wire/sdk-config.json').readAsStringSync();
+      h.answer = (r) async {
+        if (r.url.path != '/api/v1/sdk-config') return null;
+        // One request on a cold connection measured about 2 s.
+        await Future<void>.delayed(const Duration(seconds: 2));
+        return http.Response(
+          fixture,
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      };
+      await FlutterDectog().initialize(config);
+      expect(
+        SdkConfigStore().config?.fbAppId,
+        '1234567890',
+        reason: 'the install registration ran with the settings',
+      );
+    },
+  );
+
+  test(
     'diagnostics warns when the key belongs to the other environment',
     () async {
       h.responses['/api/v1/sdk-config'] =

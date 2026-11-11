@@ -183,6 +183,11 @@ final class FlutterDectogImpl implements FlutterDectog {
   static const Duration _asaTimeout = Duration(milliseconds: 500);
   static const Duration _pasteboardTimeout = Duration(seconds: 6);
 
+  /// How long a launch with no cached app settings waits for them before
+  /// registering the install. That launch is usually the first, on a cold
+  /// connection: one request with DNS, connect and TLS measured about 2 s.
+  static const Duration _settingsWait = Duration(milliseconds: 2500);
+
   /// Install POST: two in-process attempts, 15 s each (Branch 5.5 s × 3,
   /// Adjust 60 s with a persisted queue); a Retry-After longer than this
   /// defers to the next launch instead of blocking initialize().
@@ -262,8 +267,8 @@ final class FlutterDectogImpl implements FlutterDectog {
       // The app's settings from the dashboard (Facebook App ID, OEM
       // referrers, the pasteboard read) before the install registration
       // reads them. A fresh cache costs nothing; without one the first
-      // launch waits at most 1.5 s; a stale one is refreshed in the
-      // background.
+      // launch waits at most 2.5 s while the request runs on and is cached
+      // when it lands; a stale one is refreshed in the background.
       await _loadSdkConfig();
 
       // Post-install telemetry: resume the event queue (unless opted out)
@@ -745,16 +750,21 @@ final class FlutterDectogImpl implements FlutterDectog {
     return DectogLink.fromJson(json as Map<String, dynamic>);
   }
 
-  /// Read the cached server settings; fetch when there are none
-  /// (bounded) or refresh in the background when they are stale.
+  /// Read the cached server settings; fetch when there are none or
+  /// refresh in the background when they are stale. Without a cache the
+  /// first launch waits for the answer at most [_settingsWait], but the
+  /// request itself keeps its full budget: a cold connection that needs a
+  /// few seconds still fills the cache for this and every later launch,
+  /// instead of being cut off and retried from scratch each time.
   Future<void> _loadSdkConfig() async {
     final cached = await _sdkConfig.load();
     // Collection off: the cached settings only, no request.
     if (!_sdkState.enabled || _sdkConfig.isFresh()) return;
+    final fetch = _fetchSdkConfig();
     if (cached == null) {
-      await _fetchSdkConfig(timeout: const Duration(milliseconds: 1500));
+      await fetch.timeout(_settingsWait, onTimeout: () => null);
     } else {
-      unawaited(_fetchSdkConfig());
+      unawaited(fetch);
     }
   }
 
