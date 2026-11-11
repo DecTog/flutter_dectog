@@ -1,12 +1,14 @@
 name: Publish
 
-# Runs on a version tag. pub.dev's automated publishing must be enabled for
+# flutter_dectog 1.x maintenance, for apps still on it (iStoria): runs on a
+# flutter_dectog-v<version> tag, so it never collides with flutter_adto's v<version>
+# tags on main. Runs on a version tag. pub.dev's automated publishing must be enabled for
 # this repository (package admin page → Automated publishing, tag pattern
-# `v{{version}}`, environment `pub.dev`), which pub.dev only allows after the
+# `flutter_dectog-v{{version}}`, environment `pub.dev`), which pub.dev only allows after the
 # first manual publish. See RELEASING.md.
 on:
   push:
-    tags: ['v[0-9]+.[0-9]+.[0-9]+*']
+    tags: ['flutter_dectog-v[0-9]+.[0-9]+.[0-9]+*']
 
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Compare tag, pubspec.yaml, version.dart and CHANGELOG.md
         run: |
-          tag="${GITHUB_REF_NAME#v}"
+          tag="${GITHUB_REF_NAME#flutter_dectog-v}"
           pubspec=$(sed -n 's/^version:[[:space:]]*//p' pubspec.yaml)
           dart=$(sed -n "s/^const String packageVersion = '\(.*\)';/\1/p" lib/src/version.dart)
           changelog=$(sed -n 's/^## \[\([^]]*\)\].*/\1/p' CHANGELOG.md | head -n1)

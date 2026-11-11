@@ -1,5 +1,12 @@
 # Releasing flutter_dectog
 
+> [!IMPORTANT]
+> This is the `flutter_dectog-1.x` maintenance branch. `main` became `flutter_adto`. A
+> flutter_dectog fix is released from here with a `flutter_dectog-v<version>` tag (the pub.dev
+> automated-publishing tag pattern must be `flutter_dectog-v{{version}}`), never a `v<version>` tag,
+> which belongs to flutter_adto.
+
+
 flutter_dectog is on pub.dev (1.0.0, published 2026-11-04). Versions follow
 semantic versioning: a breaking change to the public API needs a major
 version. CI runs `flutter pub publish --dry-run` on every push so the package
