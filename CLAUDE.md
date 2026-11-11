@@ -23,8 +23,9 @@ the Kotlin and Swift.
 
 ## Rules
 
-- Pre-release: the public API may change without deprecations until the first
-  pub.dev release. Never publish to pub.dev without being asked.
+- Released: 1.0.0 is on pub.dev and in production apps, so the public API
+  follows semantic versioning; a removed, renamed or retyped member needs a
+  major version. Never publish to pub.dev without being asked.
 - The wire format follows the server's `docs/API_CONTRACT.md`; change both
   together. Errors arrive as `{"error": {"code", "message", "request_id"}}` and
   surface as `DectogError.code` / `requestId`.

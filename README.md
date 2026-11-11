@@ -23,9 +23,6 @@ installed and the store when it is not, deferred deep links that survive the ins
 attribution you can audit, and post-install events. It defaults to the hosted service at
 `app.dectog.com` and works unchanged against a [self-hosted server](https://github.com/DecTog/dectog).
 
-> [!NOTE]
-> Pre-release. Not on pub.dev yet; the API may change until the first release.
-
 For AI coding agents the package ships [`llms.txt`](llms.txt): every public type and member,
 the link URLs the SDK recognizes and the init snippets in one file, available offline in the
 pub cache. It is generated from [`doc/api-reference.md`](doc/api-reference.md).

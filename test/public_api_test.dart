@@ -4,8 +4,9 @@
 //    member or a new parameter on an existing one is a compile error;
 //  - surface() takes each member at its exact function type, so a removed or
 //    renamed parameter, or a changed type, is a compile error.
-// Pre-release, change this file freely with the API. After the first pub.dev
-// release, a change here is a breaking change and needs a major version.
+// flutter_dectog is on pub.dev, so a change here changes the published API:
+// a removed, renamed or retyped member is a breaking change and needs a major
+// version.
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter_dectog/flutter_dectog.dart';
