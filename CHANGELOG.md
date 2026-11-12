@@ -5,7 +5,7 @@ All notable changes to flutter_adto are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - Unreleased
+## [1.0.0] - 2026-11-12
 
 flutter_adto is the SDK of AdTo, a new service. It starts from flutter_dectog 1.0.x, the DecTog
 service's SDK, with every name made AdTo's; it shares no names or device data with it. See
