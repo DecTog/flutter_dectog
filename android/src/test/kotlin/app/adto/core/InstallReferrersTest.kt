@@ -111,10 +111,10 @@ class InstallReferrersTest {
         val entry = reader(
             Answer.Code(InstallReferrerResponse.SERVICE_UNAVAILABLE),
             Answer.Code(InstallReferrerResponse.SERVICE_UNAVAILABLE),
-            Answer.Referrer("dtg_click=abc123&utm_source=x", clickTsSeconds = 1_700_000_000, installBeginTsSeconds = 1_700_000_100),
+            Answer.Referrer("adto_click=abc123&utm_source=x", clickTsSeconds = 1_700_000_000, installBeginTsSeconds = 1_700_000_100),
         ).read()
         assertEquals(ReferrerStatus.OK, entry["status"])
-        assertEquals("dtg_click=abc123&utm_source=x", entry["referrer"])
+        assertEquals("adto_click=abc123&utm_source=x", entry["referrer"])
         assertEquals(1_700_000_000_000L, entry["clickTs"])
         assertEquals(1_700_000_100_000L, entry["installBeginTs"])
         assertEquals("1.2.3", entry["installVersion"])
@@ -175,7 +175,7 @@ class InstallReferrersTest {
 
     @Test
     fun disconnectAndDroppedReadsAreRetried() {
-        val entry = reader(Answer.Disconnect, Answer.DropMidRead, Answer.Referrer("dtg_click=zz")).read()
+        val entry = reader(Answer.Disconnect, Answer.DropMidRead, Answer.Referrer("adto_click=zz")).read()
         assertEquals(ReferrerStatus.OK, entry["status"])
         assertEquals(3, entry["attempts"])
     }
@@ -197,7 +197,7 @@ class InstallReferrersTest {
         try {
             val orchestrator = InstallReferrerOrchestrator(context, pool) { store ->
                 when (store) {
-                    ReferrerStores.GOOGLE_PLAY -> reader(Answer.Referrer("dtg_click=fast"))
+                    ReferrerStores.GOOGLE_PLAY -> reader(Answer.Referrer("adto_click=fast"))
                     ReferrerStores.HUAWEI -> object : ReferrerReader(context) {
                         override val store = ReferrerStores.HUAWEI
                         override fun doRead(): MutableMap<String, Any> {

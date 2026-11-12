@@ -23,7 +23,7 @@ void main() {
 
     test('AdTo links and ordinary deep links are not', () {
       for (final u in [
-        'https://demo.adto.app/welcome?dtg_click=abc&dec_deeplink=voucher%3Fcode%3DX',
+        'https://demo.adto.app/welcome?adto_click=abc&adto_deeplink=voucher%3Fcode%3DX',
         'istoria://demo/welcome/products/42?color=black',
         'http://localhost:8787/r/demo/e2e',
         'https://demo.adto.app/promo?token_hint=1', // not an exact token key
@@ -77,7 +77,7 @@ void main() {
       () {
         final d = LinkDeduper(window: const Duration(seconds: 10));
         final t0 = DateTime(2026, 10, 12, 12);
-        const url = 'istoria://demo/promo?dtg_click=1';
+        const url = 'istoria://demo/promo?adto_click=1';
         expect(d.shouldProcess(url, initial: false, now: t0), isTrue);
         expect(
           d.shouldProcess(

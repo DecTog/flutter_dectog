@@ -35,14 +35,14 @@ void main() {
         final r = InstallReferrerService.pickWinner({
           'google_play': sr(
             'google_play',
-            referrer: 'dtg_click=a',
+            referrer: 'adto_click=a',
             installBegin: 1000,
             attempts: 2,
             waitMs: 3000,
           ),
           'huawei': sr(
             'huawei',
-            referrer: 'dtg_click=b',
+            referrer: 'adto_click=b',
             installBegin: 2000,
             attempts: 1,
             waitMs: 500,
@@ -50,7 +50,7 @@ void main() {
         });
         expect(r.status, ReferrerStatus.ok);
         expect(r.store, 'huawei');
-        expect(r.referrer, 'dtg_click=b');
+        expect(r.referrer, 'adto_click=b');
         expect(r.attempts, 3);
         expect(r.waitMs, 3000);
         expect(r.hasReferrer, isTrue);
@@ -60,8 +60,8 @@ void main() {
 
     test('google_play wins ties and unknown timestamps', () {
       final r = InstallReferrerService.pickWinner({
-        'samsung': sr('samsung', referrer: 'dtg_click=s'),
-        'google_play': sr('google_play', referrer: 'dtg_click=g'),
+        'samsung': sr('samsung', referrer: 'adto_click=s'),
+        'google_play': sr('google_play', referrer: 'adto_click=g'),
       });
       expect(r.store, 'google_play');
     });
@@ -116,7 +116,7 @@ void main() {
           'google_play': sr('google_play', status: ReferrerStatus.notAvailable),
           'vivo': sr(
             'vivo',
-            referrer: 'dtg_click=v&dtg_l=u/s',
+            referrer: 'adto_click=v&adto_l=u/s',
             installBegin: 5,
           ),
         });
@@ -162,7 +162,7 @@ void main() {
             return {
               'google_play': {
                 'status': 'ok',
-                'referrer': 'dtg_click=abc&dtg_l=demo/welcome',
+                'referrer': 'adto_click=abc&adto_l=demo/welcome',
                 'clickTs': 1760000000000,
                 'installBeginTs': 1760000020000,
                 'clickServerTs': 1760000001000,
@@ -192,7 +192,7 @@ void main() {
       });
       final r = read.result;
       expect(r.store, 'google_play');
-      expect(r.referrer, 'dtg_click=abc&dtg_l=demo/welcome');
+      expect(r.referrer, 'adto_click=abc&adto_l=demo/welcome');
       expect(r.clickServerTs, 1760000001000);
       expect(r.installBeginServerTs, 1760000021000);
       expect(r.installVersion, '1.2.3');
@@ -238,7 +238,7 @@ void main() {
               return {
                 'google_play': {
                   'status': 'ok',
-                  'referrer': 'dtg_click=late',
+                  'referrer': 'adto_click=late',
                   'attempts': 3,
                   'waitMs': 9000,
                 },
@@ -253,7 +253,7 @@ void main() {
         expect(read.result.isDefinitive, isFalse);
         expect(read.late, isNotNull);
         final late = await read.late!;
-        expect(late.referrer, 'dtg_click=late');
+        expect(late.referrer, 'adto_click=late');
         expect(late.status, ReferrerStatus.ok);
       },
     );
@@ -263,7 +263,7 @@ void main() {
         timeout: const Duration(seconds: 1),
         oemStores: true,
         isAndroid: true,
-        provider: () async => 'dtg_click=p',
+        provider: () async => 'adto_click=p',
       );
       expect(ok.result.status, ReferrerStatus.ok);
       expect(ok.result.store, 'google_play');

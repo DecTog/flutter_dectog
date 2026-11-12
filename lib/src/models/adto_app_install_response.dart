@@ -46,12 +46,12 @@ class AdtoAppInstallResponse {
   /// Metadata
   final Map<String, dynamic>? customParameters;
 
-  /// The `dec_*` params on the attributed click: label, campaign,
+  /// The `adto_*` params on the attributed click: label, campaign,
   /// adgroup, creative, tracker and deep link. Null when organic or the
   /// clicked URL carried none.
   final AdtoClickParams? clickParams;
 
-  /// In-app route from the clicked URL's `dec_deeplink`, e.g.
+  /// In-app route from the clicked URL's `adto_deeplink`, e.g.
   /// `voucher?code=X` — route the user there after a deferred install.
   final String? deepLink;
 
@@ -312,7 +312,7 @@ class AdtoDeferredRoute {
   final String? username;
   final String? slug;
 
-  /// `dec_deeplink` of the candidate click, e.g. `voucher?code=X`.
+  /// `adto_deeplink` of the candidate click, e.g. `voucher?code=X`.
   final String? deepLink;
   final AdtoClickParams? clickParams;
 
@@ -413,7 +413,7 @@ class AdtoAppInstallLink {
 
   /// The customer who referred this install: the id passed to
   /// `createReferralLink` for a referral link (read from the link, so nothing
-  /// in the tapped URL can change it), else the tap's `dec_referrer` URL
+  /// in the tapped URL can change it), else the tap's `adto_referrer` URL
   /// parameter, else null. Use it for screens such as "Invited by …"; grant
   /// rewards from the `referral.converted` webhook.
   final String? referrerCustomerId;

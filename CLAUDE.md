@@ -23,13 +23,15 @@ the Kotlin and Swift.
 
 ## Rules
 
-- flutter_adto continues flutter_dectog (1.0.0 on pub.dev, in production
-  apps; maintained on the `flutter_dectog-1.x` branch). The public API follows
+- flutter_adto is the SDK of AdTo, a new service; it shares no names or
+  device data with flutter_dectog (the DecTog service's SDK, maintained on
+  the `flutter_dectog-1.x` branch). Once published, the public API follows
   semantic versioning; a removed, renamed or retyped member needs a major
   version. Never publish to pub.dev without being asked.
-- The on-device names stay DecTog's (the `dectog` folder, `.dectog_*.json`,
-  the Keychain service `app.dectog.sdk`), as do the wire names (`x-dectog-*`,
-  `DectogSDK/`, `dtg_*`, `dectog://`): `test/on_device_names_test.dart` pins them.
+- The on-device names (the `adto` folder, `.adto_*.json`, the Keychain
+  service `app.adto.sdk`) and the wire names (`x-adto-*`, `AdtoSDK/`,
+  `adto_*` keys and parameters, `adto://`) never change once released:
+  `test/on_device_names_test.dart` pins the device ones.
 - The wire format follows the server's `docs/API_CONTRACT.md`; change both
   together. Errors arrive as `{"error": {"code", "message", "request_id"}}` and
   surface as `AdtoError.code` / `requestId`.
@@ -45,8 +47,8 @@ the Kotlin and Swift.
   `AdtoKeychain.swift`, `AdtoInstallDates.swift` and
   `AdtoPasteTargetView.swift`. Keep Flutter out of them, change them here
   first, then sync. The plugin classes only map the channel onto them.
-- Custom-scheme links are recognised by their `dtg_l=<username>/<slug>` tag,
-  never by the URL's shape (only `dectog://` is accepted untagged).
+- Custom-scheme links are recognised by their `adto_l=<username>/<slug>` tag,
+  never by the URL's shape (only `adto://` is accepted untagged).
 - Version bumps touch `pubspec.yaml`, `lib/src/version.dart`, the podspec and
   `CHANGELOG.md` together (`RELEASING.md`).
 - `test/fixtures/wire/` mirrors the server's golden responses (`tool/sync_wire_fixtures.sh`);

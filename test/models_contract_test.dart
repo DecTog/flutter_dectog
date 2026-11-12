@@ -117,12 +117,12 @@ void main() {
   });
 
   test('config defaults to hosted AdTo', () {
-    const hosted = AdtoConfig(apiKey: 'dtg_test');
+    const hosted = AdtoConfig(apiKey: 'adto_test');
     expect(hosted.effectiveBaseUrl, 'https://app.adto.app');
     expect(hosted.effectiveLinkRootDomain, 'adto.app');
 
     const selfHosted = AdtoConfig(
-      apiKey: 'dtg_test',
+      apiKey: 'adto_test',
       baseUrl: 'https://links.example.com/',
     );
     expect(selfHosted.effectiveBaseUrl, 'https://links.example.com');
@@ -132,7 +132,7 @@ void main() {
     ); // falls back to the API host
 
     const split = AdtoConfig(
-      apiKey: 'dtg_test',
+      apiKey: 'adto_test',
       baseUrl: 'https://app.example.com',
       linkRootDomain: 'example.com.',
     );

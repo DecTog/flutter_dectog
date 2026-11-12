@@ -31,7 +31,7 @@
 			<string>app.adto.example</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>dectog</string>
+				<string>adto</string>
 			</array>
 		</dict>
 	</array>

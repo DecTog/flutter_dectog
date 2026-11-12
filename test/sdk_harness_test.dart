@@ -164,7 +164,7 @@ class Harness {
 const _identifiers = MethodChannel('adto_device_identifiers');
 
 const config = AdtoConfig(
-  apiKey: 'dtg_0123456789abcdef0123456789abcdef',
+  apiKey: 'adto_0123456789abcdef0123456789abcdef',
   baseUrl: 'https://app.adto.app',
   linkRootDomain: 'adto.app',
 );
@@ -190,8 +190,8 @@ void main() {
       );
       expect(installs, hasLength(1));
       final r = installs.single;
-      expect(r.headers['x-dectog-sdk'], 'flutter_adto/$packageVersion');
-      expect(r.headers['x-dectog-signature'], startsWith('v1='));
+      expect(r.headers['x-adto-sdk'], 'flutter_adto/$packageVersion');
+      expect(r.headers['x-adto-signature'], startsWith('v1='));
       expect(FlutterAdto().currentAppInstall?.matched, isFalse);
     },
   );
@@ -205,17 +205,17 @@ void main() {
   });
 
   test(
-    'the click report carries the dec_* and utm_* values, never the rest of the URL',
+    'the click report carries the adto_* and utm_* values, never the rest of the URL',
     () async {
       h.initialLink =
-          'https://demo.adto.app/spring?dec_campaign=chat&utm_source=mail&email=ana%40example.com#top';
+          'https://demo.adto.app/spring?adto_campaign=chat&utm_source=mail&email=ana%40example.com#top';
       await FlutterAdto().initialize(config);
       await h.settle();
       final click = h.requests.singleWhere(
         (r) => r.url.path == '/api/v1/clicks',
       );
       final body = jsonDecode(click.body) as Map<String, dynamic>;
-      expect(body['link_params'], {'dec_campaign': 'chat'});
+      expect(body['link_params'], {'adto_campaign': 'chat'});
       expect(body['utm_source'], 'mail');
       expect(click.body, isNot(contains('email')));
       expect(click.body, isNot(contains('example.com')));
@@ -231,7 +231,7 @@ void main() {
       h.initialLink = 'https://go.acme.app/spring';
       await FlutterAdto().initialize(
         const AdtoConfig(
-          apiKey: 'dtg_0123456789abcdef0123456789abcdef',
+          apiKey: 'adto_0123456789abcdef0123456789abcdef',
           baseUrl: 'https://app.adto.app',
           linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
@@ -251,7 +251,7 @@ void main() {
       h.initialLink = 'https://go.acme.app/spring';
       await FlutterAdto().initialize(
         const AdtoConfig(
-          apiKey: 'dtg_0123456789abcdef0123456789abcdef',
+          apiKey: 'adto_0123456789abcdef0123456789abcdef',
           baseUrl: 'https://app.adto.app',
           linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
@@ -319,7 +319,7 @@ void main() {
 
   group('consent mode', () {
     const waiting = AdtoConfig(
-      apiKey: 'dtg_0123456789abcdef0123456789abcdef',
+      apiKey: 'adto_0123456789abcdef0123456789abcdef',
       baseUrl: 'https://app.adto.app',
       linkRootDomain: 'adto.app',
       enabled: false,
@@ -328,7 +328,7 @@ void main() {
     test(
       'enabled: false sends nothing: launch link, events, identify, attribution pull, in-app link',
       () async {
-        h.initialLink = 'https://demo.adto.app/spring?dec_screen=sale';
+        h.initialLink = 'https://demo.adto.app/spring?adto_screen=sale';
         final emitted = <AdtoLinkClick>[];
         final sub = FlutterAdto().onLinkClick.listen(emitted.add);
         await FlutterAdto().initialize(waiting);
@@ -534,7 +534,7 @@ void main() {
     () async {
       FlutterAdtoImpl.debugIsIOS = true;
       addTearDown(() => FlutterAdtoImpl.debugIsIOS = null);
-      h.pasteboardUrl = 'https://demo.adto.app/spring?dtg_click=abcdefgh1234';
+      h.pasteboardUrl = 'https://demo.adto.app/spring?adto_click=abcdefgh1234';
       await FlutterAdto().initialize(config);
       await h.settle();
       expect(h.pasteboardReads, 1);
@@ -594,9 +594,9 @@ void main() {
   );
 
   test(
-    'a link with a malformed dtg_click opens the app without it, and later events still go',
+    'a link with a malformed adto_click opens the app without it, and later events still go',
     () async {
-      h.initialLink = 'https://demo.adto.app/spring?dtg_click=bad';
+      h.initialLink = 'https://demo.adto.app/spring?adto_click=bad';
       await FlutterAdto().initialize(config);
       await h.settle();
       await FlutterAdto().trackEvent('checkout');
@@ -698,10 +698,7 @@ void main() {
       expect(SdkConfigStore().config?.fbAppId, '1234567890');
 
       final report = await FlutterAdto().diagnostics();
-      expect(report.serverConfig?.linkHosts, [
-        'go.acme.app',
-        'acme.dectog.com',
-      ]);
+      expect(report.serverConfig?.linkHosts, ['go.acme.app', 'acme.adto.app']);
       expect(report.serverConfig?.username, 'acme');
       expect(
         report.ok,
@@ -776,7 +773,7 @@ void main() {
           File('test/fixtures/wire/sdk-config.json').readAsStringSync();
       await FlutterAdto().initialize(
         const AdtoConfig(
-          apiKey: 'dtg_0123456789abcdef0123456789abcdef',
+          apiKey: 'adto_0123456789abcdef0123456789abcdef',
           baseUrl: 'https://app.adto.app',
           linkRootDomain: 'adto.app',
           environment: AdtoEnvironment.test,
@@ -953,7 +950,7 @@ void main() {
   });
 
   group('each pasteboard read keeps its own mark', () {
-    const link = 'https://demo.adto.app/invite?dtg_click=c1';
+    const link = 'https://demo.adto.app/invite?adto_click=c1';
     final matched =
         jsonDecode(
               File(
@@ -1020,7 +1017,7 @@ void main() {
         await h.paste(link); // read at 7
         await wait(20);
         h.pasteboardChangeCount = 8; // the user copies another link
-        await h.paste('https://demo.adto.app/other?dtg_click=c2');
+        await h.paste('https://demo.adto.app/other?adto_click=c2');
         await wait(600);
         expect(h.pasteboardClears, 0);
       },

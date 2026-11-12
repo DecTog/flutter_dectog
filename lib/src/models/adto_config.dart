@@ -8,15 +8,15 @@ typedef InstallReferrerProvider = Future<String?> Function();
 
 /// Configuration for initializing Flutter AdTo
 class AdtoConfig {
-  /// An SDK key (`dtg_pub_…`, dashboard Settings → SDK keys). It reports
+  /// An SDK key (`adto_pub_…`, dashboard Settings → SDK keys). It reports
   /// installs, clicks and events, reads links and makes temporary links;
   /// creating or changing links needs a key with the links:write option.
-  /// Never ship the account key (`dtg_…`): it can delete links.
+  /// Never ship the account key (`adto_…`): it can delete links.
   final String apiKey;
 
   /// The API base URL. When omitted the SDK talks to AdTo at
-  /// https://app.adto.app. An account on the old DecTog service sets
-  /// `https://app.dectog.com` (with [linkRootDomain] `dectog.com`).
+  /// https://app.adto.app. An account on the old AdTo service sets
+  /// `https://app.adto.app` (with [linkRootDomain] `adto.app`).
   final String? baseUrl;
 
   /// Whether to enable debug logging
@@ -155,8 +155,8 @@ class AdtoConfig {
   /// Root domain that tenant link subdomains hang off
   /// (`{username}.$linkRootDomain/{slug}`). Defaults to `adto.app` when
   /// [baseUrl] is unset, else to the host of [baseUrl]; set it when the
-  /// links live on a different host than the API (the old DecTog service:
-  /// API at `app.dectog.com`, links at `{username}.dectog.com`).
+  /// links live on a different host than the API (the old AdTo service:
+  /// API at `app.adto.app`, links at `{username}.adto.app`).
   final String? linkRootDomain;
 
   /// The account's custom link domains (`go.yourbrand.com`), whose

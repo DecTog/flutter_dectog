@@ -312,7 +312,7 @@ internal class PlayReferrerReader(
  * the selection argument; column 0 is the Huawei Ads referrer, 1/2 the click
  * and install timestamps, 4 the AppGallery track id. Which column carries a
  * store link's `referrer=` parameter is not documented consistently, so the
- * entry's `referrer` is whichever of the two contains `dtg_click`, else the
+ * entry's `referrer` is whichever of the two contains `adto_click`, else the
  * ads referrer, else the track id; both raw values ride along as
  * `adsReferrer` / `trackId`. Needs the GET_COMMON_DATA permission and the
  * provider `<queries>` entry, both declared in this library's manifest.
@@ -338,7 +338,7 @@ internal class HuaweiReferrerReader(context: Context) : ReferrerReader(context) 
             val clickTs = c.stringAt(1).asLong()
             val installTs = c.stringAt(2).asLong()
             val trackId = c.stringAt(4)
-            val referrer = listOfNotNull(trackId, adsReferrer).firstOrNull { it.contains("dtg_click") }
+            val referrer = listOfNotNull(trackId, adsReferrer).firstOrNull { it.contains("adto_click") }
                 ?: adsReferrer ?: trackId
             val entry = referrerEntry(referrer, clickTs, installTs)
             adsReferrer?.let { entry["adsReferrer"] = it }

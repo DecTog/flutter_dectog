@@ -5,8 +5,8 @@ import 'package:crypto/crypto.dart';
 /// SDK request signature, mirroring the worker's `verifySdkSignature`
 /// (apps/worker/src/auth.ts). Required on every authenticated /api/v1 call:
 ///
-///   x-dectog-timestamp: <unix seconds>
-///   x-dectog-signature: v1=<hex>
+///   x-adto-timestamp: <unix seconds>
+///   x-adto-signature: v1=<hex>
 ///   v1 = HMAC-SHA256(apiKey, "$ts.${sha256hex(rawBody)}")
 ///
 /// The MAC key is the API key itself — the server stores only its sha256 but
@@ -22,5 +22,5 @@ Map<String, String> sdkSignatureHeaders(String apiKey, String rawBody) {
         sha256,
         utf8.encode(apiKey),
       ).convert(utf8.encode('$ts.$bodyHash')).toString();
-  return {'x-dectog-timestamp': ts, 'x-dectog-signature': 'v1=$mac'};
+  return {'x-adto-timestamp': ts, 'x-adto-signature': 'v1=$mac'};
 }

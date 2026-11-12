@@ -29,7 +29,7 @@ class SdkStorage {
 
   factory SdkStorage() => _instance;
 
-  static const String _subfolder = 'dectog';
+  static const String _subfolder = 'adto';
 
   Future<Directory>? _directory;
   Future<Directory> Function()? _override;

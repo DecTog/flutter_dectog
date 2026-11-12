@@ -11,7 +11,7 @@ void main() {
       osVersion: 'Android 15',
       language: 'en_US',
       timezone: 'UTC',
-      installReferrer: 'dtg_click=abc123',
+      installReferrer: 'adto_click=abc123',
     );
     final json = request.toJson();
     expect(
@@ -148,10 +148,10 @@ void main() {
       referrerClickTs: 1760000000000,
       installBeginTs: 1760000020000,
       webUserAgent: 'Mozilla/5.0 (Linux; Android 15; Pixel 8)',
-      metaReferrer: 'utm_source=facebook&dtg_click=abc',
+      metaReferrer: 'utm_source=facebook&adto_click=abc',
       metaReferrerTs: 1759999999000,
       metaReferrerIsCt: true,
-      clipboardUrl: 'https://demo.adto.app/welcome?dtg_click=abc',
+      clipboardUrl: 'https://demo.adto.app/welcome?adto_click=abc',
     );
     final json = withAll.toJson();
     expect(json['package_name'], 'com.example.demoapp');
@@ -162,9 +162,9 @@ void main() {
     expect(json['referrer_click_ts'], 1760000000000);
     expect(json['install_begin_ts'], 1760000020000);
     expect(json['web_user_agent'], contains('Pixel 8'));
-    expect(json['meta_referrer'], contains('dtg_click'));
+    expect(json['meta_referrer'], contains('adto_click'));
     expect(json['meta_referrer_is_ct'], isTrue);
-    expect(json['clipboard_url'], contains('dtg_click'));
+    expect(json['clipboard_url'], contains('adto_click'));
 
     final minimal = AdtoAppInstallRequest(os: 'ios');
     final minimalJson = minimal.toJson();
@@ -197,7 +197,7 @@ void main() {
   test('contract v2 fields serialize, omit-if-null and round-trip', () {
     const withAll = AdtoAppInstallRequest(
       os: 'android',
-      installReferrer: 'dtg_click=abc&dtg_l=demo/welcome',
+      installReferrer: 'adto_click=abc&adto_l=demo/welcome',
       installAttemptId: '8b1e2b0a-7c1d-4f3e-9a2b-1c2d3e4f5a6b',
       attempt: 2,
       createdAtClient: '2026-10-12T09:00:00.000Z',

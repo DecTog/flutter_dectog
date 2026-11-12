@@ -7,11 +7,11 @@ reported, so the dashboard shows where people went after a link opened the app.
 
 | Flow | What the app calls |
 |---|---|
-| A shared trail opens the installed app on it | `onLinkClick`, `clickParams.deepLink` (`dec_deeplink=trails/2`) |
+| A shared trail opens the installed app on it | `onLinkClick`, `clickParams.deepLink` (`adto_deeplink=trails/2`) |
 | A new install lands on the shared trail after signing up | `onAppInstalled`, `deepLink` / `routing.deepLink` |
 | Sign up (a random id, no name or email) | `identify(customerId:)`; on an install credited to a referral link the server records the referral |
 | Invite friends | `createReferralLink(customerId:)` |
-| Share a trail | the referral link with `dec_deeplink=trails/<id>` per share |
+| Share a trail | the referral link with `adto_deeplink=trails/<id>` per share |
 | Go Pro (a demo purchase) | `trackConversion(...)` with a transaction id, store and plan |
 | Every screen | `AdtoNavigatorObserver(captureParams: {'trail_id'})` |
 | Paste an invite link on iOS 16+ without the paste alert | `AdtoPasteButton` |
@@ -37,13 +37,13 @@ browser gets AdTo's way out to the store. Serve it from anywhere, after replacin
 
    | Key | Meaning |
    |---|---|
-   | `ADTO_API_KEY` | The SDK key (`dtg_pub_…`), never the account key. |
+   | `ADTO_API_KEY` | The SDK key (`adto_pub_…`), never the account key. |
    | `ADTO_BASE_URL` | The API: `https://app.adto.app`. |
    | `ADTO_LINK_ROOT_DOMAIN` | Where links live: `adto.app`. |
 
 3. Universal Links and App Links need your link host in the app. Replace `{username}` in
    `android/app/src/main/AndroidManifest.xml` and `YOUR_SUBDOMAIN` in
-   `ios/Runner/Runner.entitlements` with your username. The `dectog://` scheme filters already in
+   `ios/Runner/Runner.entitlements` with your username. The `adto://` scheme filters already in
    the project work without it.
 4. Run:
 
@@ -55,7 +55,7 @@ Without a key the app opens on its welcome screen and says how to configure it.
 
 ## Try each flow
 
-- **Warm open:** with the app installed, open `https://<you>.adto.app/get-trails?dec_deeplink=trails/3`
+- **Warm open:** with the app installed, open `https://<you>.adto.app/get-trails?adto_deeplink=trails/3`
   from Notes or Messages (not by pasting into Safari): Trails opens on Old Mill Path once signed in.
 - **Deferred deep link:** uninstall, tap the same link (it goes to the store), install from your
   build, launch: after Sign up you land on the trail. The Debug screen shows how the install was

@@ -1,29 +1,29 @@
-/// Per-click link overrides: the `dec_*` query params on an AdTo
+/// Per-click link overrides: the `adto_*` query params on an AdTo
 /// short link, e.g.
-/// `https://you.adto.app/promo?dec_label=2323&dec_campaign=spring&dec_deeplink=myapp%3A%2F%2Fvoucher%3Fcode%3DX`.
+/// `https://you.adto.app/promo?adto_label=2323&adto_campaign=spring&adto_deeplink=myapp%3A%2F%2Fvoucher%3Fcode%3DX`.
 ///
 /// After a deferred install the server returns them on the attribution
 /// ([AdtoAppInstallResponse.clickParams]); on a warm open they are read
 /// straight from the opened URL ([AdtoLinkClick.clickParams]).
 class AdtoClickParams {
-  /// In-app route from `dec_deeplink`, in the same shape as a link's
+  /// In-app route from `adto_deeplink`, in the same shape as a link's
   /// deep-link path (`voucher?code=X`, no scheme). On a warm open this is the
-  /// raw `dec_deeplink` value as it appeared in the URL.
+  /// raw `adto_deeplink` value as it appeared in the URL.
   final String? deepLink;
 
-  /// `dec_label` — free-form value for your own reporting.
+  /// `adto_label` — free-form value for your own reporting.
   final String? label;
 
-  /// `dec_campaign`
+  /// `adto_campaign`
   final String? campaign;
 
-  /// `dec_adgroup`
+  /// `adto_adgroup`
   final String? adgroup;
 
-  /// `dec_creative`
+  /// `adto_creative`
   final String? creative;
 
-  /// `dec_tracker`
+  /// `adto_tracker`
   final String? tracker;
 
   const AdtoClickParams({
@@ -57,10 +57,10 @@ class AdtoClickParams {
     );
   }
 
-  /// The `dec_*` query params of an opened link; null when it has none.
+  /// The `adto_*` query params of an opened link; null when it has none.
   static AdtoClickParams? fromUri(Uri uri) {
     String? q(String key) {
-      final v = uri.queryParameters['dec_$key']?.trim();
+      final v = uri.queryParameters['adto_$key']?.trim();
       return v == null || v.isEmpty ? null : v;
     }
 

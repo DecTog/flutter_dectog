@@ -1,8 +1,8 @@
 # Releasing flutter_adto
 
 flutter_adto is not on pub.dev yet: its first version, 1.0.0, goes out by hand (see First
-publish). It continues flutter_dectog (1.0.0 on pub.dev since 2026-11-04), which is
-maintained on the `flutter_dectog-1.x` branch and released with `flutter_dectog-v<version>`
+publish). It started from flutter_dectog, the DecTog service's SDK (1.0.0 on pub.dev since
+2026-11-04), which is maintained on the `flutter_dectog-1.x` branch and released with `flutter_dectog-v<version>`
 tags; the `v<version>` tags belong to flutter_adto (`v1.0.0` is flutter_dectog's, from before
 the rename). Versions follow semantic versioning: a breaking change to the public API needs a major
 version. CI runs `flutter pub publish --dry-run` on every push so the package

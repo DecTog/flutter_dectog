@@ -13,7 +13,7 @@ class SdkConfigStore {
   static final SdkConfigStore _instance = SdkConfigStore._internal();
   factory SdkConfigStore() => _instance;
 
-  static const String fileName = '.dectog_sdk_config.json';
+  static const String fileName = '.adto_sdk_config.json';
 
   AdtoSdkConfig? _config;
   DateTime? _fetchedAt;

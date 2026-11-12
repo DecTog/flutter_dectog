@@ -1,5 +1,5 @@
 {
-  "ADTO_API_KEY": "dtg_paste_your_production_key_here",
+  "ADTO_API_KEY": "adto_paste_your_production_key_here",
   "ADTO_BASE_URL": "https://app.adto.app",
   "ADTO_LINK_ROOT_DOMAIN": "adto.app"
 }

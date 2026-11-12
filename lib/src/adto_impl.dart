@@ -163,11 +163,11 @@ final class FlutterAdtoImpl implements FlutterAdto {
   /// intent's referrer package.
   bool _launchedFromHistory = false;
 
-  /// Product User-Agent for SDK API calls: "DectogSDK/<version> (android)".
+  /// Product User-Agent for SDK API calls: "AdtoSDK/<version> (android)".
   /// A bare platform name was sent before; the product token makes SDK
   /// traffic identifiable server-side without fingerprinting headers.
   String get _sdkUserAgent =>
-      'DectogSDK/$packageVersion (${Platform.operatingSystem})';
+      'AdtoSDK/$packageVersion (${Platform.operatingSystem})';
 
   /// Ceiling for SDK telemetry calls: attribution must never hang
   /// the host app on a dead connection.
@@ -203,7 +203,7 @@ final class FlutterAdtoImpl implements FlutterAdto {
     'Authorization': 'Bearer ${_config!.apiKey}',
     // The SDK build, stored on installs, events and clicks so the operator
     // sees which versions are still in the wild.
-    'x-dectog-sdk': sdkIdentity,
+    'x-adto-sdk': sdkIdentity,
     ...sdkSignatureHeaders(_config!.apiKey, rawBody),
   };
 
@@ -466,7 +466,7 @@ final class FlutterAdtoImpl implements FlutterAdto {
 
     var username = parseResult['username']!;
     final slug = parseResult['slug']!;
-    final bouncedClickId = validClickId(uri.queryParameters['dtg_click']);
+    final bouncedClickId = validClickId(uri.queryParameters['adto_click']);
 
     // Collection off: the app gets the link as parsed, its click and
     // open wait for setEnabled(true), and nothing is resolved or sent.
@@ -501,7 +501,7 @@ final class FlutterAdtoImpl implements FlutterAdto {
 
     // Log the click and the warm open in the background (fire-and-forget),
     // independent of resolving: the backend checks the slug itself.
-    // dtg_click carries the web click id from an intent:// bounce so the
+    // adto_click carries the web click id from an intent:// bounce so the
     // backend converts the existing web row instead of inserting a second.
     _reportLink(username, slug, uri, bouncedClickId, receivedAt, inApp: inApp);
 
@@ -1147,7 +1147,7 @@ final class FlutterAdtoImpl implements FlutterAdto {
             (receivedAt ?? DateTime.now()).toUtc().toIso8601String(),
         if (launchReferrer != null) 'launch_referrer': launchReferrer,
         // The rest of the opened URL stays on the device; the
-        // server keeps only the dec_* and utm_* values below.
+        // server keeps only the adto_* and utm_* values below.
         'metadata': {
           'flutter_plugin_version': packageVersion,
           'dart_version': _getDartVersion(),
@@ -1160,11 +1160,11 @@ final class FlutterAdtoImpl implements FlutterAdto {
         clickData[key] = value;
       });
 
-      // dec_* link overrides: the server validates and stores them
+      // adto_* link overrides: the server validates and stores them
       // on the click, like the redirect does for browser taps.
       final linkParams = <String, String>{
         for (final e in originalUri.queryParameters.entries)
-          if (e.key.startsWith('dec_')) e.key: e.value,
+          if (e.key.startsWith('adto_')) e.key: e.value,
       };
       if (linkParams.isNotEmpty) clickData['link_params'] = linkParams;
 
@@ -1194,7 +1194,7 @@ final class FlutterAdtoImpl implements FlutterAdto {
 
   /// POST /api/v1/app-opens: an AdTo link opened the
   /// already-installed app (cold start or warm resume). Fire-and-forget,
-  /// signed like every /api/v1 call; carries the intent-bounce dtg_click
+  /// signed like every /api/v1 call; carries the intent-bounce adto_click
   /// when present so the backend ties the open to the web click row.
   Future<void> _reportAppOpen(
     String username,
@@ -2330,10 +2330,10 @@ typedef _PastedLink = ({String url, int? mark});
 ///    with links `{username}.example.com`)
 ///  - <baseHost>/r/<username>/<slug>             path mode
 ///  - https://localhost:3000?user=<u>/<s>        development query mode
-///  - <scheme>://<anything>?…dtg_l=<u>/<s>        custom scheme: every scheme
-///    URI the server builds names its link in dtg_l, because with a deep-link
+///  - <scheme>://<anything>?…adto_l=<u>/<s>        custom scheme: every scheme
+///    URI the server builds names its link in adto_l, because with a deep-link
 ///    path the host and path are the app's own route (myapp://products/42)
-///  - dectog://<username>/<slug>                 development scheme, untagged
+///  - adto://<username>/<slug>                 development scheme, untagged
 Map<String, String>? parseAdtoUrl(
   Uri uri,
   String baseUrl, {
@@ -2354,13 +2354,13 @@ Map<String, String>? parseAdtoUrl(
     return {'username': parts[0], 'slug': parts[1]};
   }
 
-  // Custom scheme: the link is named by dtg_l, never by the URI's shape, so
+  // Custom scheme: the link is named by adto_l, never by the URI's shape, so
   // an app's own route (myapp://products/42) is not mistaken for a link.
   if (uri.scheme != 'http' && uri.scheme != 'https') {
-    final tagged = uri.queryParameters['dtg_l'];
+    final tagged = uri.queryParameters['adto_l'];
     if (tagged != null) return _parseLinkTag(tagged);
-    // Development convenience only: dectog://username/slug, no tag.
-    if (uri.scheme == 'dectog' && host.isNotEmpty && pathSegments.isNotEmpty) {
+    // Development convenience only: adto://username/slug, no tag.
+    if (uri.scheme == 'adto' && host.isNotEmpty && pathSegments.isNotEmpty) {
       return {'username': host, 'slug': pathSegments[0]};
     }
     return null;
@@ -2411,7 +2411,7 @@ final RegExp _linkTagRe = RegExp(
   r'^([A-Za-z0-9][A-Za-z0-9._-]*)/([A-Za-z0-9_-]{1,128})$',
 );
 
-/// `dtg_l=<username>/<slug>` (query-decoded, so `%2F` arrives as `/`).
+/// `adto_l=<username>/<slug>` (query-decoded, so `%2F` arrives as `/`).
 Map<String, String>? _parseLinkTag(String value) {
   final m = _linkTagRe.firstMatch(value.trim());
   if (m == null) return null;

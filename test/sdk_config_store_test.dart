@@ -29,7 +29,7 @@ void main() {
     expect(c.readClipboardOnInstall, isTrue);
     expect(c.linkHosts, [
       'go.acme.app',
-      'acme.dectog.com',
+      'acme.adto.app',
     ]); // as in the server's fixture
     expect(c.username, 'acme');
     expect(c.environment, AdtoEnvironment.live);

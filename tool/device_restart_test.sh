@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Two-phase device test: the install registration survives a process
 # kill. Phase 1 launches the example app against a mock API that answers 503,
-# so the SDK persists .dectog_install.json as failed and the process is then
+# so the SDK persists .adto_install.json as failed and the process is then
 # force-stopped. Phase 2 relaunches against an API that accepts, and the SDK
 # must retry with the SAME install_attempt_id and record the install as
 # tracked. Needs one booted Android emulator or device (adb) and Flutter.
@@ -24,7 +24,7 @@ adb reverse "tcp:$PORT" "tcp:$PORT" > /dev/null
 (
   cd example
   flutter build apk --debug \
-    --dart-define=ADTO_API_KEY=dtg_pub_00000000000000000000000000000000 \
+    --dart-define=ADTO_API_KEY=adto_pub_00000000000000000000000000000000 \
     --dart-define=ADTO_BASE_URL="http://127.0.0.1:$PORT"
 )
 adb install -r example/build/app/outputs/flutter-apk/app-debug.apk > /dev/null
@@ -36,7 +36,7 @@ wait_for() { # wait_for N: until at least N install POSTs arrived
   for _ in $(seq 1 120); do [ "$(count)" -ge "$1" ] && return 0; sleep 1; done
   echo "FAIL: expected $1 install POSTs, got $(count)"; exit 1
 }
-state() { adb exec-out run-as "$PKG" sh -c 'cat $(find . -name .dectog_install.json | head -1)'; }
+state() { adb exec-out run-as "$PKG" sh -c 'cat $(find . -name .adto_install.json | head -1)'; }
 
 echo "Phase 1: the API is down"
 adb shell am start -n "$PKG/.MainActivity" > /dev/null

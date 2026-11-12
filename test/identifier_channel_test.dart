@@ -111,7 +111,7 @@ void main() {
         },
         'getAttributionToken': (_) => 'token==',
         'pasteboardHasUrl': (_) => true,
-        'readPasteboardUrl': (_) => ' https://demo.adto.app/x?dtg_click=1 ',
+        'readPasteboardUrl': (_) => ' https://demo.adto.app/x?adto_click=1 ',
         'clearPasteboard': (_) => true,
       });
       final c = IdentifierChannel();
@@ -133,7 +133,7 @@ void main() {
       expect(await c.pasteboardHasUrl(), isTrue);
       expect(
         await c.readPasteboardUrl(),
-        'https://demo.adto.app/x?dtg_click=1',
+        'https://demo.adto.app/x?adto_click=1',
       );
       expect(await c.clearPasteboard(), isTrue);
     },
@@ -157,7 +157,7 @@ void main() {
             },
             'huawei': {
               'status': 'ok',
-              'referrer': 'dtg_click=h',
+              'referrer': 'adto_click=h',
               'clickTs': 10,
               'installBeginTs': 20,
               'attempts': 1,
@@ -175,7 +175,7 @@ void main() {
       expect(all['google_play']!.status, 'service_unavailable');
       expect(all['google_play']!.attempts, 3);
       expect(all['google_play']!.error, 'disconnected');
-      expect(all['huawei']!.referrer, 'dtg_click=h');
+      expect(all['huawei']!.referrer, 'adto_click=h');
       expect(all['huawei']!.installBeginTs, 20);
       expect(all['huawei']!.hasReferrer, isTrue);
     },
@@ -199,15 +199,15 @@ void main() {
         await completer.future;
       }
 
-      await push({'url': 'https://demo.adto.app/invite?dtg_click=p1'});
+      await push({'url': 'https://demo.adto.app/invite?adto_click=p1'});
       await push({'url': '   '}); // blank: ignored
       await push(
-        'https://demo.adto.app/invite?dtg_click=p2',
+        'https://demo.adto.app/invite?adto_click=p2',
       ); // bare string also accepted
       await Future<void>.delayed(Duration.zero);
       expect(received, [
-        'https://demo.adto.app/invite?dtg_click=p1',
-        'https://demo.adto.app/invite?dtg_click=p2',
+        'https://demo.adto.app/invite?adto_click=p1',
+        'https://demo.adto.app/invite?adto_click=p2',
       ]);
       await sub.cancel();
     },

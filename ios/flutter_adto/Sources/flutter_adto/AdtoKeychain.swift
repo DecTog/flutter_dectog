@@ -14,7 +14,7 @@ import Security
  * store would shadow the real value once it unlocks).
  */
 enum AdtoKeychain {
-  static let service = "app.dectog.sdk"
+  static let service = "app.adto.sdk"
 
   enum ReadResult {
     case value(String)

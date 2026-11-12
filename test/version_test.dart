@@ -74,7 +74,7 @@ void main() {
     );
   });
 
-  test('the x-dectog-sdk identity carries the package version', () {
+  test('the x-adto-sdk identity carries the package version', () {
     expect(sdkIdentity, 'flutter_adto/$packageVersion');
   });
 }
