@@ -129,7 +129,7 @@ class TrailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           const Text(
-            'The shared URL is your referral link with dec_deeplink: a friend who '
+            'The shared URL is your referral link with adto_deeplink: a friend who '
             'installs lands on this trail, and you are credited.',
           ),
         ],
@@ -141,10 +141,10 @@ class TrailScreen extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(context);
     try {
       final link = await app.referralLink();
-      // One referral link, any trail: dec_deeplink sets the route per share
+      // One referral link, any trail: adto_deeplink sets the route per share
       // and survives the trip through the store.
       final url = Uri.parse(link.url).replace(
-        queryParameters: {'dec_deeplink': trail.route},
+        queryParameters: {'adto_deeplink': trail.route},
       );
       await Clipboard.setData(ClipboardData(text: url.toString()));
       await app.adto.trackEvent(

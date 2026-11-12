@@ -31,12 +31,12 @@ void main() {
 
   test('the full URI, path included, survives for the host app router', () {
     // AdtoLinkClick.originalUrl is uri.toString(): the deep-link path is
-    // the HOST APP's route, delivered verbatim, with dtg_click readable.
+    // the HOST APP's route, delivered verbatim, with adto_click readable.
     const raw =
-        'istoria://products/42?color=black&dtg_click=abc123&dtg_l=demo/welcome';
+        'istoria://products/42?color=black&adto_click=abc123&adto_l=demo/welcome';
     final uri = Uri.parse(raw);
     expect(uri.toString(), raw);
-    expect(uri.queryParameters['dtg_click'], 'abc123');
+    expect(uri.queryParameters['adto_click'], 'abc123');
     expect(uri.queryParameters['color'], 'black');
   });
 }

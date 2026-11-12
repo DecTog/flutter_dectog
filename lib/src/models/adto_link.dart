@@ -45,7 +45,7 @@ class AdtoLink {
   /// Desktop destination (null = the app's fallback, then the QR page)
   final String? fallbackUrl;
 
-  /// Tracking values stored on every click (a `dec_*` URL param overrides
+  /// Tracking values stored on every click (a `adto_*` URL param overrides
   /// each one per click) and returned on attribution as `clickParams`.
   final String? label;
   final String? campaign;
@@ -60,7 +60,7 @@ class AdtoLink {
   final bool? iosTapToStore;
   final bool? mobileInterstitial;
 
-  /// Whether the link adds `dtg_click` to its web destinations, so
+  /// Whether the link adds `adto_click` to its web destinations, so
   /// `adto.js` on that site credits its events to the tap; null is off
   /// (or the template's value).
   final bool? appendClickId;

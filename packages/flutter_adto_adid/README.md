@@ -20,7 +20,7 @@ import 'package:flutter_adto_adid/flutter_adto_adid.dart';
 await AdtoAdId.requestTracking();
 
 await FlutterAdto().initialize(const AdtoConfig(
-  apiKey: 'dtg_pub_your_sdk_key',
+  apiKey: 'adto_pub_your_sdk_key',
   advertisingIdProvider: AdtoAdId.provider,
 ));
 ```

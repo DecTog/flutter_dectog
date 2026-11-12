@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2026-10-14
+## [1.0.0] - Unreleased
 
 First release, for flutter_adto 1.0.0. `AdtoAdId.provider` for
 `AdtoConfig.advertisingIdProvider` (the IDFA once App Tracking

@@ -6,21 +6,23 @@ import 'package:flutter_test/flutter_test.dart';
 /// copied anything since it was read.
 void main() {
   group('carriesClickTag', () {
-    test('a link with dtg_click or dtg_l is a signal', () {
+    test('a link with adto_click or adto_l is a signal', () {
       expect(
         PasteboardGate.carriesClickTag(
-          'https://demo.adto.app/welcome?dtg_click=abc123',
+          'https://demo.adto.app/welcome?adto_click=abc123',
         ),
         isTrue,
       );
       expect(
         PasteboardGate.carriesClickTag(
-          'https://demo.adto.app/welcome?utm_source=x&dtg_click=abc123',
+          'https://demo.adto.app/welcome?utm_source=x&adto_click=abc123',
         ),
         isTrue,
       );
       expect(
-        PasteboardGate.carriesClickTag('myapp://product/42?dtg_l=demo/welcome'),
+        PasteboardGate.carriesClickTag(
+          'myapp://product/42?adto_l=demo/welcome',
+        ),
         isTrue,
       );
     });
@@ -31,7 +33,7 @@ void main() {
         isFalse,
       );
       expect(
-        PasteboardGate.carriesClickTag('https://example.com/?x=dtg_click'),
+        PasteboardGate.carriesClickTag('https://example.com/?x=adto_click'),
         isFalse,
       );
     });

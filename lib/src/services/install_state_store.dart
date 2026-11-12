@@ -10,7 +10,7 @@ import 'sdk_storage.dart';
 /// Install sentinel v2 — the SDK's record of the first-launch
 /// install registration, in the backup-excluded storage directory.
 ///
-/// What changed from the earlier `.dectog_install_tracked` file and why:
+/// What changed from the earlier `.adto_install_tracked` file and why:
 ///  - `install_attempt_id`: a client idempotency key sent with every attempt
 ///    of the install POST. The old pending/failed retry was at-least-once
 ///    with nothing to dedupe on, so a launch that died after the server
@@ -215,7 +215,7 @@ class InstallStateStore {
 
   factory InstallStateStore() => _instance;
 
-  static const String fileName = '.dectog_install.json';
+  static const String fileName = '.adto_install.json';
 
   /// How long a `pending` claim suppresses a re-POST before it is assumed
   /// to belong to a launch that died mid-flight.

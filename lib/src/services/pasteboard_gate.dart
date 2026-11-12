@@ -1,6 +1,6 @@
 /// What the SDK may do with the pasteboard.
 ///
-/// Only a link that names a click (`dtg_click`) or a link (`dtg_l`) is a
+/// Only a link that names a click (`adto_click`) or a link (`adto_l`) is a
 /// signal the server can credit, so only such a link is sent; a bare share
 /// link the user copied to paste into a chat is left alone. The pasteboard
 /// is cleared only after the server credited the link (`matchSource ==
@@ -22,9 +22,9 @@ class PasteboardGate {
   /// Empty the pasteboard.
   final Future<bool> Function() clear;
 
-  static final RegExp _tag = RegExp(r'[?&](?:dtg_click|dtg_l)=[^&#\s]');
+  static final RegExp _tag = RegExp(r'[?&](?:adto_click|adto_l)=[^&#\s]');
 
-  /// Whether [url] carries `dtg_click=` or `dtg_l=` as a query parameter.
+  /// Whether [url] carries `adto_click=` or `adto_l=` as a query parameter.
   static bool carriesClickTag(String url) => _tag.hasMatch(url);
 
   /// The mark of a read: the change counter right after a link was read

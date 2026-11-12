@@ -4,7 +4,7 @@
 /// ```dart
 /// await AdtoAdId.requestTracking(); // iOS: shows the ATT prompt once
 /// await FlutterAdto().initialize(const AdtoConfig(
-///   apiKey: 'dtg_pub_…',
+///   apiKey: 'adto_pub_…',
 ///   advertisingIdProvider: AdtoAdId.provider,
 /// ));
 /// ```

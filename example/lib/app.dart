@@ -81,7 +81,7 @@ class TrailsApp extends ChangeNotifier {
 
   void _onLink(AdtoLinkClick click) {
     lastClick = click;
-    // dec_deeplink on the shared URL first, then the link's own route.
+    // adto_deeplink on the shared URL first, then the link's own route.
     final route = click.clickParams?.deepLink ??
         (!kIsWeb && Platform.isIOS
             ? click.linkResolution?.iosDeepLinkPath

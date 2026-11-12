@@ -9,7 +9,7 @@
   "android_app_scheme": "acme",
   "ios_bundle_id": "com.example.testapp",
   "android_package": "com.example.testapp",
-  "link_hosts": ["go.acme.app", "acme.dectog.com"],
+  "link_hosts": ["go.acme.app", "acme.adto.app"],
   "username": "acme",
   "environment": "live",
   "cache_seconds": 3600

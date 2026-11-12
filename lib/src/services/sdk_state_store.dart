@@ -44,7 +44,7 @@ class LastOpen {
 }
 
 /// A click id as the server writes it (`CLICK_ID_RE` in the server's
-/// util.ts), or null. A link's malformed `dtg_click` is never kept
+/// util.ts), or null. A link's malformed `adto_click` is never kept
 /// or sent; the server once refused every event that named one.
 String? validClickId(Object? id) =>
     id is String && RegExp(r'^[A-Za-z0-9_-]{8,32}$').hasMatch(id) ? id : null;
@@ -55,7 +55,7 @@ class SdkStateStore {
 
   factory SdkStateStore() => _instance;
 
-  static const String _stateFileName = '.dectog_sdk_state.json';
+  static const String _stateFileName = '.adto_sdk_state.json';
 
   File? _file;
   String? _customerId;

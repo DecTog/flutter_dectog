@@ -51,7 +51,7 @@ class EventQueueService {
   /// Singleton instance (matches the other SDK services).
   factory EventQueueService() => _instance;
 
-  static const String _queueFileName = '.dectog_event_queue.jsonl';
+  static const String _queueFileName = '.adto_event_queue.jsonl';
 
   static const int _flushThreshold = 20;
   static const Duration _flushInterval = Duration(seconds: 30);

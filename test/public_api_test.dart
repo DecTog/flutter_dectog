@@ -144,7 +144,7 @@ class _Probe implements FlutterAdto {
 
 /// Every AdtoConfig parameter by name: a removed or renamed one fails to compile.
 const AdtoConfig everyConfigParameter = AdtoConfig(
-  apiKey: 'dtg_pub_0123456789abcdef0123456789abcdef',
+  apiKey: 'adto_pub_0123456789abcdef0123456789abcdef',
   baseUrl: null,
   linkRootDomain: null,
   linkDomains: [],

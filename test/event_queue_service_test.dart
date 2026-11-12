@@ -36,7 +36,7 @@ void main() {
 
     // Persistence contract: a fresh process reading this file must rebuild
     // exactly this queue (the load path runs once per process in _ensureFile).
-    final file = File('${tempDir.path}/.dectog_event_queue.jsonl');
+    final file = File('${tempDir.path}/.adto_event_queue.jsonl');
     expect(await file.exists(), isTrue);
     final lines = await file.readAsLines();
     expect(lines, hasLength(2));
@@ -105,7 +105,7 @@ void main() {
       await queue.flush();
       expect(sent, isEmpty);
       expect(queue.pendingCount, 1);
-      final file = File('${tempDir.path}/.dectog_event_queue.jsonl');
+      final file = File('${tempDir.path}/.adto_event_queue.jsonl');
       expect(
         (await file.readAsLines()).where((l) => l.isNotEmpty),
         hasLength(1),
@@ -161,7 +161,7 @@ void main() {
         reason: 'a 400 must not wedge the queue head',
       );
       expect(queue.droppedBatchCount, 1);
-      final file = File('${tempDir.path}/.dectog_event_queue.jsonl');
+      final file = File('${tempDir.path}/.adto_event_queue.jsonl');
       expect((await file.readAsLines()).where((l) => l.isNotEmpty), isEmpty);
     },
   );
@@ -235,7 +235,7 @@ void main() {
         await queue.enqueue(ev('a'));
         final line =
             (await File(
-                  '${tempDir.path}/.dectog_event_queue.jsonl',
+                  '${tempDir.path}/.adto_event_queue.jsonl',
                 ).readAsLines())
                 .single;
         expect(jsonDecode(line)['client_event_id'], matches(uuid));
@@ -245,9 +245,7 @@ void main() {
     test('an id the caller set is kept', () async {
       await queue.enqueue({...ev('a'), 'client_event_id': 'mine-0001'});
       final line =
-          (await File(
-                '${tempDir.path}/.dectog_event_queue.jsonl',
-              ).readAsLines())
+          (await File('${tempDir.path}/.adto_event_queue.jsonl').readAsLines())
               .single;
       expect(jsonDecode(line)['client_event_id'], 'mine-0001');
     });

@@ -17,37 +17,37 @@ void main() {
   }
 
   test('signs POST bodies over ts.bodyHash with the API key as MAC key', () {
-    final headers = sdkSignatureHeaders('dtg_testkey', '{"device_id":"d1"}');
-    final ts = int.parse(headers['x-dectog-timestamp']!);
+    final headers = sdkSignatureHeaders('adto_testkey', '{"device_id":"d1"}');
+    final ts = int.parse(headers['x-adto-timestamp']!);
     expect(ts, greaterThan(1760000000)); // unix seconds, not milliseconds
     expect(
-      headers['x-dectog-signature'],
-      'v1=${referenceMac('dtg_testkey', headers['x-dectog-timestamp']!, '{"device_id":"d1"}')}',
+      headers['x-adto-signature'],
+      'v1=${referenceMac('adto_testkey', headers['x-adto-timestamp']!, '{"device_id":"d1"}')}',
     );
   });
 
   test('signs the empty string for GETs', () {
-    final headers = sdkSignatureHeaders('dtg_testkey', '');
+    final headers = sdkSignatureHeaders('adto_testkey', '');
     expect(
-      headers['x-dectog-signature'],
-      'v1=${referenceMac('dtg_testkey', headers['x-dectog-timestamp']!, '')}',
+      headers['x-adto-signature'],
+      'v1=${referenceMac('adto_testkey', headers['x-adto-timestamp']!, '')}',
     );
     // Distinct from a one-char body — the binding is real.
-    final other = sdkSignatureHeaders('dtg_testkey', 'x');
-    expect(other['x-dectog-signature'], isNot(headers['x-dectog-signature']));
+    final other = sdkSignatureHeaders('adto_testkey', 'x');
+    expect(other['x-adto-signature'], isNot(headers['x-adto-signature']));
   });
 
   test('the MAC key is the API key: different keys, different signatures', () {
-    final a = sdkSignatureHeaders('dtg_aaaa', 'same-body');
-    final b = sdkSignatureHeaders('dtg_bbbb', 'same-body');
-    expect(a['x-dectog-signature'], isNot(b['x-dectog-signature']));
+    final a = sdkSignatureHeaders('adto_aaaa', 'same-body');
+    final b = sdkSignatureHeaders('adto_bbbb', 'same-body');
+    expect(a['x-adto-signature'], isNot(b['x-adto-signature']));
   });
 
   test('timestamps move forward in whole seconds', () {
     final first = sdkSignatureHeaders('k', '');
     final second = sdkSignatureHeaders('k', '');
-    final t1 = int.parse(first['x-dectog-timestamp']!);
-    final t2 = int.parse(second['x-dectog-timestamp']!);
+    final t1 = int.parse(first['x-adto-timestamp']!);
+    final t2 = int.parse(second['x-adto-timestamp']!);
     expect(t2, greaterThanOrEqualTo(t1));
   });
 }

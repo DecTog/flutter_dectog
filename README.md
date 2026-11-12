@@ -39,36 +39,31 @@ ranges are kept wide (`app_links` 6–7, `connectivity_plus` 6–7, `device_info
 that already pin these. On iOS the plugin is a Swift package: hosts on Swift Package Manager
 need no extra step, and hosts that disabled SwiftPM get the same code through CocoaPods.
 
-## Moving from flutter_dectog
+## Moving from flutter_adto
 
-flutter_adto is flutter_dectog under AdTo's name. The behaviour, the wire and the data the SDK
-keeps on the device are the same, so an app that moves keeps its users' install state: no install
-registers again and no customer loses its id.
+flutter_adto is the SDK of the AdTo service (adto.app); flutter_adto is the SDK of AdTo, a
+separate service with its own accounts, keys and names. Moving an app means an AdTo account and a
+fresh start: nothing the SDK kept on the device carries over, so the app's current users arrive
+on AdTo as new installs.
 
-1. In `pubspec.yaml`, replace `flutter_dectog` with `flutter_adto` (and `flutter_dectog_adid` with
-   `flutter_adto_adid`).
-2. Import `package:flutter_adto/flutter_adto.dart`.
-3. Rename the types: `FlutterDectog` becomes `FlutterAdto`, and every other `Dectog` prefix
+1. In `pubspec.yaml`, replace `flutter_adto` with `flutter_adto` (and `flutter_adto_adid` with
+   `flutter_adto_adid`), and import `package:flutter_adto/flutter_adto.dart`.
+2. Rename the types: `FlutterAdto` becomes `FlutterAdto`, and every other `Adto` prefix
    becomes `Adto` (`AdtoConfig`, `AdtoLink`, `AdtoError`, `AdtoPasteButton`,
-   `AdtoNavigatorObserver`…). A find and replace of `Dectog` with `Adto` does it.
-4. Hosts: flutter_dectog defaulted to the DecTog service (`app.dectog.com`, links on
-   `dectog.com`); flutter_adto defaults to AdTo (`app.adto.app`, links on `adto.app`). An
-   account on the DecTog service sets `baseUrl: 'https://app.dectog.com'` and
-   `linkRootDomain: 'dectog.com'` (see [Setup](#3-initialize)); an app that already named the
-   AdTo hosts changes nothing.
-5. On iOS, the plugin's Swift package and pod are now `flutter_adto`: run `flutter pub get`, then
-   `pod install` if the app uses CocoaPods.
-
-What did not change: the request headers (`x-dectog-*`), the `dtg_*` parameters, the
-`dectog://` development links, and the files and Keychain items the SDK keeps on the device.
+   `AdtoNavigatorObserver`…).
+3. Use the SDK key (`adto_pub_…`) of the app's AdTo account, and drop any `baseUrl` and
+   `linkRootDomain`: the SDK defaults to `https://app.adto.app` and links on `{username}.adto.app`.
+4. Change the associated domains and intent filters to the AdTo link host, and the app's routing
+   to the AdTo link parameters (`adto_deeplink` and the rest).
+5. On iOS, run `flutter pub get`, then `pod install` if the app uses CocoaPods.
 
 ## Setup
 
 ### 1. Get an SDK key
 
 Sign up at [app.adto.app](https://app.adto.app/login) and pick a username: it is your link
-subdomain, `<username>.adto.app`. Dashboard → Settings shows your **SDK key** (`dtg_pub_…`).
-The account key (`dtg_…`) is for servers and scripts and never goes in an app.
+subdomain, `<username>.adto.app`. Dashboard → Settings shows your **SDK key** (`adto_pub_…`).
+The account key (`adto_…`) is for servers and scripts and never goes in an app.
 
 ### 2. Register the link host
 
@@ -105,21 +100,13 @@ import 'package:flutter_adto/flutter_adto.dart';
 final adto = FlutterAdto();
 
 await adto.initialize(AdtoConfig(
-  apiKey: 'dtg_pub_your_sdk_key',
+  apiKey: 'adto_pub_your_sdk_key',
   enableDebugLogging: true,
 ));
 ```
 
 That is all AdTo needs: the SDK defaults to the API at `https://app.adto.app` and links on
-`{username}.adto.app`. An account still on the old DecTog service names its hosts:
-
-```dart
-await adto.initialize(AdtoConfig(
-  apiKey: 'dtg_pub_your_sdk_key',
-  baseUrl: 'https://app.dectog.com',
-  linkRootDomain: 'dectog.com', // links at {username}.dectog.com
-));
-```
+`{username}.adto.app`.
 
 Every `AdtoConfig` option (consent, the collection switches, the Meta referrer, Apple Search
 Ads, the test environment) is in the [API reference](doc/api-reference.md#adtoconfig).
@@ -130,7 +117,7 @@ Subscribe before `initialize()` finishes: the link that opened the app arrives d
 
 ```dart
 adto.onLinkClick.listen((linkClick) {
-  // Route on dec_deeplink when the URL carries one, else on the link's own path.
+  // Route on adto_deeplink when the URL carries one, else on the link's own path.
   final route = linkClick.clickParams?.deepLink ?? linkClick.linkResolution?.deepLinkPath;
   if (route != null) _openRoute(route);
 });
@@ -186,7 +173,7 @@ retried first launch can never register a second install.
 ### Deterministic signals
 
 - **Android install referrers.** AdTo puts the click id in the store's install referrer
-  (`referrer=dtg_click=<id>&dtg_l=<username>/<slug>`); the SDK's native reader (modelled on
+  (`referrer=adto_click=<id>&adto_l=<username>/<slug>`); the SDK's native reader (modelled on
   the Adjust and Branch readers) reads it back from Google Play and, with
   `AdtoCollection.oemReferrers` (on by default), from Huawei AppGallery and vivo. The
   Samsung Galaxy Store and Xiaomi GetApps readers activate when the host app adds their

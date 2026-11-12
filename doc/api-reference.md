@@ -88,8 +88,8 @@ const AdtoConfig({
 
 | Member | Type | Meaning |
 |---|---|---|
-| `apiKey` | `String` | An SDK key (`dtg_pub_…`); also the HMAC key for request signing. |
-| `baseUrl` | `String?` | The API base. `null` means `https://app.adto.app`; an account on the old DecTog service sets `https://app.dectog.com`. |
+| `apiKey` | `String` | An SDK key (`adto_pub_…`); also the HMAC key for request signing. |
+| `baseUrl` | `String?` | The API base. `null` means `https://app.adto.app`. |
 | `linkRootDomain` | `String?` | Root domain of tenant links. `null` means `adto.app` when `baseUrl` is unset, else the host of `baseUrl`. |
 | `linkDomains` | `List<String>` | The account's custom link domains (`go.yourbrand.com`): `https://<domain>/<slug>` is a link of this key's account. The SDK also learns the active domain from the server (`AdtoSdkConfig.linkHosts`); listing it here covers a link that opens the app before the first server answer. |
 | `enableDebugLogging` | `bool` | Print SDK logs. |
@@ -160,7 +160,7 @@ A permanent link as the API returns it. All fields are `final`; `AdtoLink.fromJs
 | `label`, `campaign`, `adgroup`, `creative` | `String?` | Tracking defaults for every click |
 | `referrerCustomerId` | `String?` | On a referral link, the customer it belongs to |
 | `iosTapToStore`, `mobileInterstitial` | `bool?` | This link's iOS tap-to-store page and mobile interstitial; `null` follows the app's setting |
-| `appendClickId` | `bool?` | Whether the link adds `dtg_click` to its web destinations for `adto.js`; `null` is off |
+| `appendClickId` | `bool?` | Whether the link adds `adto_click` to its web destinations for `adto.js`; `null` is off |
 | `routingRules` | `List<AdtoRoutingRule>?` | Geo and language routing, first match wins; `null` when the link has none |
 | `templateId` | `String?` | The template whose defaults fill the fields the link leaves empty |
 | `utmSource`, `utmMedium`, `utmCampaign`, `utmTerm`, `utmContent` | `String?` | Added to the link's web destinations, and to clicks whose URL has none |
@@ -245,22 +245,22 @@ The public resolve result, for permanent and temporary links. Only a live link r
 | `isResolved` | `bool get` | `linkResolution != null && error == null` |
 | `targetUrl` | `String? get` | `linkResolution?.target` |
 | `linkType` | `String? get` | `linkResolution?.type` |
-| `clickParams` | `AdtoClickParams? get` | The `dec_*` parameters of `originalUrl`, or `null` |
+| `clickParams` | `AdtoClickParams? get` | The `adto_*` parameters of `originalUrl`, or `null` |
 
 Extension `AdtoLinkClickX` on `AdtoLinkClick`: `Map<String, String>? get queryParameters`, `String? queryParameter(String key)`, `String? get path`, `String? get host`, `String? get scheme`, `String? get fragment`, all read from `originalUrl`.
 
 ### AdtoClickParams
 
-The per-click `dec_*` overrides.
+The per-click `adto_*` overrides.
 
 | Field | Type | Query parameter |
 |---|---|---|
-| `deepLink` | `String?` | `dec_deeplink` (the route without a scheme on verdicts; the raw value on opened URLs) |
-| `label` | `String?` | `dec_label` |
-| `campaign` | `String?` | `dec_campaign` |
-| `adgroup` | `String?` | `dec_adgroup` |
-| `creative` | `String?` | `dec_creative` |
-| `tracker` | `String?` | `dec_tracker` |
+| `deepLink` | `String?` | `adto_deeplink` (the route without a scheme on verdicts; the raw value on opened URLs) |
+| `label` | `String?` | `adto_label` |
+| `campaign` | `String?` | `adto_campaign` |
+| `adgroup` | `String?` | `adto_adgroup` |
+| `creative` | `String?` | `adto_creative` |
+| `tracker` | `String?` | `adto_tracker` |
 
 `bool get isEmpty`, `AdtoClickParams.fromJson(Map<String, dynamic>)` (the server's `click_params` shape), `static AdtoClickParams? fromUri(Uri uri)` (`null` when the URL carries none), `Map<String, dynamic> toJson()`.
 
@@ -284,7 +284,7 @@ The verdict on `onAppInstalled`, `currentAppInstall`, `getAttributionData()` and
 | `clickedAt` | `DateTime?` | | The credited click's time |
 | `link` | `AdtoAppInstallLink?` | | The credited permanent link |
 | `customParameters` | `Map<String, dynamic>?` | | The credited link's metadata |
-| `clickParams` | `AdtoClickParams?` | | The credited click's `dec_*` values |
+| `clickParams` | `AdtoClickParams?` | | The credited click's `adto_*` values |
 | `deepLink` | `String?` | | `clickParams?.deepLink`, the route to open |
 | `replayed` | `bool` | `false` | The server returned a stored verdict for a known attempt id |
 | `isReinstall` | `bool` | `false` | Server or client reinstall detection |
@@ -435,4 +435,4 @@ A `NavigatorObserver` for `MaterialApp(navigatorObservers: [...])` or `GoRouter(
 
 ## Package version
 
-`flutter_adto` sends `x-dectog-sdk: flutter_adto/<version>` on every signed call, and also reports its version in the `User-Agent` header (`DectogSDK/<version> (<platform>)`) and in the `flutter_plugin_version` metadata of clicks and installs. The version constants are internal (`lib/src/version.dart`) and match `pubspec.yaml`.
+`flutter_adto` sends `x-adto-sdk: flutter_adto/<version>` on every signed call, and also reports its version in the `User-Agent` header (`AdtoSDK/<version> (<platform>)`) and in the `flutter_plugin_version` metadata of clicks and installs. The version constants are internal (`lib/src/version.dart`) and match `pubspec.yaml`.

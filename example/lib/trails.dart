@@ -1,5 +1,5 @@
 /// The example's catalog: a few trails, addressed by the deep-link route
-/// `trails/<id>` (a link's deep-link path, or `dec_deeplink=trails/<id>` on
+/// `trails/<id>` (a link's deep-link path, or `adto_deeplink=trails/<id>` on
 /// a shared URL).
 class Trail {
   const Trail(this.id, this.name, this.region, this.km);

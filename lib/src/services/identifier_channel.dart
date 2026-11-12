@@ -396,7 +396,7 @@ class MetaReferrer {
   const MetaReferrer({required this.referrer, this.ts, this.isCt});
 
   /// The raw referrer string Meta recorded (utm params; an AdTo link
-  /// click carries dtg_click inside it).
+  /// click carries adto_click inside it).
   final String referrer;
 
   /// Epoch milliseconds of Meta's click record, when present.

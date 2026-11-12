@@ -55,7 +55,7 @@ void main() {
 
   test('the provider fits AdtoConfig.advertisingIdProvider', () {
     const config = AdtoConfig(
-      apiKey: 'dtg_pub_test',
+      apiKey: 'adto_pub_test',
       advertisingIdProvider: AdtoAdId.provider,
     );
     expect(config.collectsAdId, isTrue);

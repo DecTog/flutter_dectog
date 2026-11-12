@@ -39,10 +39,10 @@ void main() {
     expect(response.deepLink, isNull);
   });
 
-  test('fromUri reads only dec_* keys; none means null', () {
+  test('fromUri reads only adto_* keys; none means null', () {
     final params = AdtoClickParams.fromUri(
       Uri.parse(
-        'https://demo.adto.app/promo?dec_label=2323&dec_deeplink=myapp%3A%2F%2Fvoucher&label=x&adj_campaign=y&dec_tracker=t1',
+        'https://demo.adto.app/promo?adto_label=2323&adto_deeplink=myapp%3A%2F%2Fvoucher&label=x&adj_campaign=y&adto_tracker=t1',
       ),
     );
     expect(params?.label, '2323');
@@ -59,7 +59,7 @@ void main() {
 
   test('AdtoLinkClick exposes the opened URL click params', () {
     final click = AdtoLinkClick(
-      originalUrl: 'https://demo.adto.app/promo?dec_campaign=spring',
+      originalUrl: 'https://demo.adto.app/promo?adto_campaign=spring',
       slug: 'promo',
       username: 'demo',
       receivedAt: DateTime(2026, 10, 11),

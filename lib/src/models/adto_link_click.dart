@@ -45,7 +45,7 @@ class AdtoLinkClick {
   /// Get the link type if resolution was successful
   String? get linkType => linkResolution?.type;
 
-  /// The `dec_*` params on the opened URL; null when it has none.
+  /// The `adto_*` params on the opened URL; null when it has none.
   AdtoClickParams? get clickParams {
     final uri = Uri.tryParse(originalUrl);
     return uri == null ? null : AdtoClickParams.fromUri(uri);
