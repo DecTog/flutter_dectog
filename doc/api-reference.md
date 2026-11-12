@@ -89,7 +89,7 @@ const AdtoConfig({
 | Member | Type | Meaning |
 |---|---|---|
 | `apiKey` | `String` | An SDK key (`adto_pub_…`); also the HMAC key for request signing. |
-| `baseUrl` | `String?` | The API base. `null` means `https://app.adto.app`. |
+| `baseUrl` | `String?` | The API base. `null` means `https://api.adto.app`. |
 | `linkRootDomain` | `String?` | Root domain of tenant links. `null` means `adto.app` when `baseUrl` is unset, else the host of `baseUrl`. |
 | `linkDomains` | `List<String>` | The account's custom link domains (`go.yourbrand.com`): `https://<domain>/<slug>` is a link of this key's account. The SDK also learns the active domain from the server (`AdtoSdkConfig.linkHosts`); listing it here covers a link that opens the app before the first server answer. |
 | `enableDebugLogging` | `bool` | Print SDK logs. |
@@ -101,7 +101,7 @@ const AdtoConfig({
 | `persistDeviceId` | `bool` | Keep the first IDFV in the iOS Keychain. |
 | `enabled` | `bool` | Whether collection is on until the app first calls `setEnabled` (default `true`). `false` waits for consent; see `setEnabled`. The app's stored choice wins on every later launch. |
 | `environment` | `AdtoEnvironment?` | A check, not a switch: the key alone decides the account, and this changes nothing at runtime. The environment this build's key should belong to, for example `test` in debug builds with the test environment's key; when the app calls `diagnostics()`, it warns if the key belongs to the other one. `null`: no check, except that a release build with a test key warns. See [Environments](#environments). |
-| `defaultBaseUrl` | `static const String` | `'https://app.adto.app'` |
+| `defaultBaseUrl` | `static const String` | `'https://api.adto.app'` |
 | `defaultLinkRootDomain` | `static const String` | `'adto.app'` |
 | `effectiveBaseUrl` | `String get` | `baseUrl` with trailing slashes removed, or the default. |
 | `effectiveLinkRootDomain` | `String? get` | `linkRootDomain` with trailing dots removed; `adto.app` when both are unset; `null` (use the API host) when only `baseUrl` is set. |

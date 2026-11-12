@@ -32,7 +32,7 @@ otherwise, and agree a disclosure date with you once a fix is available.
 In scope: this repository (the Dart package and its Kotlin and Swift plugin
 code), the server it talks to
 ([ad-to/adto](https://github.com/ad-to/adto)), and the hosted service at
-`adto.app`, `app.adto.app` and `*.adto.app`.
+`adto.app`, `dashboard.adto.app`, `api.adto.app` and `*.adto.app`.
 
 Of particular interest: leaking the API key or device data beyond what the
 documentation says is sent, request-signature weaknesses, the SDK acting on a

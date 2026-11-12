@@ -118,7 +118,7 @@ void main() {
 
   test('config defaults to hosted AdTo', () {
     const hosted = AdtoConfig(apiKey: 'adto_test');
-    expect(hosted.effectiveBaseUrl, 'https://app.adto.app');
+    expect(hosted.effectiveBaseUrl, 'https://api.adto.app');
     expect(hosted.effectiveLinkRootDomain, 'adto.app');
 
     const selfHosted = AdtoConfig(

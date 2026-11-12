@@ -17,7 +17,7 @@ service's SDK, with every name made AdTo's; it shares no names or device data wi
   never clash in one app.
 - **Types:** every `Dectog` prefix becomes `Adto`: `FlutterAdto`, `AdtoConfig`, `AdtoLink`,
   `AdtoLinkClick`, `AdtoError`, `AdtoPasteButton`, `AdtoNavigatorObserver` and the rest.
-- **Hosts:** `AdtoConfig.defaultBaseUrl` is `https://app.adto.app` and
+- **Hosts:** `AdtoConfig.defaultBaseUrl` is `https://api.adto.app` and
   `defaultLinkRootDomain` is `adto.app`.
 - **Wire:** the `x-adto-*` request headers (`x-adto-sdk: flutter_adto/<version>`), the
   `AdtoSDK/` user-agent token, `adto_` keys and link parameters (`adto_click`, `adto_l`,
