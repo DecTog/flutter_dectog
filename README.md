@@ -20,7 +20,7 @@
 
 The Flutter SDK for [AdTo](https://adto.app): links that open your app when it is
 installed and the store when it is not, deferred deep links that survive the install, install
-attribution you can audit, and post-install events. It talks to AdTo at `app.adto.app`.
+attribution you can audit, and post-install events. It talks to AdTo's API at `api.adto.app`.
 
 For AI coding agents the package ships [`llms.txt`](llms.txt): every public type and member,
 the link URLs the SDK recognizes and the init snippets in one file, available offline in the
@@ -52,7 +52,7 @@ on AdTo as new installs.
    becomes `Adto` (`AdtoConfig`, `AdtoLink`, `AdtoError`, `AdtoPasteButton`,
    `AdtoNavigatorObserver`…).
 3. Use the SDK key (`adto_pub_…`) of the app's AdTo account, and drop any `baseUrl` and
-   `linkRootDomain`: the SDK defaults to `https://app.adto.app` and links on `{username}.adto.app`.
+   `linkRootDomain`: the SDK defaults to `https://api.adto.app` and links on `{username}.adto.app`.
 4. Change the associated domains and intent filters to the AdTo link host, and the app's routing
    to the AdTo link parameters (`adto_deeplink` and the rest).
 5. On iOS, run `flutter pub get`, then `pod install` if the app uses CocoaPods.
@@ -61,7 +61,7 @@ on AdTo as new installs.
 
 ### 1. Get an SDK key
 
-Sign up at [app.adto.app](https://app.adto.app/login) and pick a username: it is your link
+Sign up at [dashboard.adto.app](https://dashboard.adto.app/login) and pick a username: it is your link
 subdomain, `<username>.adto.app`. Dashboard → Settings shows your **SDK key** (`adto_pub_…`).
 The account key (`adto_…`) is for servers and scripts and never goes in an app.
 
@@ -105,7 +105,7 @@ await adto.initialize(AdtoConfig(
 ));
 ```
 
-That is all AdTo needs: the SDK defaults to the API at `https://app.adto.app` and links on
+That is all AdTo needs: the SDK defaults to the API at `https://api.adto.app` and links on
 `{username}.adto.app`.
 
 Every `AdtoConfig` option (consent, the collection switches, the Meta referrer, Apple Search

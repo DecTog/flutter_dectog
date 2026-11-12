@@ -38,7 +38,7 @@ browser gets AdTo's way out to the store. Serve it from anywhere, after replacin
    | Key | Meaning |
    |---|---|
    | `ADTO_API_KEY` | The SDK key (`adto_pub_…`), never the account key. |
-   | `ADTO_BASE_URL` | The API: `https://app.adto.app`. |
+   | `ADTO_BASE_URL` | The API: `https://api.adto.app`. |
    | `ADTO_LINK_ROOT_DOMAIN` | Where links live: `adto.app`. |
 
 3. Universal Links and App Links need your link host in the app. Replace `{username}` in

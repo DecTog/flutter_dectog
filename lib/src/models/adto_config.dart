@@ -15,8 +15,7 @@ class AdtoConfig {
   final String apiKey;
 
   /// The API base URL. When omitted the SDK talks to AdTo at
-  /// https://app.adto.app. An account on the old AdTo service sets
-  /// `https://app.adto.app` (with [linkRootDomain] `adto.app`).
+  /// https://api.adto.app.
   final String? baseUrl;
 
   /// Whether to enable debug logging
@@ -141,9 +140,9 @@ class AdtoConfig {
   bool? get oemReferrersSetting =>
       collect == null ? null : collect!.contains(AdtoCollection.oemReferrers);
 
-  /// Hosted AdTo: the API lives on `app.adto.app`, links on
+  /// Hosted AdTo: the API lives on `api.adto.app`, links on
   /// `{username}.adto.app`.
-  static const String defaultBaseUrl = 'https://app.adto.app';
+  static const String defaultBaseUrl = 'https://api.adto.app';
   static const String defaultLinkRootDomain = 'adto.app';
 
   /// Get the effective base URL (trailing slashes stripped)
@@ -155,8 +154,8 @@ class AdtoConfig {
   /// Root domain that tenant link subdomains hang off
   /// (`{username}.$linkRootDomain/{slug}`). Defaults to `adto.app` when
   /// [baseUrl] is unset, else to the host of [baseUrl]; set it when the
-  /// links live on a different host than the API (the old AdTo service:
-  /// API at `app.adto.app`, links at `{username}.adto.app`).
+  /// links live on a different host than the API (as on hosted AdTo:
+  /// API at `api.adto.app`, links at `{username}.adto.app`).
   final String? linkRootDomain;
 
   /// The account's custom link domains (`go.yourbrand.com`), whose

@@ -165,7 +165,7 @@ const _identifiers = MethodChannel('adto_device_identifiers');
 
 const config = AdtoConfig(
   apiKey: 'adto_0123456789abcdef0123456789abcdef',
-  baseUrl: 'https://app.adto.app',
+  baseUrl: 'https://api.adto.app',
   linkRootDomain: 'adto.app',
 );
 
@@ -232,7 +232,7 @@ void main() {
       await FlutterAdto().initialize(
         const AdtoConfig(
           apiKey: 'adto_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.adto.app',
+          baseUrl: 'https://api.adto.app',
           linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
         ),
@@ -252,7 +252,7 @@ void main() {
       await FlutterAdto().initialize(
         const AdtoConfig(
           apiKey: 'adto_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.adto.app',
+          baseUrl: 'https://api.adto.app',
           linkRootDomain: 'adto.app',
           linkDomains: ['go.acme.app'],
         ),
@@ -320,7 +320,7 @@ void main() {
   group('consent mode', () {
     const waiting = AdtoConfig(
       apiKey: 'adto_0123456789abcdef0123456789abcdef',
-      baseUrl: 'https://app.adto.app',
+      baseUrl: 'https://api.adto.app',
       linkRootDomain: 'adto.app',
       enabled: false,
     );
@@ -774,7 +774,7 @@ void main() {
       await FlutterAdto().initialize(
         const AdtoConfig(
           apiKey: 'adto_0123456789abcdef0123456789abcdef',
-          baseUrl: 'https://app.adto.app',
+          baseUrl: 'https://api.adto.app',
           linkRootDomain: 'adto.app',
           environment: AdtoEnvironment.test,
         ),
